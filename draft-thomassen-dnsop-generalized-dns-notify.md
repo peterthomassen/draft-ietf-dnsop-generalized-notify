@@ -166,7 +166,7 @@ large number of delegations vs infrequent updates to the CSYNC record
 in the child zones.
 
 Frequent scanning is costly. Infrequent scanning causes slower convergence
-(i.e. updated delegation information in the parent).
+(i.e. delay until the delegation information in the parent is updated).
 
 ## Multi-Signer Setups
 
@@ -210,9 +210,10 @@ the registry itself, it is expected that in the ICANN RRR model, some
 registries will prefer registrars to conduct CDS/CDNSKEY scans.
 For such parents, the receiving service should notify the appropriate
 registrar, over any communication channel deemed suitable between
-registry and registry (such as EPP).
+registry and registry (such as EPP, or possibly by forwarding the
+actual NOTIFY(CDS) or NOTIFY(CSYNC) directly).
 Such internal processing is inconsequential from the perspective of
-the child: the NOTIFY packet is simply sent to the listener address.
+the child: the NOTIFY packet is simply sent to the notification address.
 
 To address the CDS/CDNSKEY dichotomy, NOTIFY(CDS) is defined to indicate
 any child-side changes pertaining to a upcoming update of DS records.
@@ -228,7 +229,7 @@ scanning by providing the parent with a hint that a particular child
 zone has published new CDS, CDNSKEY and/or CSYNC records.
 
 The DNS protocol already allows these new notification types, so no
-protocol change is required, the only thing needed is specification of
+protocol change is required. The only thing needed is specification of
 where to send the new types of Notifies and how to interpret them in
 the receiving end.
 
@@ -239,26 +240,27 @@ the notification is the parent, to improve the speed and efficiency of
 the parent's CDS/CSYNC scanning. Because the name of the parent zone
 is known, and because the parent obviously controls the contents of
 its own zone the simplest solution is for the parent to publish the
-address where it prefers to have notifications sent. To be slightly
-more general than just using an address record we propose to use SRV
-records, which also allows specifying a port number of the listener.
+address where it prefers to have notifications sent. 
 
-In the zone `parent.`:
-
-    _cds-notify.parent.   IN SRV n m  port scanner.parent.
-    _csync-notify.parent. IN SRV n m  port scanner.parent.
-
-If, however, there are cases where this scheme (sending the
-notification to the parent) is not sufficient then a more general
+However, there may exist cases where this scheme (sending the
+notification to the parent) is not sufficient and a more general
 design is needed. However, it is strongly desireable that the child is
-able to figure out where to send the Notify via a single query. Hence
-the more general design alternative proposed is:
+able to figure out where to send the Notify via a single query. 
 
-    _cds-notify.parent.   IN NOTIFY scheme port scanner.parent.
-    _csync-notify.parent. IN NOTIFY scheme port scanner.parent.
+In the zone `parent.`: 
+
+	parent.   IN NOTIFY CDS   scheme port scanner.parent.
+    parent.   IN NOTIFY CSYNC scheme port scanner.parent.
 
 where the only scheme defined here is scheme=1 with the interpretation
-above.
+that when a new CDS (or CDNSKEY or CSYNC) is published, a NOTIFY(CDS)
+or NOTIFY(CSYNC) should be sent to the address and port listed in the
+corresponding NOTIFY RRset.
+
+Other schemes are possible, but are out of scope for this document. 
+
+The suggested mnemonic for the new record type is "NOTIIFY" and it is
+further described below.
 
 ## How to Interpret CDS and CSYNC Notifications
 
@@ -313,32 +315,27 @@ knows the name of the parent zone and can look up the notification
 address there. In the NOTIFY(DNSKEY) case, there is no trivial target.
 
 However, it is possible to look up the notification address in the
-child zone itself. This translates into a requirement for
-multi-signer setups, namely that at least one external party (the
+child zone itself. This translates into a requirement for multi-signer
+setups, namely that at least one external party (typically a
 multi-signer controller) has the ability to insert or modify RRsets in
 the child zone. Therefore the controller should be able to insert a
-record that documents the wanted address for DNSKEY notifications.
-
-In analogy with the other cases, but here in the zone `child.parent.`:
-
-    _dnskey-notify.child.parent. IN SRV n m port scanner.signerA.
-    _dnskey-notify.child.parent. IN SRV n m port scanner.signerB.
-
-should act as a trigger for the signer that whenever there are changes
-to the DNSKEY RRset it should send a corresponding NOTIFY(DNSKEY) to
-all signers that have signaled interest via insertion of SRV records
-in the zone. 
+record that documents the wanted notification address for
+NOTIFY(DNSKEY).
 
 Also in the NOTIFY(DNSKEY) case there is the possibility that this
-scheme will not be sufficient for all cases. And therefore the more
-general design (in analogy with the NOTIFY(CDS) and NOTIFY(CSYNC)
+scheme will not be sufficient for all cases. And therefore the
+proposed design (in analogy with the NOTIFY(CDS) and NOTIFY(CSYNC)
 cases) is:
 
-    _dnskey-notify.child.parent. IN NOTIFY scheme port scanner.signerA.
-    _dnskey-notify.child.parent. IN NOTIFY scheme port scanner.signerB.
+    child.parent. IN NOTIFY DNSKEY scheme port scanner.signerA.
+    child.parent. IN NOTIFY DNSKEY scheme port scanner.signerB.
 
 with the only defined scheme at this time being scheme=1 with the
-interpretation above.
+interpretation that whenever there are changes to the DNSKEY RRset in
+a signer it should send a corresponding NOTIFY(DNSKEY) to all
+notification addresses listed in the "child.parent. NOTIFY" RRset.
+
+Other schemes are possible, but are out of scope for this document. 
 
 ## How to Interpret DNSKEY Notifications
 
@@ -389,9 +386,69 @@ records is ensured.
 NOTIFY(CSYNC) has the same timing consideration as NOTIFY(CDS) while
 NOTIFY(DNSKEY) does not.
 
+# The Format of the NOTIFY Record
+
+Here is the format of the NOTIFY RR, whose DNS type code is not yet
+defined.
+
+        Name TTL Class NOTIFY RRtype Scheme Port Target
+
+Name
+        The zone this RR refers to. In the case of NOTIFY(CDS) and
+        NOTIFY(CSYNC) this is the name of the parent zone. In the case
+        of NOTIFY(DNSKEY) this is the name of the zone in which a
+        change in the DNSKEY RRset is taking place.
+
+TTL
+        Standard DNS meaning [RFC 1035].
+
+Class
+        Standard DNS meaning [RFC 1035]. NOTIFY records occur in the IN
+        Class.
+
+RRtype
+        The type of generalised NOTIFY that this NOTIFY RR defines
+		the desired target address for. Currently only the types CDS,
+        CSYNC and DNSKEY are suggested to be supported, but there is
+		no protocol issue should a use case for additional types of
+		notifications arise in the future.
+ 		
+Scheme
+	    The scheme for locating the desired notification address.
+        The range is 0-255. This is a 16 bit unsigned integer in
+		network byte order. The value 0 is an error. The value 1 is
+		described in this document and all other values are currently
+		unspecified.
+
+Port
+	    The port on the target host of the notification service. The
+        range is 0-65535. This is a 16 bit unsigned integer in network
+		byte order.
+
+Target
+        The domain name of the target host providing the service of
+        listening for generalised notifications of the specified type.
+        There MUST be one or more address records for this name, the
+        name MUST NOT be an alias (in the sense of RFC 1034 or RFC
+        2181). 
+
+        A Target of "." means that the service is decidedly not
+        available at this domain.
+
 # Open Questions
 
-## SRV vs new record type
+## Rationale for a new record type, "NOTIFY"
+
+It is technically possible to store the same information in an SRV
+record as in the proposed NOTIFY records. This would, however,
+require name space pollution (indicating the RRtype via a label in the
+owner name) and also changing the semantics of one of the integer
+fields of the SRV record.
+
+But overloading semantics on a single record type has not been a
+good idea in the past. Furthermore, as the generalised notifications
+are a new proposal with no prior deployment on the public Internet
+there is an opportunity to avoid repeating previous mistakes.
 
 In the case of the "vertical" Notify(CDS) and NOTIFY(CSYNC)
 nothing needs to be done by the nameservers serving the parent zone.
@@ -400,12 +457,11 @@ case of the more "horizontal" NOTIFY(DNSKEY), however, the
 nameserver will have to act on the insertion of a NOTIFY(DNSKEY)
 instruction.
 
-It may therefore be preferable to use a new record type, to make it
-possible to more easily associate the special processing needed with
-the new type rather than the standard SRV RRtype that occurs in
-completely other scenarios than are described here. If that is the
-case it could be that a new record type would provide a cleaner
-solution to all the new types of notification signaling. Eg.:
+A new record type would therefore make it possible to more easily
+associate the special processing needed with the new type rather than
+the standard SRV RRtype that occur in completely other scenarios than
+are described here. type would provide a cleaner solution to all the
+new types of notification signaling. Eg.:
 
     parent.         IN NOTIFY  CDS     59   scanner.parent.
     parent.         IN NOTIFY  CSYNC   59   scanner.parent.
@@ -423,10 +479,15 @@ for updates to the DNSKEY RRset.
 # Out of Scope
 
 To accommodate ICANN's RRR model, the parent's listener may forward
-CDS/CDNSKEY and CSYNC notifications to the registrar, e.g. via EPP.
+NOTIFY(CDS) and NOTIFY(CSYNC) messages to the registrar, e.g. via EPP
+or by forwarding the NOTIFY message directly.
+
 From the perspective of this protocol, the NOTIFY packet is simply
-sent to the parent's listener address; additional aspects of internal
-processing are out of scope.
+sent to the parent's listener address. However, should this turn out
+not to be sufficient, it is possible to define a new "scheme" that
+specifies alternative logic for dealing with such requirements.
+Description of internal processing in the recipient end or for
+locating the recipient are out of scope of this document.
 
 In the multi-signer case, where the same zone is signed by multiple
 semi-independent “signers” it is obviously necessary to devise means
@@ -470,11 +531,11 @@ Per {{!RFC8552}}, IANA is requested to create the "Generalized DNS
 Notifications" registry with the following columns and initial
 entries:
 
-| NOTIFY type | Location             | relative to | Reference       |
-| ----------- | -------------------- | ----------- | --------------- |
-| CDS         | _cds-notifications   | parent      | [this document] |
-| CSYNC       | _csync-notifications | parent      | [this document] |
-| DNSKEY      | TODO                 | TODO        | [this document] |
+| NOTIFY type | Scheme | Location | Reference       |
+| ----------- | ------ | -------- | --------------- |
+| CDS         |      1 | parent.  | [this document] |
+| CSYNC       |      1 | parent.  | [this document] |
+| DNSKEY      |      1 | zone.    | [this document] |
 
 [TODO: (1) Detail out use cases? (2) Add entries via RFC or web form?]
 
