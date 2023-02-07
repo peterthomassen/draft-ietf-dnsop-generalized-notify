@@ -276,8 +276,8 @@ corresponding NOTIFY RRset.
  
 Example:
 
-	parent.   IN NOTIFY CDS   1 559 cds-scanner.parent.
-    parent.   IN NOTIFY CSYNC 1 560 csync-scanner.parent.
+	parent.   IN NOTIFY CDS   1 5359 cds-scanner.parent.
+    parent.   IN NOTIFY CSYNC 1 5360 csync-scanner.parent.
 
 Other schemes are possible, but are out of scope for this document. 
 
@@ -361,7 +361,7 @@ Example:
 
     child.parent. IN NOTIFY DNSKEY 1 5361 scanner.signerA.
     child.parent. IN NOTIFY DNSKEY 1 5361 scanner.signerB.
-    child.parent. IN NOTIFY DNSKEY 1 5361 controller.multi-signer.net.
+    child.parent. IN NOTIFY DNSKEY 1 5361 ctrl.multi-signer.example.
 
 Other schemes are possible, but are out of scope for this document. 
 
@@ -463,22 +463,22 @@ Target
 ## Rationale for a new record type, "NOTIFY"
 
 It is technically possible to store the same information in an SRV
-record as in the proposed NOTIFY records. This would, however,
-require name space pollution (indicating the RRtype via a label in the
-owner name) and also changing the semantics of one of the integer
-fields of the SRV record.
+record as in the proposed NOTIFY record. This would, however, require
+name space pollution (indicating the RRtype via a label in the owner
+name) and also changing the semantics of one of the integer fields of
+the SRV record.
 
-But overloading semantics on a single record type has not been a
-good idea in the past. Furthermore, as the generalised notifications
-are a new proposal with no prior deployment on the public Internet
-there is an opportunity to avoid repeating previous mistakes.
+Overloading semantics on a single record type has not been a good idea
+in the past. Furthermore, as the generalised notifications are a new
+proposal with no prior deployment on the public Internet there is an
+opportunity to avoid repeating previous mistakes.
 
-In the case of the "vertical" Notify(CDS) and NOTIFY(CSYNC)
-nothing needs to be done by the nameservers serving the parent zone.
-So therefore the SRV records appear to be a near perfect match. In the
-case of the more "horizontal" NOTIFY(DNSKEY), however, the
-nameserver will have to act on the insertion of a NOTIFY(DNSKEY)
-instruction.
+In the case of the "vertical" NOTIFY(CDS) and NOTIFY(CSYNC) nothing
+needs to be done by the nameservers serving the child.parent. zone.
+So therefore the SRV record, modulo the overloading issue, appear to
+be workable match. In the case of the more "horizontal"
+NOTIFY(DNSKEY), however, the nameserver will have to act on the
+insertion of a "zone. NOTIFY DNSKEY ..." record.
 
 A new record type would therefore make it possible to more easily
 associate the special processing needed with the new type rather than
@@ -486,9 +486,9 @@ the standard SRV RRtype that occurs in completely other scenarios than
 are described here. The NOTIFY record type would provide a cleaner
 solution to all the new types of notification signaling. Eg.:
 
-    parent.         IN NOTIFY  CDS     59   scanner.parent.
-    parent.         IN NOTIFY  CSYNC   59   scanner.parent.
-    child.parent.   IN NOTIFY  DNSKEY  5900 music.service.provider.
+    parent.         IN NOTIFY  CDS     1  59   scanner.parent.
+    parent.         IN NOTIFY  CSYNC   1  59   scanner.parent.
+    child.parent.   IN NOTIFY  DNSKEY  1  5900 ctrl.multi-signer.example.
 
 ## Open Question For DNSKEY Notifications
 
@@ -501,11 +501,12 @@ for updates to the DNSKEY RRset.
 
 # Out of Scope
 
-To accommodate ICANN's RRR model, the parent's listener may forward
-NOTIFY(CDS) and NOTIFY(CSYNC) messages to the registrar, e.g. via EPP
-or by forwarding the NOTIFY message directly.
+To accommodate ICANN's RRR model, the parent's designated notification
+target may forward NOTIFY(CDS) messages to the registrar, e.g. via EPP
+or by forwarding the NOTIFY(CDS) message directly. The same is true
+also for NOTIFY(CSYNC).
 
-From the perspective of this protocol, the NOTIFY packet is simply
+From the perspective of this protocol, the NOTIFY(CDS) packet is simply
 sent to the parent's listener address. However, should this turn out
 not to be sufficient, it is possible to define a new "scheme" that
 specifies alternative logic for dealing with such requirements.
@@ -550,9 +551,14 @@ concerns about the impact of unsolicited NOTIFY messages.
 
 # IANA Considerations
 
-Per {{!RFC8552}}, IANA is requested to create the "Generalized DNS
-Notifications" registry with the following columns and initial
-entries:
+Per {{!RFC8552}}, IANA is requested to create a new registry on the
+"Domain Name System (DNS) Parameters" IANA web page as follows:
+
+Name: Generalized DNS Notifications"
+
+Assignment Policy: Expert Review
+
+Reference: [this document]
 
 | NOTIFY type | Scheme | Location | Reference       |
 | ----------- | ------ | -------- | --------------- |
@@ -564,7 +570,8 @@ entries:
 
 # Acknowledgements
 
-Joe Abley, Mark Andrews, Christian Elmerot, Ólafur Guðmundsson, Paul Wouters
+Joe Abley, Mark Andrews, Christian Elmerot, Ólafur Guðmundsson, Paul
+Wouters, Brian Dickinson
 
 --- back
 
