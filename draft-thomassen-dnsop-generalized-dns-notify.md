@@ -554,7 +554,7 @@ concerns about the impact of unsolicited NOTIFY messages.
 Per {{!RFC8552}}, IANA is requested to create a new registry on the
 "Domain Name System (DNS) Parameters" IANA web page as follows:
 
-Name: Generalized DNS Notifications"
+Name: Generalized DNS Notifications
 
 Assignment Policy: Expert Review
 
@@ -582,6 +582,10 @@ Wouters, Brian Dickson
 > Mention Ry-to-Rr forwarding to accommodate RRR model
 
 > Add port number flexiblity
+
+> Add scheme parameter
+
+> Drop SRV-based alternative in favour of new NOTIFY RR
 
 > Editorial improvements
 
