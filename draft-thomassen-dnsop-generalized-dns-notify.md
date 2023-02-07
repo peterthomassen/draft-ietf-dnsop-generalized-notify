@@ -44,10 +44,14 @@ ad-hoc transfer independently of when the next SOA check would be due.
 
 This document extends the use of DNS NOTIFY beyond conventional zone
 transfer hints, bringing the benefits of ad-hoc notifications to DNS
-delegation maintenance in general.
-Use cases include DNSSEC key rollovers hints via NOTIFY(CDS) and
-NOTIFY(DNSKEY), and quicker changes to a delegation's NS record set
-via NOTIFY(CSYNC).
+delegation maintenance in general.  Use cases include DNSSEC key
+rollovers hints via NOTIFY(CDS) and NOTIFY(DNSKEY) messages, and
+quicker changes to a delegation's NS record set via NOTIFY(CSYNC)
+messages.
+
+Furthermore, this document proposes a new DNS record type, tentatively
+referred to as "NOTIFY record", which is used to publish details about
+where generalized notifications should be sent.
 
 TO BE REMOVED: This document is being collaborated on in Github at:
 [https://github.com/peterthomassen/draft-thomassen-dnsop-generalized-dns-notify](https://github.com/peterthomassen/draft-thomassen-dnsop-generalized-dns-notify).
@@ -91,6 +95,18 @@ RECOMMENDED**", "**MAY**", and "**OPTIONAL**" in this document are to be
 interpreted as described in BCP 14 {{!RFC2119}} {{!RFC8174}} when, and only
 when, they appear in all capitals, as shown here.
 
+## Terminology
+
+In the text below there are two different uses of the term
+"NOTIFY". One refers to the NOTIFY message, sent from a DNSSEC signer
+or name server to a notification target (for subsequent
+processing). We refer to this message as NOTIFY(RRtype) where the
+RRtype indicates the type of NOTIFY message (CDS, CSYNC or DNSKEY
+respectively).
+
+The second is a proposed new DNS record type, with the suggested
+mnemonic "NOTIFY". This record is used to publish the location of the
+notification target. We refer to this as the "NOTIFY record".
 
 # Costs and Dangers of Slow Convergence
 
@@ -210,7 +226,7 @@ the registry itself, it is expected that in the ICANN RRR model, some
 registries will prefer registrars to conduct CDS/CDNSKEY scans.
 For such parents, the receiving service should notify the appropriate
 registrar, over any communication channel deemed suitable between
-registry and registry (such as EPP, or possibly by forwarding the
+registry and registrar (such as EPP, or possibly by forwarding the
 actual NOTIFY(CDS) or NOTIFY(CSYNC) directly).
 Such internal processing is inconsequential from the perspective of
 the child: the NOTIFY packet is simply sent to the notification address.
@@ -244,18 +260,24 @@ address where it prefers to have notifications sent.
 
 However, there may exist cases where this scheme (sending the
 notification to the parent) is not sufficient and a more general
-design is needed. However, it is strongly desireable that the child is
-able to figure out where to send the Notify via a single query. 
+design is needed. At the same time, it is strongly desireable that the
+child is able to figure out where to send the NOTIFY via a single
+query.
 
-In the zone `parent.`: 
+By adding the following to the zone `parent.`: 
 
 	parent.   IN NOTIFY CDS   scheme port scanner.parent.
     parent.   IN NOTIFY CSYNC scheme port scanner.parent.
-
+ 	
 where the only scheme defined here is scheme=1 with the interpretation
 that when a new CDS (or CDNSKEY or CSYNC) is published, a NOTIFY(CDS)
 or NOTIFY(CSYNC) should be sent to the address and port listed in the
 corresponding NOTIFY RRset.
+ 
+Example:
+
+	parent.   IN NOTIFY CDS   1 559 cds-scanner.parent.
+    parent.   IN NOTIFY CSYNC 1 560 csync-scanner.parent.
 
 Other schemes are possible, but are out of scope for this document. 
 
@@ -320,20 +342,26 @@ setups, namely that at least one external party (typically a
 multi-signer controller) has the ability to insert or modify RRsets in
 the child zone. Therefore the controller should be able to insert a
 record that documents the wanted notification address for
-NOTIFY(DNSKEY).
+NOTIFY(DNSKEY) messages.
 
 Also in the NOTIFY(DNSKEY) case there is the possibility that this
 scheme will not be sufficient for all cases. And therefore the
 proposed design (in analogy with the NOTIFY(CDS) and NOTIFY(CSYNC)
 cases) is:
 
-    child.parent. IN NOTIFY DNSKEY scheme port scanner.signerA.
-    child.parent. IN NOTIFY DNSKEY scheme port scanner.signerB.
-
+    child.parent. IN NOTIFY DNSKEY scheme port scanner.signerA.  
+    child.parent. IN NOTIFY DNSKEY scheme port scanner.signerB.  
+ 
 with the only defined scheme at this time being scheme=1 with the
 interpretation that whenever there are changes to the DNSKEY RRset in
 a signer it should send a corresponding NOTIFY(DNSKEY) to all
 notification addresses listed in the "child.parent. NOTIFY" RRset.
+
+Example:
+
+    child.parent. IN NOTIFY DNSKEY 1 5361 scanner.signerA.
+    child.parent. IN NOTIFY DNSKEY 1 5361 scanner.signerB.
+    child.parent. IN NOTIFY DNSKEY 1 5361 controller.multi-signer.net.
 
 Other schemes are possible, but are out of scope for this document. 
 
@@ -408,32 +436,27 @@ Class
 
 RRtype
         The type of generalised NOTIFY that this NOTIFY RR defines
-		the desired target address for. Currently only the types CDS,
+        the desired target address for. Currently only the types CDS,
         CSYNC and DNSKEY are suggested to be supported, but there is
-		no protocol issue should a use case for additional types of
-		notifications arise in the future.
+        no protocol issue should a use case for additional types of
+        notifications arise in the future.
  		
 Scheme
-	    The scheme for locating the desired notification address.
+        The scheme for locating the desired notification address.
         The range is 0-255. This is a 16 bit unsigned integer in
-		network byte order. The value 0 is an error. The value 1 is
-		described in this document and all other values are currently
-		unspecified.
+        network byte order. The value 0 is an error. The value 1 is
+        described in this document and all other values are currently
+        unspecified.
 
 Port
-	    The port on the target host of the notification service. The
+        The port on the target host of the notification service. The
         range is 0-65535. This is a 16 bit unsigned integer in network
-		byte order.
+        byte order.
 
 Target
         The domain name of the target host providing the service of
         listening for generalised notifications of the specified type.
-        There MUST be one or more address records for this name, the
-        name MUST NOT be an alias (in the sense of RFC 1034 or RFC
-        2181). 
-
-        A Target of "." means that the service is decidedly not
-        available at this domain.
+        There MUST be one or more address records for this name. 
 
 # Open Questions
 
@@ -459,9 +482,9 @@ instruction.
 
 A new record type would therefore make it possible to more easily
 associate the special processing needed with the new type rather than
-the standard SRV RRtype that occur in completely other scenarios than
-are described here. type would provide a cleaner solution to all the
-new types of notification signaling. Eg.:
+the standard SRV RRtype that occurs in completely other scenarios than
+are described here. The NOTIFY record type would provide a cleaner
+solution to all the new types of notification signaling. Eg.:
 
     parent.         IN NOTIFY  CDS     59   scanner.parent.
     parent.         IN NOTIFY  CSYNC   59   scanner.parent.
