@@ -571,7 +571,7 @@ Reference: [this document]
 # Acknowledgements
 
 Joe Abley, Mark Andrews, Christian Elmerot, Ólafur Guðmundsson, Paul
-Wouters, Brian Dickinson
+Wouters, Brian Dickson
 
 --- back
 
