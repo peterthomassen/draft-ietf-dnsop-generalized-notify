@@ -455,7 +455,7 @@ Port
 Target
         The domain name of the target host providing the service of
         listening for generalised notifications of the specified type.
-        There MUST be one or more address records for this name.
+        This name MUST resolve to one or more address records.
 
 # Open Questions
 
@@ -472,18 +472,19 @@ in the past. Furthermore, as the generalised notifications are a new
 proposal with no prior deployment on the public Internet there is an
 opportunity to avoid repeating previous mistakes.
 
-In the case of the "vertical" NOTIFY(CDS) and NOTIFY(CSYNC) nothing
-needs to be done by the nameservers serving the child.parent. zone.
-So therefore the SRV record, modulo the overloading issue, appear to
-be workable match. In the case of the more "horizontal"
-NOTIFY(DNSKEY), however, the nameserver will have to act on the
-insertion of a "zone. NOTIFY DNSKEY ..." record.
+In the case of the "vertical" NOTIFY(CDS) and NOTIFY(CSYNC), no
+special processing needs to be applied by the authoritative nameserver
+upon insertion of the record indicating the notification target.
+The nameserver can be "unaware"; a conventional SRV record would
+therefore suffice from a processing point of view.
+In the case of the more "horizontal" NOTIFY(DNSKEY), however, the
+nameserver will have to act on the insertion of a `zone. NOTIFY
+DNSKEY ...` record.
 
 A new record type would therefore make it possible to more easily
-associate the special processing needed with the new type rather than
-the standard SRV RRtype that occurs in completely other scenarios than
-are described here. The NOTIFY record type would provide a cleaner
-solution to all the new types of notification signaling. Eg.:
+associate the special processing with the record's insertion. The
+NOTIFY record type would provide a cleaner solution to all the new
+types of notification signaling. Eg.:
 
     parent.         IN NOTIFY  CDS     1  59   scanner.parent.
     parent.         IN NOTIFY  CSYNC   1  59   scanner.parent.
@@ -564,8 +565,6 @@ Reference: [this document]
 | CDS         |      1 | parent.  | [this document] |
 | CSYNC       |      1 | parent.  | [this document] |
 | DNSKEY      |      1 | zone.    | [this document] |
-
-[TODO: (1) Detail out use cases? (2) Add entries via RFC or web form?]
 
 # Acknowledgements
 
