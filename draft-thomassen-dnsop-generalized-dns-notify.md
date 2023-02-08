@@ -82,7 +82,6 @@ There are no DNS protocol changes introduced by this document.
 There are, however, proposals for how to interpret a wider range of
 DNS messages that are already allowed (but not used) by the protocol.
 
-
 Readers are expected to be familiar with DNSSEC, including {{!RFC4033}},
 {{!RFC4034}}, {{!RFC4035}}, {{!RFC6781}}, {{!RFC7344}}, {{!RFC7477}},
 {{!RFC7583}}, and {{!RFC8901}}.
@@ -256,7 +255,7 @@ the notification is the parent, to improve the speed and efficiency of
 the parent's CDS/CSYNC scanning. Because the name of the parent zone
 is known, and because the parent obviously controls the contents of
 its own zone the simplest solution is for the parent to publish the
-address where it prefers to have notifications sent. 
+address where it prefers to have notifications sent.
 
 However, there may exist cases where this scheme (sending the
 notification to the parent) is not sufficient and a more general
@@ -264,22 +263,22 @@ design is needed. At the same time, it is strongly desireable that the
 child is able to figure out where to send the NOTIFY via a single
 query.
 
-By adding the following to the zone `parent.`: 
+By adding the following to the zone `parent.`:
 
-	parent.   IN NOTIFY CDS   scheme port scanner.parent.
+    parent.   IN NOTIFY CDS   scheme port scanner.parent.
     parent.   IN NOTIFY CSYNC scheme port scanner.parent.
- 	
+
 where the only scheme defined here is scheme=1 with the interpretation
 that when a new CDS (or CDNSKEY or CSYNC) is published, a NOTIFY(CDS)
 or NOTIFY(CSYNC) should be sent to the address and port listed in the
 corresponding NOTIFY RRset.
- 
+
 Example:
 
-	parent.   IN NOTIFY CDS   1 5359 cds-scanner.parent.
+    parent.   IN NOTIFY CDS   1 5359 cds-scanner.parent.
     parent.   IN NOTIFY CSYNC 1 5360 csync-scanner.parent.
 
-Other schemes are possible, but are out of scope for this document. 
+Other schemes are possible, but are out of scope for this document.
 
 The suggested mnemonic for the new record type is "NOTIIFY" and it is
 further described below.
@@ -349,9 +348,9 @@ scheme will not be sufficient for all cases. And therefore the
 proposed design (in analogy with the NOTIFY(CDS) and NOTIFY(CSYNC)
 cases) is:
 
-    child.parent. IN NOTIFY DNSKEY scheme port scanner.signerA.  
-    child.parent. IN NOTIFY DNSKEY scheme port scanner.signerB.  
- 
+    child.parent. IN NOTIFY DNSKEY scheme port scanner.signerA.
+    child.parent. IN NOTIFY DNSKEY scheme port scanner.signerB.
+
 with the only defined scheme at this time being scheme=1 with the
 interpretation that whenever there are changes to the DNSKEY RRset in
 a signer it should send a corresponding NOTIFY(DNSKEY) to all
@@ -363,7 +362,7 @@ Example:
     child.parent. IN NOTIFY DNSKEY 1 5361 scanner.signerB.
     child.parent. IN NOTIFY DNSKEY 1 5361 ctrl.multi-signer.example.
 
-Other schemes are possible, but are out of scope for this document. 
+Other schemes are possible, but are out of scope for this document.
 
 ## How to Interpret DNSKEY Notifications
 
@@ -440,7 +439,7 @@ RRtype
         CSYNC and DNSKEY are suggested to be supported, but there is
         no protocol issue should a use case for additional types of
         notifications arise in the future.
- 		
+
 Scheme
         The scheme for locating the desired notification address.
         The range is 0-255. This is a 16 bit unsigned integer in
@@ -456,7 +455,7 @@ Port
 Target
         The domain name of the target host providing the service of
         listening for generalised notifications of the specified type.
-        There MUST be one or more address records for this name. 
+        There MUST be one or more address records for this name.
 
 # Open Questions
 
