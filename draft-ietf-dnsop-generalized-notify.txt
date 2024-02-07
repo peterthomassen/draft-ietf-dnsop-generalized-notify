@@ -385,29 +385,35 @@ Table of Contents
 
 8.  Security Considerations
 
-   The original NOTIFY specification ([RFC1996]) sidesteps most security
-   issues by not relying on the information in the NOTIFY message in any
-   way but instead only use it to set the timer until the next scheduled
-   check (for the SOA record) to zero.  Therefore it is impossible to
-   affect the behaviour of the recipient of the NOTIFY other than by
-   changing the timing for when different checks are initiated.
+   The original NOTIFY specification sidesteps most security issues by
+   not relying on the information in the NOTIFY message in any way, and
+   instead only using it to "enter the state it would if the zone's
+   refresh timer had expired" (Section 4.7 of [RFC1996]).
 
-   This mechanism and security model is reused for all the generalized
-   NOTIFY messages.
+   It therefore seems impossible to affect the behaviour of the
+   recipient of the NOTIFY other than by hastening the timing for when
+   different checks are initiated.  This security model is reused for
+   generalized NOTIFY messages.
 
-   Another consideration is whether generalized DNS Notifications can be
-   used as an amplification attack.  The answer seems to be "no",
-   because the size of the generalized NOTIFY messages is mostly equal
-   to the size of the response and it is also mostly equal to the size
-   of the resulting outbound query (for the child zone's CDS or CSYNC
-   RRset).
+   The receipt of a notification message will, in general, cause the
+   receiving party to cause an outbound query for the records of
+   interest (for example, NOTIFY(CDS) will cause CDS/CDNSKEY queries).
+   When performed via port 53, the size of these queries is comparable
+   to that of the notification messages themselves, rendering any
+   amplfication attempts futile.
 
-   Hence the amplification attack potential of generalized Notifications
-   is the same as for the original NOTIFY(SOA), which has never been
-   found to be useful for amplification attacks.
+   However, when the outgoing query occurs via encrypted transport, some
+   amplification is possible, both with respect to bandwidth and
+   computational resources.  Receivers therefore MUST implement rate
+   limiting for notification processing.  It is RECOMMENDED to configure
+   rate limiting independently for both the notification's source IP
+   address and the name of the zone that is conveyed in the notification
+   message (e.g., the child zone).
 
-   In any case, NOTIFY consumers MAY configure rate limits to address
-   concerns about the impact of unsolicited NOTIFY messages.
+   Rate limiting will also mitigate processing load of garbage
+   notifications.  Alternative solutions appear significantly more
+   expensive.  (For example, validating the signature of a signed
+   notification is much more expensive than checking the rate limit.)
 
 9.  IANA Considerations
 
@@ -548,6 +554,10 @@ Appendix A.  Efficiency and Convergence Issues in DNS Scanning
 Appendix B.  Change History (to be removed before publication)
 
    *  draft-ietf-dnsop-generalized-notify-01
+
+      Discussion on garbage notifications
+
+      More discussion on amplification risks
 
       Clean-up, remove multi-signer use-case
 

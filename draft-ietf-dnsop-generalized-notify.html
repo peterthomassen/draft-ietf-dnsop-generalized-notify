@@ -1547,25 +1547,29 @@ the detailed specification is left for future work.<a href="#section-7-3" class=
       <h2 id="name-security-considerations">
 <a href="#section-8" class="section-number selfRef">8. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-8-1">The original NOTIFY specification (<span>[<a href="#RFC1996" class="cite xref">RFC1996</a>]</span>) sidesteps most security
-issues by not relying on the information in the NOTIFY message in any
-way but instead only use it to set the timer until the next scheduled
-check (for the SOA record) to zero. Therefore it is impossible to
-affect the behaviour of the recipient of the NOTIFY other than by
-changing the timing for when different checks are initiated.<a href="#section-8-1" class="pilcrow">¶</a></p>
-<p id="section-8-2">This mechanism and security model is reused for all the generalized
-NOTIFY messages.<a href="#section-8-2" class="pilcrow">¶</a></p>
-<p id="section-8-3">Another consideration is whether generalized DNS
-Notifications can be used as an amplification attack. The answer seems
-to be "no", because the size of the generalized NOTIFY messages is
-mostly equal to the size of the response and it is also mostly equal
-to the size of the resulting outbound query (for the child zone's CDS or
-CSYNC RRset).<a href="#section-8-3" class="pilcrow">¶</a></p>
-<p id="section-8-4">Hence the amplification attack potential of generalized Notifications
-is the same as for the original NOTIFY(SOA), which has never been
-found to be useful for amplification attacks.<a href="#section-8-4" class="pilcrow">¶</a></p>
-<p id="section-8-5">In any case, NOTIFY consumers MAY configure rate limits to address
-concerns about the impact of unsolicited NOTIFY messages.<a href="#section-8-5" class="pilcrow">¶</a></p>
+<p id="section-8-1">The original NOTIFY specification sidesteps most security issues by not
+relying on the information in the NOTIFY message in any way, and instead
+only using it to "enter the state it would if the zone's refresh timer
+had expired" (<span><a href="https://rfc-editor.org/rfc/rfc1996#section-4.7" class="relref">Section 4.7</a> of [<a href="#RFC1996" class="cite xref">RFC1996</a>]</span>).<a href="#section-8-1" class="pilcrow">¶</a></p>
+<p id="section-8-2">It therefore seems impossible to affect the behaviour of the recipient of
+the NOTIFY other than by hastening the timing for when different checks
+are initiated. This security model is reused for generalized NOTIFY messages.<a href="#section-8-2" class="pilcrow">¶</a></p>
+<p id="section-8-3">The receipt of a notification message will, in general, cause the
+receiving party to cause an outbound query for the records of interest
+(for example, NOTIFY(CDS) will cause CDS/CDNSKEY queries). When performed
+via port 53, the size of these queries is comparable to that of the
+notification messages themselves, rendering any amplfication attempts
+futile.<a href="#section-8-3" class="pilcrow">¶</a></p>
+<p id="section-8-4">However, when the outgoing query occurs via encrypted transport, some
+amplification is possible, both with respect to bandwidth and computational
+resources. Receivers therefore MUST implement rate limiting for notification
+processing. It is RECOMMENDED to configure rate limiting independently for
+both the notification's source IP address and the name of the zone that is
+conveyed in the notification message (e.g., the child zone).<a href="#section-8-4" class="pilcrow">¶</a></p>
+<p id="section-8-5">Rate limiting will also mitigate processing load of garbage notifications.
+Alternative solutions appear significantly more expensive. (For example,
+validating the signature of a signed notification is much more expensive
+than checking the rate limit.)<a href="#section-8-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana-considerations">
@@ -1728,72 +1732,82 @@ causes slower convergence (delay until the delegation is updated).<a href="#appe
       </ul>
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="appendix-B-2.1">
-          <p id="appendix-B-2.1.1">Clean-up, remove multi-signer use-case<a href="#appendix-B-2.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-2.1.1">Discussion on garbage notifications<a href="#appendix-B-2.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<ul class="normal">
-<li class="normal" id="appendix-B-3.1">
-          <p id="appendix-B-3.1.1">draft-ietf-dnsop-generalized-notify-00<a href="#appendix-B-3.1.1" class="pilcrow">¶</a></p>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="appendix-B-3.1">
+          <p id="appendix-B-3.1.1">More discussion on amplification risks<a href="#appendix-B-3.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="appendix-B-4.1">
-          <p id="appendix-B-4.1.1">Revision after adoption.<a href="#appendix-B-4.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-4.1.1">Clean-up, remove multi-signer use-case<a href="#appendix-B-4.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal">
 <li class="normal" id="appendix-B-5.1">
-          <p id="appendix-B-5.1.1">draft-thomassen-dnsop-generalized-dns-notify-02<a href="#appendix-B-5.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-5.1.1">draft-ietf-dnsop-generalized-notify-00<a href="#appendix-B-5.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="appendix-B-6.1">
-          <p id="appendix-B-6.1.1">Add rationale for staying in band<a href="#appendix-B-6.1.1" class="pilcrow">¶</a></p>
-</li>
-      </ul>
-<ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="appendix-B-7.1">
-          <p id="appendix-B-7.1.1">Add John as an author<a href="#appendix-B-7.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-6.1.1">Revision after adoption.<a href="#appendix-B-6.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal">
-<li class="normal" id="appendix-B-8.1">
-          <p id="appendix-B-8.1.1">draft-thomassen-dnsop-generalized-dns-notify-01<a href="#appendix-B-8.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-B-7.1">
+          <p id="appendix-B-7.1.1">draft-thomassen-dnsop-generalized-dns-notify-02<a href="#appendix-B-7.1.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="appendix-B-8.1">
+          <p id="appendix-B-8.1.1">Add rationale for staying in band<a href="#appendix-B-8.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="appendix-B-9.1">
-          <p id="appendix-B-9.1.1">Mention Ry-to-Rr forwarding to accommodate RRR model<a href="#appendix-B-9.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-9.1.1">Add John as an author<a href="#appendix-B-9.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="appendix-B-10.1">
-          <p id="appendix-B-10.1.1">Add port number flexiblity<a href="#appendix-B-10.1.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-B-10.1">
+          <p id="appendix-B-10.1.1">draft-thomassen-dnsop-generalized-dns-notify-01<a href="#appendix-B-10.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="appendix-B-11.1">
-          <p id="appendix-B-11.1.1">Add scheme parameter<a href="#appendix-B-11.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-11.1.1">Mention Ry-to-Rr forwarding to accommodate RRR model<a href="#appendix-B-11.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="appendix-B-12.1">
-          <p id="appendix-B-12.1.1">Drop SRV-based alternative in favour of new NOTIFY RR<a href="#appendix-B-12.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-12.1.1">Add port number flexiblity<a href="#appendix-B-12.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="appendix-B-13.1">
-          <p id="appendix-B-13.1.1">Editorial improvements<a href="#appendix-B-13.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-13.1.1">Add scheme parameter<a href="#appendix-B-13.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<ul class="normal">
-<li class="normal" id="appendix-B-14.1">
-          <p id="appendix-B-14.1.1">draft-thomassen-dnsop-generalized-dns-notify-00<a href="#appendix-B-14.1.1" class="pilcrow">¶</a></p>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="appendix-B-14.1">
+          <p id="appendix-B-14.1.1">Drop SRV-based alternative in favour of new NOTIFY RR<a href="#appendix-B-14.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="appendix-B-15.1">
-          <p id="appendix-B-15.1.1">Initial public draft.<a href="#appendix-B-15.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-15.1.1">Editorial improvements<a href="#appendix-B-15.1.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<ul class="normal">
+<li class="normal" id="appendix-B-16.1">
+          <p id="appendix-B-16.1.1">draft-thomassen-dnsop-generalized-dns-notify-00<a href="#appendix-B-16.1.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="appendix-B-17.1">
+          <p id="appendix-B-17.1.1">Initial public draft.<a href="#appendix-B-17.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 </section>
