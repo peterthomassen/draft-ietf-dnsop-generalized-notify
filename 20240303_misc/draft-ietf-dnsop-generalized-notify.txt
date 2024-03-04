@@ -164,10 +164,10 @@ Table of Contents
    themselves, or by a designated entity who is in charge of handling
    the domain's delegation data (such as a domain registrar).
 
-   To keep the lookup process simple, the simplest solution is for the
+   The simplest solution enabling straightforward discovery is for the
    parent to publish the address where it prefers to have notifications
    sent.  Potential notification senders, knowing the name of the parent
-   zone, can then simply looking up that information.
+   zone, can then simply look up that information.
 
    It is strongly desirable that the notification sender is able to
    figure out where to send the NOTIFY via a single lookup, even when
@@ -355,11 +355,11 @@ example._signal.se.   IN DSYNC  CDS   scheme port endpoint.registrar.com.
           owner name just before the parent zone labels inferred from
           the negative response, and go to step 2.
 
-          For example, kantei.go.jp is delegated from jp (not from
-          go.jp), but the first DSYNC query relating to it would have
-          been directed at kantei._signal.go.jp.  This is expected to
-          result in a negative response, and another query for
-          kantei.go._signal.jp is then required;
+          For example, city.ise.mie.jp is delegated from jp (and not
+          from ise.mie.jp or mie.jp!).  The initial DSYNC query relating
+          to it is thus directed at city._signal.ise.mie.jp.  This is
+          expected to result in a negative response from jp, and another
+          query for city.ise.mie._signal.jp is then required;
 
        *  Otherwise, if the lookup name has any labels in front of the
           _signal label, remove them to construct a new lookup name
@@ -487,30 +487,34 @@ example._signal.se.   IN DSYNC  CDS   scheme port endpoint.registrar.com.
    instead only using it to "enter the state it would if the zone's
    refresh timer had expired" (Section 4.7 of [RFC1996]).
 
-   It therefore seems impossible to affect the behaviour of the
-   recipient of the NOTIFY other than by hastening the timing for when
-   different checks are initiated.  This security model is reused for
-   generalized NOTIFY messages.
+   This security model is reused for generalized NOTIFY messages.  It
+   therefore seems impossible to affect the behaviour of the recipient
+   of the NOTIFY other than by hastening the timing for when different
+   checks are initiated.
 
    The receipt of a notification message will, in general, cause the
-   receiving party to cause one or more outbound queries for the records
-   of interest (for example, NOTIFY(CDS) will cause CDS/CDNSKEY
-   queries).  When performed via port 53, the size of these queries is
-   comparable to that of the notification messages themselves, rendering
-   any amplfication attempts futile.
+   receiving party to perform one or more outbound queries for the
+   records of interest (for example, NOTIFY(CDS) will cause CDS/CDNSKEY
+   queries).  When done via port 53, the size of these queries is
+   comparable to that of the NOTIFY messages themselves, rendering any
+   amplification attempts futile.  The number of queries triggered per
+   notification is also limited by the requirement that a NOTIFY message
+   can refer to one child only.
 
    However, when the outgoing query occurs via encrypted transport, some
    amplification is possible, both with respect to bandwidth and
-   computational resources.  Receivers therefore MUST implement rate
-   limiting for notification processing.  It is RECOMMENDED to configure
-   rate limiting independently for both the notification's source IP
-   address and the name of the zone that is conveyed in the notification
-   message (e.g., the child zone).
+   computational burden.  In this case, the usual principle of bounding
+   the work, even under unreasonable events, applies.
 
-   Rate limiting will also mitigate processing load of garbage
-   notifications.  Alternative solutions appear significantly more
-   expensive.  (For example, validating the signature of a signed
-   notification is much more expensive than checking the rate limit.)
+   Receivers therefore MUST implement rate limiting for notification
+   processing.  It is RECOMMENDED to configure rate limiting
+   independently for both the notification's source IP address and the
+   name of the zone that is conveyed in the NOTIFY message.  Rate
+   limiting also mitigates processing load from garbage notifications.
+
+   Alternative solutions (such as signing notifications and validating
+   their signatures) appear significantly more expensive without
+   tangible benefit.
 
 6.  IANA Considerations
 

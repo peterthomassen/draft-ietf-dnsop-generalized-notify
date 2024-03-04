@@ -1308,10 +1308,10 @@ made available for accepting these notifications. Depending on the
 context, this service may be run by the parent zone operator themselves,
 or by a designated entity who is in charge of handling the domain's
 delegation data (such as a domain registrar).<a href="#section-2.1-1" class="pilcrow">¶</a></p>
-<p id="section-2.1-2">To keep the lookup process simple, the simplest solution is for the
+<p id="section-2.1-2">The simplest solution enabling straightforward discovery is for the
 parent to publish the address where it prefers to have notifications
 sent. Potential notification senders, knowing the name of the parent
-zone, can then simply looking up that information.<a href="#section-2.1-2" class="pilcrow">¶</a></p>
+zone, can then simply look up that information.<a href="#section-2.1-2" class="pilcrow">¶</a></p>
 <p id="section-2.1-3">It is strongly desirable that the notification sender is able to figure
 out where to send the NOTIFY via a single lookup, even when ignorant of
 the details of the parent-side business relationships (e.g., whether
@@ -1532,11 +1532,11 @@ inserting the <code>_signal</code> label into the delegation owner name just
 before the parent zone labels inferred from the negative response,
 and go to step 2.<a href="#section-4.1-2.3.2.1.1" class="pilcrow">¶</a></p>
 <p id="section-4.1-2.3.2.1.2">
-For example, <code>kantei.go.jp</code> is delegated from <code>jp</code> (not from
-<code>go.jp</code>), but the first DSYNC query relating to it would have been
-directed at <code>kantei._signal.go.jp</code>. This is expected to result in
-a negative response, and another query for <code>kantei.go._signal.jp</code>
-is then required;<a href="#section-4.1-2.3.2.1.2" class="pilcrow">¶</a></p>
+For example, <code>city.ise.mie.jp</code> is delegated from <code>jp</code> (and not
+from <code>ise.mie.jp</code> or <code>mie.jp</code>!). The initial DSYNC query relating
+to it is thus directed at <code>city._signal.ise.mie.jp</code>. This is
+expected to result in a negative response from <code>jp</code>, and another
+query for <code>city.ise.mie._signal.jp</code> is then required;<a href="#section-4.1-2.3.2.1.2" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-4.1-2.3.2.2">
                 <p id="section-4.1-2.3.2.2.1">Otherwise, if the lookup name has any labels in front of the
@@ -1681,25 +1681,30 @@ NOTIFY(CDS).<a href="#section-4.3-6" class="pilcrow">¶</a></p>
 relying on the information in the NOTIFY message in any way, and instead
 only using it to "enter the state it would if the zone's refresh timer
 had expired" (<span><a href="https://rfc-editor.org/rfc/rfc1996#section-4.7" class="relref">Section 4.7</a> of [<a href="#RFC1996" class="cite xref">RFC1996</a>]</span>).<a href="#section-5-1" class="pilcrow">¶</a></p>
-<p id="section-5-2">It therefore seems impossible to affect the behaviour of the recipient of
+<p id="section-5-2">This security model is reused for generalized NOTIFY messages. It
+therefore seems impossible to affect the behaviour of the recipient of
 the NOTIFY other than by hastening the timing for when different checks
-are initiated. This security model is reused for generalized NOTIFY messages.<a href="#section-5-2" class="pilcrow">¶</a></p>
+are initiated.<a href="#section-5-2" class="pilcrow">¶</a></p>
 <p id="section-5-3">The receipt of a notification message will, in general, cause the
-receiving party to cause one or more outbound queries for the records
+receiving party to perform one or more outbound queries for the records
 of interest (for example, NOTIFY(CDS) will cause CDS/CDNSKEY
-queries). When performed via port 53, the size of these queries is
-comparable to that of the notification messages themselves, rendering
-any amplfication attempts futile.<a href="#section-5-3" class="pilcrow">¶</a></p>
+queries). When done via port 53, the size of these queries is comparable
+to that of the NOTIFY messages themselves, rendering any amplification
+attempts futile. The number of queries triggered per notification is
+also limited by the requirement that a NOTIFY message can refer to one
+child only.<a href="#section-5-3" class="pilcrow">¶</a></p>
 <p id="section-5-4">However, when the outgoing query occurs via encrypted transport, some
-amplification is possible, both with respect to bandwidth and computational
-resources. Receivers therefore MUST implement rate limiting for notification
-processing. It is RECOMMENDED to configure rate limiting independently for
-both the notification's source IP address and the name of the zone that is
-conveyed in the notification message (e.g., the child zone).<a href="#section-5-4" class="pilcrow">¶</a></p>
-<p id="section-5-5">Rate limiting will also mitigate processing load of garbage notifications.
-Alternative solutions appear significantly more expensive. (For example,
-validating the signature of a signed notification is much more expensive
-than checking the rate limit.)<a href="#section-5-5" class="pilcrow">¶</a></p>
+amplification is possible, both with respect to bandwidth and
+computational burden. In this case, the usual principle of bounding the
+work, even under unreasonable events, applies.<a href="#section-5-4" class="pilcrow">¶</a></p>
+<p id="section-5-5">Receivers therefore MUST implement rate limiting for notification
+processing. It is RECOMMENDED to configure rate limiting independently
+for both the notification's source IP address and the name of the zone
+that is conveyed in the NOTIFY message. Rate limiting also mitigates
+processing load from garbage notifications.<a href="#section-5-5" class="pilcrow">¶</a></p>
+<p id="section-5-6">Alternative solutions (such as signing notifications and validating
+their signatures) appear significantly more expensive without tangible
+benefit.<a href="#section-5-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana-considerations">
