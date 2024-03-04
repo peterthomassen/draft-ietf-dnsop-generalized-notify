@@ -245,9 +245,9 @@ example._signal.se.   IN DSYNC  CDS   scheme port endpoint.registrar.com.
 
    Scheme  The scheme for locating the desired notification address.
       The range is 0-255.  This is an 8 bit unsigned integer.  The value
-      0 is an error, and values 128-255 are reserved.  The value 1 is
-      described in this document, and all other values are currently
-      unspecified.
+      0 is an error, and values 128-255 are reserved for private use.
+      The value 1 is described in this document, and all other values
+      are currently unspecified.
 
    Port  The port on the target host of the notification service.  The
       range is 0-65535.  This is a 16 bit unsigned integer in network
@@ -527,17 +527,17 @@ example._signal.se.   IN DSYNC  CDS   scheme port endpoint.registrar.com.
 
    Reference: (this document)
 
-    +============+=========+=======================+=================+
-    | DSYNC type | Scheme  | Purpose               | Reference       |
-    +============+=========+=======================+=================+
-    | CDS        | 1       | Delegation management | (this document) |
-    +------------+---------+-----------------------+-----------------+
-    | CSYNC      | 1       | Delegation management | (this document) |
-    +------------+---------+-----------------------+-----------------+
-    |            | 128-255 | reserved              | (this document) |
-    +------------+---------+-----------------------+-----------------+
+    +============+=========+========================+=================+
+    | DSYNC type | Scheme  | Purpose                | Reference       |
+    +============+=========+========================+=================+
+    | CDS        | 1       | Delegation management  | (this document) |
+    +------------+---------+------------------------+-----------------+
+    | CSYNC      | 1       | Delegation management  | (this document) |
+    +------------+---------+------------------------+-----------------+
+    |            | 128-255 | Reserved (private use) | (this document) |
+    +------------+---------+------------------------+-----------------+
 
-                                 Table 1
+                                  Table 1
 
 7.  Acknowledgements
 
