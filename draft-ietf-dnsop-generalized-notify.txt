@@ -667,6 +667,10 @@ A.2.  Similar Issues for DS Maintenance and Beyond
 
 Appendix B.  Change History (to be removed before publication)
 
+   *  draft-ietf-dnsop-generalized-notify-02
+
+      Reserve scheme value 0
+
    *  draft-ietf-dnsop-generalized-notify-01
 
       Reserve scheme values 128-255
