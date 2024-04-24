@@ -5,10 +5,10 @@
 DNSOP Working Group                                          J. Stenstam
 Internet-Draft                           The Swedish Internet Foundation
 Intended status: Standards Track                            P. Thomassen
-Expires: 13 October 2024               deSEC, Secure Systems Engineering
+Expires: 26 October 2024               deSEC, Secure Systems Engineering
                                                                J. Levine
                                                            Standcore LLC
-                                                           11 April 2024
+                                                           24 April 2024
 
 
                      Generalized DNS Notifications
@@ -16,7 +16,7 @@ Expires: 13 October 2024               deSEC, Secure Systems Engineering
 
 Abstract
 
-   This document extends the use of DNS NOTIFY ([RFC1996] beyond
+   This document extends the use of DNS NOTIFY [RFC1996] beyond
    conventional zone transfer hints, bringing the benefits of ad-hoc
    notifications to DNS delegation maintenance in general.  Use cases
    include DNSSEC key rollovers hints, and quicker changes to a
@@ -48,7 +48,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 13 October 2024.
+   This Internet-Draft will expire on 26 October 2024.
 
 Copyright Notice
 
@@ -544,7 +544,7 @@ example._signal.se.   IN DSYNC  CDS   scheme port endpoint.registrar.com.
 7.  Acknowledgements
 
    Joe Abley, Mark Andrews, Christian Elmerot, Ólafur Guðmundsson, Paul
-   Wouters, Brian Dickson
+   Wouters, Brian Dickson, Warren Kumari
 
 8.  Normative References
 
@@ -668,6 +668,8 @@ A.2.  Similar Issues for DS Maintenance and Beyond
 Appendix B.  Change History (to be removed before publication)
 
    *  draft-ietf-dnsop-generalized-notify-02
+
+      Editorial nits
 
       Reserve scheme value 0
 

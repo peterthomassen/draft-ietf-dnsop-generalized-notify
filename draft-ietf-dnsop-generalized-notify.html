@@ -9,7 +9,7 @@
 <meta content="Peter Thomassen" name="author">
 <meta content="John Levine" name="author">
 <meta content="
-       This document extends the use of DNS NOTIFY (  beyond conventional
+       This document extends the use of DNS NOTIFY   beyond conventional
 zone transfer hints, bringing the benefits of ad-hoc notifications to DNS
 delegation maintenance in general.  Use cases include DNSSEC key rollovers
 hints, and quicker changes to a delegation's NS record set. 
@@ -20,12 +20,12 @@ for such notification message is introduced, via the new NOTIFY record type.
 The most recent working version of the document, open issues, etc. should all be
 available there.  The authors (gratefully) accept pull requests. 
     " name="description">
-<meta content="xml2rfc 3.20.1" name="generator">
+<meta content="xml2rfc 3.21.0" name="generator">
 <meta content="Internet-Draft" name="keyword">
 <meta content="draft-ietf-dnsop-generalized-notify-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.20.1
-    Python 3.11.8
+  xml2rfc 3.21.0
+    Python 3.11.9
     ConfigArgParse 1.7
     google-i18n-address 3.1.0
     intervaltree 3.1.0
@@ -1040,7 +1040,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Stenstam, et al.</td>
-<td class="center">Expires 13 October 2024</td>
+<td class="center">Expires 26 October 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1053,12 +1053,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-dnsop-generalized-notify-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-04-11" class="published">11 April 2024</time>
+<time datetime="2024-04-24" class="published">24 April 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-10-13">13 October 2024</time></dd>
+<dd class="expires"><time datetime="2024-10-26">26 October 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1079,7 +1079,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <h1 id="title">Generalized DNS Notifications</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">This document extends the use of DNS NOTIFY (<span>[<a href="#RFC1996" class="cite xref">RFC1996</a>]</span> beyond conventional
+<p id="section-abstract-1">This document extends the use of DNS NOTIFY <span>[<a href="#RFC1996" class="cite xref">RFC1996</a>]</span> beyond conventional
 zone transfer hints, bringing the benefits of ad-hoc notifications to DNS
 delegation maintenance in general.  Use cases include DNSSEC key rollovers
 hints, and quicker changes to a delegation's NS record set.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
@@ -1109,7 +1109,7 @@ available there.  The authors (gratefully) accept pull requests.<a href="#sectio
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 13 October 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 26 October 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1763,7 +1763,7 @@ benefit.<a href="#section-5-6" class="pilcrow">¶</a></p>
 <a href="#section-7" class="section-number selfRef">7. </a><a href="#name-acknowledgements" class="section-name selfRef">Acknowledgements</a>
       </h2>
 <p id="section-7-1">Joe Abley, Mark Andrews, Christian Elmerot, Ólafur Guðmundsson, Paul
-Wouters, Brian Dickson<a href="#section-7-1" class="pilcrow">¶</a></p>
+Wouters, Brian Dickson, Warren Kumari<a href="#section-7-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-normative-references">
@@ -1897,107 +1897,112 @@ the detailed specification is left for future work.<a href="#appendix-A.2-5" cla
       </ul>
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="appendix-B-2.1">
-          <p id="appendix-B-2.1.1">Reserve scheme value 0<a href="#appendix-B-2.1.1" class="pilcrow">¶</a></p>
-</li>
-      </ul>
-<ul class="normal">
-<li class="normal" id="appendix-B-3.1">
-          <p id="appendix-B-3.1.1">draft-ietf-dnsop-generalized-notify-01<a href="#appendix-B-3.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-2.1.1">Editorial nits<a href="#appendix-B-2.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="appendix-B-4.1">
-          <p id="appendix-B-4.1.1">Reserve scheme values 128-255<a href="#appendix-B-4.1.1" class="pilcrow">¶</a></p>
+<li class="normal ulEmpty" id="appendix-B-3.1">
+          <p id="appendix-B-3.1.1">Reserve scheme value 0<a href="#appendix-B-3.1.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<ul class="normal">
+<li class="normal" id="appendix-B-4.1">
+          <p id="appendix-B-4.1.1">draft-ietf-dnsop-generalized-notify-01<a href="#appendix-B-4.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="appendix-B-5.1">
-          <p id="appendix-B-5.1.1">Rename NOTIFY rrtype to DSYNC (to distinguish from NOTIFY message)<a href="#appendix-B-5.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-5.1.1">Reserve scheme values 128-255<a href="#appendix-B-5.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="appendix-B-6.1">
-          <p id="appendix-B-6.1.1">Describe endpoint discovery<a href="#appendix-B-6.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-6.1.1">Rename NOTIFY rrtype to DSYNC (to distinguish from NOTIFY message)<a href="#appendix-B-6.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="appendix-B-7.1">
-          <p id="appendix-B-7.1.1">Discussion on garbage notifications<a href="#appendix-B-7.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-7.1.1">Describe endpoint discovery<a href="#appendix-B-7.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="appendix-B-8.1">
-          <p id="appendix-B-8.1.1">More discussion on amplification risks<a href="#appendix-B-8.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-8.1.1">Discussion on garbage notifications<a href="#appendix-B-8.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="appendix-B-9.1">
-          <p id="appendix-B-9.1.1">Clean-up, editorial changes<a href="#appendix-B-9.1.1" class="pilcrow">¶</a></p>
-</li>
-      </ul>
-<ul class="normal">
-<li class="normal" id="appendix-B-10.1">
-          <p id="appendix-B-10.1.1">draft-ietf-dnsop-generalized-notify-00<a href="#appendix-B-10.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-9.1.1">More discussion on amplification risks<a href="#appendix-B-9.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="appendix-B-11.1">
-          <p id="appendix-B-11.1.1">Revision after adoption.<a href="#appendix-B-11.1.1" class="pilcrow">¶</a></p>
+<li class="normal ulEmpty" id="appendix-B-10.1">
+          <p id="appendix-B-10.1.1">Clean-up, editorial changes<a href="#appendix-B-10.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal">
-<li class="normal" id="appendix-B-12.1">
-          <p id="appendix-B-12.1.1">draft-thomassen-dnsop-generalized-dns-notify-02<a href="#appendix-B-12.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-B-11.1">
+          <p id="appendix-B-11.1.1">draft-ietf-dnsop-generalized-notify-00<a href="#appendix-B-11.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="appendix-B-13.1">
-          <p id="appendix-B-13.1.1">Add rationale for staying in band<a href="#appendix-B-13.1.1" class="pilcrow">¶</a></p>
+<li class="normal ulEmpty" id="appendix-B-12.1">
+          <p id="appendix-B-12.1.1">Revision after adoption.<a href="#appendix-B-12.1.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<ul class="normal">
+<li class="normal" id="appendix-B-13.1">
+          <p id="appendix-B-13.1.1">draft-thomassen-dnsop-generalized-dns-notify-02<a href="#appendix-B-13.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="appendix-B-14.1">
-          <p id="appendix-B-14.1.1">Add John as an author<a href="#appendix-B-14.1.1" class="pilcrow">¶</a></p>
-</li>
-      </ul>
-<ul class="normal">
-<li class="normal" id="appendix-B-15.1">
-          <p id="appendix-B-15.1.1">draft-thomassen-dnsop-generalized-dns-notify-01<a href="#appendix-B-15.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-14.1.1">Add rationale for staying in band<a href="#appendix-B-14.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="appendix-B-16.1">
-          <p id="appendix-B-16.1.1">Mention Ry-to-Rr forwarding to accommodate RRR model<a href="#appendix-B-16.1.1" class="pilcrow">¶</a></p>
+<li class="normal ulEmpty" id="appendix-B-15.1">
+          <p id="appendix-B-15.1.1">Add John as an author<a href="#appendix-B-15.1.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<ul class="normal">
+<li class="normal" id="appendix-B-16.1">
+          <p id="appendix-B-16.1.1">draft-thomassen-dnsop-generalized-dns-notify-01<a href="#appendix-B-16.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="appendix-B-17.1">
-          <p id="appendix-B-17.1.1">Add port number flexiblity<a href="#appendix-B-17.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-17.1.1">Mention Ry-to-Rr forwarding to accommodate RRR model<a href="#appendix-B-17.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="appendix-B-18.1">
-          <p id="appendix-B-18.1.1">Add scheme parameter<a href="#appendix-B-18.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-18.1.1">Add port number flexiblity<a href="#appendix-B-18.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="appendix-B-19.1">
-          <p id="appendix-B-19.1.1">Drop SRV-based alternative in favour of new NOTIFY RR<a href="#appendix-B-19.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-19.1.1">Add scheme parameter<a href="#appendix-B-19.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="appendix-B-20.1">
-          <p id="appendix-B-20.1.1">Editorial improvements<a href="#appendix-B-20.1.1" class="pilcrow">¶</a></p>
-</li>
-      </ul>
-<ul class="normal">
-<li class="normal" id="appendix-B-21.1">
-          <p id="appendix-B-21.1.1">draft-thomassen-dnsop-generalized-dns-notify-00<a href="#appendix-B-21.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-20.1.1">Drop SRV-based alternative in favour of new NOTIFY RR<a href="#appendix-B-20.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="appendix-B-22.1">
-          <p id="appendix-B-22.1.1">Initial public draft.<a href="#appendix-B-22.1.1" class="pilcrow">¶</a></p>
+<li class="normal ulEmpty" id="appendix-B-21.1">
+          <p id="appendix-B-21.1.1">Editorial improvements<a href="#appendix-B-21.1.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<ul class="normal">
+<li class="normal" id="appendix-B-22.1">
+          <p id="appendix-B-22.1.1">draft-thomassen-dnsop-generalized-dns-notify-00<a href="#appendix-B-22.1.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="appendix-B-23.1">
+          <p id="appendix-B-23.1.1">Initial public draft.<a href="#appendix-B-23.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 </section>
