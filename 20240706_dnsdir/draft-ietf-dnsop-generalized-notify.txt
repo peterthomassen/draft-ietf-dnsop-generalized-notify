@@ -1,0 +1,800 @@
+
+
+
+
+DNSOP Working Group                                          J. Stenstam
+Internet-Draft                           The Swedish Internet Foundation
+Intended status: Standards Track                            P. Thomassen
+Expires: 9 January 2025                deSEC, Secure Systems Engineering
+                                                               J. Levine
+                                                           Standcore LLC
+                                                             8 July 2024
+
+
+                     Generalized DNS Notifications
+               draft-ietf-dnsop-generalized-notify-latest
+
+Abstract
+
+   This document extends the use of DNS NOTIFY [RFC1996] beyond
+   conventional zone transfer hints, bringing the benefits of ad-hoc
+   notifications to DNS delegation maintenance in general.  Use cases
+   include DNSSEC key rollovers hints, and quicker changes to a
+   delegation's NS record set.
+
+   To enable this functionality, a method for discovering the receiver
+   endpoint for such notification message is introduced, via the new
+   NOTIFY record type.
+
+   TO BE REMOVED: This document is being collaborated on in Github at:
+   https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify
+   (https://github.com/peterthomassen/draft-ietf-dnsop-generalized-
+   notify).  The most recent working version of the document, open
+   issues, etc. should all be available there.  The authors (gratefully)
+   accept pull requests.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on 9 January 2025.
+
+Copyright Notice
+
+   Copyright (c) 2024 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents (https://trustee.ietf.org/
+   license-info) in effect on the date of publication of this document.
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.  Code Components
+   extracted from this document must include Revised BSD License text as
+   described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Revised BSD License.
+
+Table of Contents
+
+   1.  Introduction
+     1.1.  Design Requirements
+     1.2.  Requirements Notation
+   2.  DSYNC RR Type
+     2.1.  Wire Format
+     2.2.  Semantics
+     2.3.  Rationale
+   3.  Publication of Notification Targets
+     3.1.  Signaling Method
+   4.  Delegation Maintenance: CDS/CDNSKEY and CSYNC Notifications
+     4.1.  Endpoint Discovery
+     4.2.  Sending Notifications
+       4.2.1.  Timeouts and Error Handling
+       4.2.2.  Roles
+       4.2.3.  Rationale for Using the DNS Message Format
+     4.3.  Processing of NOTIFY Messages
+   5.  Security Considerations
+   6.  IANA Considerations
+     6.1.  DSYNC RR Type
+     6.2.  DSYNC Scheme Registration
+   7.  Acknowledgements
+   8.  References
+     8.1.  Normative References
+     8.2.  Informative References
+   Appendix A.  Efficiency and Convergence Issues in DNS Scanning
+     A.1.  Original NOTIFY for Zone Transfer Nudging
+     A.2.  Similar Issues for DS Maintenance and Beyond
+   Appendix B.  Change History (to be removed before publication)
+   Authors' Addresses
+
+1.  Introduction
+
+   Traditional DNS notifications [RFC1996], which are here referred to
+   as "NOTIFY(SOA)", are sent from a primary server to a secondary
+   server to minimize the latter's convergence time to a new version of
+   the zone.  This mechanism successfully addresses a significant
+   inefficiency in the original protocol.
+
+   Today similar inefficiencies occur in new use cases, in particular
+   delegation maintenance (DS and NS record updates).  Just as in the
+   NOTIFY(SOA) case, a new set of notification types will have a major
+   positive benefit by allowing the DNS infrastructure to completely
+   sidestep these inefficiencies.  For additional context, see
+   Appendix A.
+
+   No DNS protocol changes are introduced by this document.  The
+   mechanism instead makes use of a wider range of DNS messages allowed
+   by the protocol.  Future extension for further use cases (such as
+   multi-signer key exchange) is possible.
+
+   Readers are expected to be familiar with DNSSEC, including [RFC4033],
+   [RFC4034], [RFC4035], [RFC6781], [RFC7344], [RFC7477], [RFC7583], and
+   [RFC8901].
+
+1.1.  Design Requirements
+
+   When the parent is interested in notifications for delegation
+   maintenance (such as for DS or NS updates), a service will need to be
+   made available for accepting these notifications.  Depending on the
+   context, this service may be run by the parent zone operator
+   themselves, or by a designated entity who is in charge of handling
+   the domain's delegation data (such as a domain registrar).
+
+   It seems desirable to minimize the number of steps that the
+   notification sender needs to figure out where to send the NOTIFY.
+   This suggests that the lookup process be ignorant of the details of
+   the parent-side relationships (e.g., whether there is a registrar or
+   not).  This is addressed by parameterizing the lookup with the name
+   of the child.  The parent may then (optionally) announce the
+   notification endpoint in a delegation-specific way, that is, at a
+   child-specific name.  (A catch-all endpoint may be indicated by
+   wildcarding.)
+
+   The solution proposed here is thus for the parent to publish the
+   address where it listens for notifications, in a child-specific way
+   (see Section 3.1).  Potential senders, knowing the name of the parent
+   zone, can then simply look up that information (see Section 4.1).
+
+1.2.  Requirements Notation
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in
+   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
+
+2.  DSYNC RR Type
+
+2.1.  Wire Format
+
+   The DSYNC RDATA wire format is encoded as follows:
+
+                        1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 3 3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   | RRtype                        | Scheme        | Port
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+                   | Target ...  /
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-/
+
+   RRtype  The type of generalized NOTIFY that this DSYNC RR defines the
+      desired target address for (see "Resource Record (RR) TYPEs" IANA
+      registry).  For now, only CDS and CSYNC are supported values, with
+      the former indicating an updated CDS or CDNSKEY record set.
+
+   Scheme  The scheme indicates the mode used for locating the desired
+      notification address.  This is an 8 bit unsigned integer.  Records
+      with value 0 (null scheme) are ignored by consumers.  Value 1 is
+      described in this document, and values 128-255 are reserved for
+      private use.  All other values are currently unspecified.
+
+   Port  The port on the target host of the notification service.  This
+      is a 16 bit unsigned integer in network byte order.
+
+   Target  The fully-qualified, uncompressed domain name of the target
+      host providing the service of listening for generalized
+      notifications of the specified type.  This name MUST resolve to
+      one or more address records.
+
+2.2.  Semantics
+
+   For now, the only scheme defined is scheme=1 with the interpretation
+   that when a new CDS/CDNSKEY (or CSYNC) is published, a NOTIFY(CDS)
+   (or NOTIFY(CSYNC)) should be sent to the address and port listed in
+   the corresponding NOTIFY RRset.
+
+   Example (for the owner names of these records, see Section 3.1):
+
+   IN DSYNC CDS   1 5359 cds-scanner.example.net.
+   IN DSYNC CSYNC 1 5360 csync-scanner.example.net.
+
+   Should a need for other mechanisms arise, other schemes may be
+   defined to deal with such requirements using alternative logic.
+
+2.3.  Rationale
+
+   (RFC Editor: This subsection is to be removed before publication)
+
+   It may look like it's possible to store the same information in an
+   SRV record.  However, this would require indicating the RRtype via a
+   label in the owner name, leading to name space pollution.  It would
+   also require changing the semantics of one of the integer fields of
+   the SRV record.
+
+   Such overloading has not been a good idea in the past.  Furthermore,
+   as the generalized notifications are a new proposal with no prior
+   deployments, there is an opportunity to avoid repeating mistakes.
+
+   The DSYNC record type also provides a cleaner solution for bundling
+   all the new types of notification signaling in one RRset, like:
+
+   IN DSYNC  CDS     1  59   scanner.example.net.
+   IN DSYNC  CSYNC   1  59   scanner.example.net.
+
+   For DSYNC records indicating CDS/CDNSKEY/CSYNC notification targets,
+   no special processing needs to be applied by the authoritative
+   nameserver upon insertion of a DSYNC record.  The nameserver can thus
+   be "unaware".
+
+   Future use cases (such as for multi-signer key exchange) may require
+   the nameserver to trigger special operations, for example when a
+   DSYNC record is inserted during onboarding of a new signer.  It seems
+   cleaner and easier that such processing be associated with the
+   insertion of a record of a new type, not an existing type like SRV.
+
+3.  Publication of Notification Targets
+
+   To use generalized notifications, it is necessary for the sender to
+   know where to direct each NOTIFY message.  This section describes the
+   procedure for discovering that notification target.
+
+   Note that generalized NOTIFY messages are but one mechanism for
+   improving the efficiency of automated delegation maintenance.  Other
+   alternatives alternatives, such as contacting the parent via an API
+   or DNS Update ([RFC2136]), may (or may not) be more suitable in
+   individual cases.  Like generalized notifications, they similarly
+   require a means for discovering where to send the API or DNS Update
+   requests.
+
+   The scope for the publication mechanism is therefore wider than only
+   to support generalized notifications, and a unified approach that
+   works independently of the notification method is specified in this
+   section.
+
+3.1.  Signaling Method
+
+   Parents participating in the discovery scheme for the purpose of
+   delegation maintenance notifications MUST publish endpoint
+   information using the record type defined in Section 2.  A parent
+   MUST NOT publish more than one DSYNC record for each combination of
+   rrtype and scheme.
+
+   If the parent itself performs CDS/CDNSKEY or CSYNC processing, or if
+   the parent forwards the notifications internally to the designated
+   party (such as as registrar), the following scheme is used:
+
+   *._dsync.example.  IN DSYNC  CDS   scheme port target
+   *._dsync.example.  IN DSYNC  CSYNC scheme port target
+
+   It is RECOMMENDED to secure the corresponding zone with DNSSEC.
+
+   It is also possible to publish child-specific records, where the
+   wildcard label is replaced by the child's FQDN with the parent zone's
+   labels stripped.
+
+   As an example, consider a registrar offering domains like
+   child.example, delegated from example zone.  If the registrar
+   provides the notification endpoint, e.g., rr-endpoint.example:5300,
+   the parent may publish this information as follows:
+
+   child._dsync.example.  IN DSYNC  CDS  1 5300 rr-endpoint.example.
+
+   In case the parent does not need child-specificity, the wildcard
+   label may be dropped from the DSYNC owner name (i.e., it may be
+   published at the _dsync label instead).  While this practice enables
+   zone structures without wildcards, it also requires an additional
+   step during discovery (see Section 4.1), and is therefore NOT
+   RECOMMENDED.
+
+   For practical purposes, the parent MAY delegate the _dsync domain as
+   a separate zone, and/or synthesize records under it.  If child-
+   specificity is not needed, the parent can publish a wildcard DSYNC
+   record.
+
+   To accommodate indirect delegation management models, the parent's
+   designated notification target may relay notifications to a third
+   party (such as the registrar, in ICANN's model).  The details of such
+   arrangements are out of scope for this document.
+
+4.  Delegation Maintenance: CDS/CDNSKEY and CSYNC Notifications
+
+   Delegation maintenance notifications address the inefficiencies
+   related to scanning child zones for CDS/CDNSKEY records [RFC7344].
+   (For an overview of the issues, see Appendix A.)
+
+   Delegation maintenance NOTIFY messages MUST be formatted as described
+   in [RFC1996], with the qtype field replaced as appropriate.
+
+   To address the CDS/CDNSKEY dichotomy, the NOTIFY(CDS) message (with
+   qtype=CDS) is defined to indicate any child-side changes pertaining
+   to an upcoming update of DS records.  Upon receipt of NOTIFY(CDS),
+   the recipient (the parent registry or a registrar) SHOULD initiate
+   the same DNS lookups and verifications that would otherwise be
+   triggered based on a timer.
+
+   The CSYNC [RFC7477] inefficiency may be similarly treated, with the
+   child sending a NOTIFY(CSYNC) message (with qtype=CSYNC) to an
+   address where the parent (or a registrar) is listening to CSYNC
+   notifications.
+
+   In both cases the notification will speed up processing times by
+   providing the recipient with a hint that a particular child zone has
+   published new CDS, CDNSKEY and/or CSYNC records.
+
+4.1.  Endpoint Discovery
+
+   To locate the target for outgoing delegation maintenance
+   notifications, the notification sender MUST perform the following
+   procedure:
+
+   1.  Construct the lookup name, by injecting the _dsync label after
+       the first label of the delegation owner name.
+
+   2.  Perform a lookup of type DSYNC for the lookup name, and validate
+       the response if DNSSEC is enabled.  If a DSYNC RRset results,
+       return it.
+
+   3.  If the query resulted in a negative response:
+
+       *  If the response's SOA record indicates that the parent is more
+          than one label away from the _dsync label, construct a new
+          lookup name by inserting the _dsync label into the delegation
+          owner name just before the parent zone labels inferred from
+          the negative response, and go to step 2.
+
+          For example, city.ise.mie.jp is delegated from jp (and not
+          from ise.mie.jp or mie.jp!).  The initial DSYNC query relating
+          to it is thus directed at city._dsync.ise.mie.jp.  This is
+          expected to result in a negative response from jp, and another
+          query for city.ise.mie._dsync.jp is then required;
+
+       *  Otherwise, if the lookup name has any labels in front of the
+          _dsync label, remove them to construct a new lookup name (such
+          as _dsync.jp), and go to step 2.  (This is to enable zone
+          structures without wildcards.)
+
+       *  Otherwise, return null (no notification target available).
+
+4.2.  Sending Notifications
+
+   When changing a CDS/CDNSKEY/CSYNC RRset in the child zone, the DNS
+   operator SHOULD send a suitable NOTIFY message to the endpoint
+   located as described in the previous section.
+
+   A NOTIFY message can only carry information about changes concerning
+   one child zone.  When there are changes to several child zones, the
+   sender MUST send a separate notification for each one.
+
+   When a primary name server publishes a new RRset in the child, there
+   typically is a time delay until all publicly visible copies of the
+   zone will have been updated.  If the primary sends a NOTIFY at the
+   exact time of publication of the new zone, there is a potential for
+   the parent to attempt CDS/CDNSKEY/CSYNC processing before the updated
+   zone is visible.  In this case the parent may draw the wrong
+   conclusion (“the CDS RRset has not been updated”).
+
+   It is therefore RECOMMENDED that the child delays sending NOTIFY
+   messages to the recipient until a consistent public view of the
+   pertinent records is ensured.
+
+4.2.1.  Timeouts and Error Handling
+
+   NOTIFY messages are expected to elicit a response from the recipient
+   ([RFC1996] Section 4.7).  If no response is received, senders SHOULD
+   employ the same logic as for SOA notifications ([RFC1996] Sections
+   3.5 and 3.6).
+
+   The parent's attempt to act upon the delegation update request may
+   fail for a variety of reasons (e.g., due to violation of the
+   continuity requirement set forth in [RFC7344] Section 4.1).  Such
+   failures may occur asynchronously, even after the NOTIFY response has
+   been sent.
+
+   In order to learn about such failures, senders MAY include an
+   [RFC9567] EDNS0 Report-Channel option in the NOTIFY message to
+   request the receiving side to report any errors by making a report
+   query with an appropriate extended DNS error code as described in
+   [RFC8914].  When including this EDNS0 option, its agent domain MUST
+   be subordinate or equal to one of the NS hostnames, as listed in the
+   child's delegation in the parent zone.
+
+4.2.2.  Roles
+
+   Because of the security model where a notification by itself never
+   causes a change (it can only speed up the time until the next check
+   for the same thing), the sender's identity is not crucial.  This
+   opens up the possibility of having an arbitrary party (e.g., a side-
+   car service) send the notifications, enabling this functionality even
+   before the emergence of native support in nameserver software.
+
+   While the CDS/CDNSKEY/CSYNC processing following the receipt of a
+   NOTIFY will often be performed by the registry, the protocol
+   anticipates that in some contexts (especially for ICANN gTLDs),
+   registrars may take on the task.  In such cases, the parent may
+   publish the current registrar notification endpoint, enabling
+   notifications to be directed to the appropriate target.  The
+   mechanics of how this is arranged between registry and registrar are
+   out of scope for this document; the protocol only offers the
+   possibility to arrange things such that from the child perspective,
+   it is inconsequential how the parent-side parties are organized:
+   notifications are simply sent to the published address.
+
+   In the general case, the child DNS operator is unaware of whether the
+   parent consumes CDS records or prefers CDNSKEY, or when that policy
+   changes.  It therefore seems advisable to publish both types of
+   records, preferably using automation features of common authoritative
+   nameserver software for ensuring consistency.
+
+4.2.3.  Rationale for Using the DNS Message Format
+
+   (RFC Editor: This subsection is to be removed before publication)
+
+   In the most common cases of using generalized notifications the
+   recipient is expected to not be a nameserver, but rather some other
+   type of service, like a CDS/CSYNC scanner.
+
+   However, this will likely not always be true.  In particular it seems
+   likely that in cases where the parent is not a large delegation-
+   centric zone like a TLD, but rather a smaller zone with a small
+   number of delegations there will not be separate services for
+   everything and the recipient of the NOTIFY(CDS) or NOTIFY(CSYNC) will
+   be an authoritative nameserver for the parent zone.
+
+   For this reason it seems most reasonable to stay within the the well
+   documented and already supported message format specified in RFC 1996
+   and delivered over normal DNS transport, although not necessarily to
+   port 53.
+
+4.3.  Processing of NOTIFY Messages
+
+   NOTIFY(CDS) messages carrying notification payloads (records) for
+   several child zones MUST be discarded, as sending them is an error.
+
+   Upon receipt of a (potentially forwarded) valid NOTIFY(CDS) message
+   for a particular child zone at the published address for CDS
+   notifications, the receiving side (parent registry or registrar) has
+   two options:
+
+   1.  Acknowledge receipt by sending a NOTIFY response as described in
+       [RFC1996] Section 4.7 (identical to NOTIFY query, but with QR bit
+       set) and schedule an immediate check of the CDS and CDNSKEY
+       RRsets as published by that particular child zone.
+
+       If the NOTIFY message contains an [RFC9567] EDNS0 Report-Channel
+       option with an agent domain subordinate or equal to one of the NS
+       hostnames listed in the delegation, the processing party SHOULD
+       report any errors occuring during CDS/CDNSKEY processing by
+       sending a report query with an appropriate extended DNS error
+       code as described in [RFC8914].
+
+       If the check finds that the CDS/CDNSKEY RRset has indeed changed,
+       the parent MAY reset the scanning timer for children for which
+       NOTIFY(CDS) is received, or reduce the periodic scanning
+       frequency accordingly (e.g. to every two weeks).  This will
+       decrease the scanning effort for the parent.  If a CDS/CDNSKEY
+       change is then detected (without having received a notification),
+       the parent SHOULD clear that state and revert to the default
+       scanning schedule.
+
+       Parents introducing CDS/CDNSKEY scanning support at the same time
+       as NOTIFY(CDS) support are not in danger of breaking children's
+       scanning assumption, and MAY therefore use a low-frequency
+       scanning schedule in default mode.
+
+   2.  Do not act upon the notification.  To prevent retries, recipients
+       SHOULD acknowledge the notification by sending a NOTIFY response
+       even when otherwise ignoring the request, combined with a report
+       query if feasible (see above).  One reason to do this may be a
+       rate limit (see Section 5), in which case "Blocked" (15) maybe a
+       suitable extended DNS error code.
+
+   If the parent implements the first option, the convergence time (time
+   between publication of a new CDS/CDNSKEY record in the child and
+   propagation of the resulting DS) will decrease significantly, thereby
+   providing improved service to the child zone.
+
+   If the parent, in addition to scheduling an immediate check for the
+   child zone of the notification, also choses to modify the scanning
+   schedule (to be less frequent), the cost of providing the scanning
+   service will be reduced.
+
+   Upon receipt of a NOTIFY(CSYNC) to the published address for CSYNC
+   notifications, the same options and considerations apply as for the
+   NOTIFY(CDS).
+
+5.  Security Considerations
+
+   The original NOTIFY specification sidesteps most security issues by
+   not relying on the information in the NOTIFY message in any way, and
+   instead only using it to "enter the state it would if the zone's
+   refresh timer had expired" (Section 4.7 of [RFC1996]).
+
+   This security model is reused for generalized NOTIFY messages.  It
+   therefore seems impossible to affect the behaviour of the recipient
+   of the NOTIFY other than by hastening the timing for when different
+   checks are initiated.
+
+   The receipt of a notification message will, in general, cause the
+   receiving party to perform one or more outbound queries for the
+   records of interest (for example, NOTIFY(CDS) will cause CDS/CDNSKEY
+   queries).  When done using standard DNS, the size of these queries is
+   comparable to that of the NOTIFY messages themselves, rendering any
+   amplification attempts futile.  The number of queries triggered per
+   notification is also limited by the requirement that a NOTIFY message
+   can refer to one child only.
+
+   However, when the outgoing query occurs via encrypted transport, some
+   amplification is possible, both with respect to bandwidth and
+   computational burden.  In this case, the usual principle of bounding
+   the work, even under unreasonable events, applies.
+
+   Receivers therefore MUST implement rate limiting for notification
+   processing.  It is RECOMMENDED to configure rate limiting
+   independently for both the notification's source IP address and the
+   name of the zone that is conveyed in the NOTIFY message.  Rate
+   limiting also mitigates processing load from garbage notifications.
+
+   Alternative solutions (such as signing notifications and validating
+   their signatures) appear significantly more expensive without
+   tangible benefit.
+
+   In order to facilitate schemes that are authenticated outside of
+   DNSSEC (such as via SIG(0)), zones containing DSYNC records are not
+   required to be signed.  Spoofed DSYNC responses would prevent
+   notifications from reaching their legitimate target, and a different
+   party may receive unsolicited notifications; both effects, however,
+   can also be achieved in the presence of DNSSEC.  The illegitimate
+   target is also enabled to learn notification contents in real-time,
+   which may be a privacy concern for the sender.  If so, the sender may
+   choose to ignore unsigned DSYNC records.
+
+6.  IANA Considerations
+
+6.1.  DSYNC RR Type
+
+   IANA is requested to update the "Resource Record (RR) TYPEs" registry
+   under the "Domain Name System (DNS) Parameters" registry group as
+   follows:
+
+   Type  DSYNC
+
+   Value  tbd (next available)
+
+   Meaning  Endpoint discovery for delegation synchronization
+
+   Reference  (this document)
+
+6.2.  DSYNC Scheme Registration
+
+   Per [RFC8552], IANA is requested to create a new registry on the
+   "Domain Name System (DNS) Parameters" IANA web page as follows:
+
+   Name  DSYNC: Location of Synchronization Endpoints
+
+   Assignment Policy  Expert Review
+
+   Reference  (this document)
+
+      +========+=========+========================+=================+
+      | RRtype | Scheme  | Purpose                | Reference       |
+      +========+=========+========================+=================+
+      |        | 0       | Null scheme (no-op)    | (this document) |
+      +--------+---------+------------------------+-----------------+
+      | CDS    | 1       | Delegation management  | (this document) |
+      +--------+---------+------------------------+-----------------+
+      | CSYNC  | 1       | Delegation management  | (this document) |
+      +--------+---------+------------------------+-----------------+
+      |        | 2-127   | Unassigned             |                 |
+      +--------+---------+------------------------+-----------------+
+      |        | 128-255 | Reserved (private use) | (this document) |
+      +--------+---------+------------------------+-----------------+
+
+                                  Table 1
+
+7.  Acknowledgements
+
+   In order of first contribution: Joe Abley, Mark Andrews, Christian
+   Elmerot, Ólafur Guðmundsson, Paul Wouters, Brian Dickson, Warren
+   Kumari, Patrick Mevzek, Tim Wicinski
+
+8.  References
+
+8.1.  Normative References
+
+   [RFC1996]  Vixie, P., "A Mechanism for Prompt Notification of Zone
+              Changes (DNS NOTIFY)", RFC 1996, DOI 10.17487/RFC1996,
+              August 1996, <https://www.rfc-editor.org/rfc/rfc1996>.
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/rfc/rfc2119>.
+
+   [RFC2136]  Vixie, P., Ed., Thomson, S., Rekhter, Y., and J. Bound,
+              "Dynamic Updates in the Domain Name System (DNS UPDATE)",
+              RFC 2136, DOI 10.17487/RFC2136, April 1997,
+              <https://www.rfc-editor.org/rfc/rfc2136>.
+
+   [RFC4033]  Arends, R., Austein, R., Larson, M., Massey, D., and S.
+              Rose, "DNS Security Introduction and Requirements",
+              RFC 4033, DOI 10.17487/RFC4033, March 2005,
+              <https://www.rfc-editor.org/rfc/rfc4033>.
+
+   [RFC4034]  Arends, R., Austein, R., Larson, M., Massey, D., and S.
+              Rose, "Resource Records for the DNS Security Extensions",
+              RFC 4034, DOI 10.17487/RFC4034, March 2005,
+              <https://www.rfc-editor.org/rfc/rfc4034>.
+
+   [RFC4035]  Arends, R., Austein, R., Larson, M., Massey, D., and S.
+              Rose, "Protocol Modifications for the DNS Security
+              Extensions", RFC 4035, DOI 10.17487/RFC4035, March 2005,
+              <https://www.rfc-editor.org/rfc/rfc4035>.
+
+   [RFC7344]  Kumari, W., Gudmundsson, O., and G. Barwood, "Automating
+              DNSSEC Delegation Trust Maintenance", RFC 7344,
+              DOI 10.17487/RFC7344, September 2014,
+              <https://www.rfc-editor.org/rfc/rfc7344>.
+
+   [RFC7477]  Hardaker, W., "Child-to-Parent Synchronization in DNS",
+              RFC 7477, DOI 10.17487/RFC7477, March 2015,
+              <https://www.rfc-editor.org/rfc/rfc7477>.
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
+
+   [RFC8552]  Crocker, D., "Scoped Interpretation of DNS Resource
+              Records through "Underscored" Naming of Attribute Leaves",
+              BCP 222, RFC 8552, DOI 10.17487/RFC8552, March 2019,
+              <https://www.rfc-editor.org/rfc/rfc8552>.
+
+   [RFC8914]  Kumari, W., Hunt, E., Arends, R., Hardaker, W., and D.
+              Lawrence, "Extended DNS Errors", RFC 8914,
+              DOI 10.17487/RFC8914, October 2020,
+              <https://www.rfc-editor.org/rfc/rfc8914>.
+
+   [RFC9567]  Arends, R. and M. Larson, "DNS Error Reporting", RFC 9567,
+              DOI 10.17487/RFC9567, April 2024,
+              <https://www.rfc-editor.org/rfc/rfc9567>.
+
+8.2.  Informative References
+
+   [I-D.ietf-dnsop-dnssec-automation]
+              Wisser, U., Huque, S., and J. Stenstam, "DNSSEC
+              automation", Work in Progress, Internet-Draft, draft-ietf-
+              dnsop-dnssec-automation-02, 22 October 2023,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-dnsop-
+              dnssec-automation-02>.
+
+   [RFC6781]  Kolkman, O., Mekking, W., and R. Gieben, "DNSSEC
+              Operational Practices, Version 2", RFC 6781,
+              DOI 10.17487/RFC6781, December 2012,
+              <https://www.rfc-editor.org/rfc/rfc6781>.
+
+   [RFC7583]  Morris, S., Ihren, J., Dickinson, J., and W. Mekking,
+              "DNSSEC Key Rollover Timing Considerations", RFC 7583,
+              DOI 10.17487/RFC7583, October 2015,
+              <https://www.rfc-editor.org/rfc/rfc7583>.
+
+   [RFC8901]  Huque, S., Aras, P., Dickinson, J., Vcelak, J., and D.
+              Blacka, "Multi-Signer DNSSEC Models", RFC 8901,
+              DOI 10.17487/RFC8901, September 2020,
+              <https://www.rfc-editor.org/rfc/rfc8901>.
+
+Appendix A.  Efficiency and Convergence Issues in DNS Scanning
+
+A.1.  Original NOTIFY for Zone Transfer Nudging
+
+   [RFC1996] introduced the concept of a DNS Notify message which was
+   used to improve the convergence time for secondary servers when a DNS
+   zone had been updated in the primary.  The basic idea was to augment
+   the traditional "pull" mechanism (a periodic SOA query) with a "push"
+   mechanism (a Notify) for a common case that was otherwise very
+   inefficient (due to either slow convergence or wasteful overly
+   frequent scanning of the primary for changes).
+
+   While it is possible to indicate how frequently checks should occur
+   (via the SOA Refresh parameter), these checks did not allow catching
+   zone changes that fall between checkpoints.  [RFC1996] addressed the
+   optimization of the time-and-cost trade-off between a seceondary
+   checking frequently for new versions of a zone, and infrequent
+   checking, by replacing scheduled scanning with the more efficient
+   NOTIFY mechanism.
+
+A.2.  Similar Issues for DS Maintenance and Beyond
+
+   Today, we have similar issues with slow updates of DNS data in spite
+   of the data having been published.  The two most obvious cases are
+   CDS and CSYNC scanners deployed in a growing number of TLD
+   registries.  Because of the large number of child delegations,
+   scanning for CDS and CSYNC records is rather slow (as in infrequent).
+
+   It is only a very small number of the delegations that will have
+   updated CDS or CDNSKEY record in between two scanning runs.  However,
+   frequent scanning for CDS and CDNSKEY records is costly, and
+   infrequent scanning causes slower convergence (i.e., delay until the
+   DS RRset is updated).
+
+   Unlike in the original case, where the primary is able to suggest the
+   scanning interval via the SOA Refresh parameter, an equivalent
+   mechanism does not exist for DS-related scanning.
+
+   All of this above also applies to parents that offer automated NS and
+   glue record maintenance via CSYNC scanning [RFC7477].  Again, given
+   that CSYNC records change only rarely, frequent scanning of a large
+   number of delegations seems disproportionately costly, while
+   infrequent scanning causes slower convergence (delay until the
+   delegation is updated).
+
+   While use of the NOTIFY mechanism for coordinating the key exchange
+   in multi-signer setups [I-D.ietf-dnsop-dnssec-automation] is
+   conceivable, the detailed specification is left for future work.
+
+Appendix B.  Change History (to be removed before publication)
+
+   *  draft-ietf-dnsop-generalized-notify-02
+
+      Nits by Tim Wicinski
+
+      Dnsdir feedback
+
+      Specify timeout and error handling
+
+      Editorial nits
+
+      Reserve scheme value 0
+
+   *  draft-ietf-dnsop-generalized-notify-01
+
+      Reserve scheme values 128-255
+
+      Rename NOTIFY rrtype to DSYNC (to distinguish from NOTIFY message)
+
+      Describe endpoint discovery
+
+      Discussion on garbage notifications
+
+      More discussion on amplification risks
+
+      Clean-up, editorial changes
+
+   *  draft-ietf-dnsop-generalized-notify-00
+
+      Revision after adoption.
+
+   *  draft-thomassen-dnsop-generalized-dns-notify-02
+
+      Add rationale for staying in band
+
+      Add John as an author
+
+   *  draft-thomassen-dnsop-generalized-dns-notify-01
+
+      Mention Ry-to-Rr forwarding to accommodate RRR model
+
+      Add port number flexiblity
+
+      Add scheme parameter
+
+      Drop SRV-based alternative in favour of new NOTIFY RR
+
+      Editorial improvements
+
+   *  draft-thomassen-dnsop-generalized-dns-notify-00
+
+      Initial public draft.
+
+Authors' Addresses
+
+   Johan Stenstam
+   The Swedish Internet Foundation
+   Email: johan.stenstam@internetstiftelsen.se
+
+
+   Peter Thomassen
+   deSEC, Secure Systems Engineering
+   Email: peter@desec.io
+
+
+   John Levine
+   Standcore LLC
+   Email: standards@standcore.com
