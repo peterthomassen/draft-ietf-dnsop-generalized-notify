@@ -190,7 +190,7 @@ procedure for discovering that notification target.
 
 Note that generalized NOTIFY messages are but one mechanism for
 improving the efficiency of automated delegation maintenance. Other
-alternatives alternatives, such as contacting the parent via an API or
+alternatives, such as contacting the parent via an API or
 DNS Update ({{!RFC2136}}), may (or may not) be more suitable in
 individual cases. Like generalized notifications, they similarly require
 a means for discovering where to send the API or DNS Update requests.
@@ -209,7 +209,7 @@ scheme.
 
 If the parent itself performs CDS/CDNSKEY or CSYNC processing, or if
 the parent forwards the notifications internally to the designated party
-(such as as registrar), the following scheme is used:
+(such as a registrar), the following scheme is used:
 
     *._dsync.example.  IN DSYNC  CDS   scheme port target
     *._dsync.example.  IN DSYNC  CSYNC scheme port target
@@ -382,7 +382,7 @@ small number of delegations there will not be separate services for
 everything and the recipient of the NOTIFY(CDS) or NOTIFY(CSYNC) will
 be an authoritative nameserver for the parent zone.
 
-For this reason it seems most reasonable to stay within the the well
+For this reason it seems most reasonable to stay within the well
 documented and already supported message format specified in RFC 1996
 and delivered over normal DNS transport, although not necessarily to
 port 53.
@@ -426,7 +426,7 @@ the receiving side (parent registry or registrar) has two options:
      SHOULD acknowledge the notification by sending a NOTIFY response
      even when otherwise ignoring the request, combined with a report
      query if feasible (see above). One reason to do this may be a rate
-     limit (see {{security}}), in which case "Blocked" (15) maybe a
+     limit (see {{security}}), in which case "Blocked" (15) may be a
      suitable extended DNS error code.
 
 If the parent implements the first option, the convergence time (time
@@ -435,7 +435,7 @@ propagation of the resulting DS) will decrease significantly, thereby
 providing improved service to the child zone.
 
 If the parent, in addition to scheduling an immediate check for the
-child zone of the notification, also choses to modify the scanning
+child zone of the notification, also chooses to modify the scanning
 schedule (to be less frequent), the cost of providing the scanning
 service will be reduced.
 
@@ -558,7 +558,7 @@ frequent scanning of the primary for changes).
 While it is possible to indicate how frequently checks should occur
 (via the SOA Refresh parameter), these checks did not allow catching
 zone changes that fall between checkpoints. {{!RFC1996}} addressed the
-optimization of the time-and-cost trade-off between a seceondary checking
+optimization of the time-and-cost trade-off between a secondary checking
 frequently for new versions of a zone, and infrequent checking, by
 replacing scheduled scanning with the more efficient NOTIFY mechanism.
 
@@ -632,7 +632,7 @@ conceivable, the detailed specification is left for future work.
 
 > Mention Ry-to-Rr forwarding to accommodate RRR model
 
-> Add port number flexiblity
+> Add port number flexibility
 
 > Add scheme parameter
 
