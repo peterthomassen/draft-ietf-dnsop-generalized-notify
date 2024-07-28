@@ -375,10 +375,10 @@ In the most common cases of using generalized notifications the
 recipient is expected to not be a nameserver, but rather some other
 type of service, like a CDS/CSYNC scanner.
 
-However, this will likely not always be true. In particular it seems
+However, this will likely not always be true. In particular, it seems
 likely that in cases where the parent is not a large
 delegation-centric zone like a TLD, but rather a smaller zone with a
-small number of delegations there will not be separate services for
+small number of delegations, there will not be separate services for
 everything and the recipient of the NOTIFY(CDS) or NOTIFY(CSYNC) will
 be an authoritative nameserver for the parent zone.
 
