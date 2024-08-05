@@ -1035,11 +1035,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">Generalized Notifications</td>
-<td class="right">July 2024</td>
+<td class="right">August 2024</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Stenstam, et al.</td>
-<td class="center">Expires 9 January 2025</td>
+<td class="center">Expires 6 February 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1052,12 +1052,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-dnsop-generalized-notify-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-07-08" class="published">8 July 2024</time>
+<time datetime="2024-08-05" class="published">5 August 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-01-09">9 January 2025</time></dd>
+<dd class="expires"><time datetime="2025-02-06">6 February 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1108,7 +1108,7 @@ available there.  The authors (gratefully) accept pull requests.<a href="#sectio
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 9 January 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 6 February 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1424,7 +1424,7 @@ where to direct each NOTIFY message. This section describes the
 procedure for discovering that notification target.<a href="#section-3-1" class="pilcrow">¶</a></p>
 <p id="section-3-2">Note that generalized NOTIFY messages are but one mechanism for
 improving the efficiency of automated delegation maintenance. Other
-alternatives alternatives, such as contacting the parent via an API or
+alternatives, such as contacting the parent via an API or
 DNS Update (<span>[<a href="#RFC2136" class="cite xref">RFC2136</a>]</span>), may (or may not) be more suitable in
 individual cases. Like generalized notifications, they similarly require
 a means for discovering where to send the API or DNS Update requests.<a href="#section-3-2" class="pilcrow">¶</a></p>
@@ -1443,7 +1443,7 @@ publish more than one DSYNC record for each combination of rrtype and
 scheme.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
 <p id="section-3.1-2">If the parent itself performs CDS/CDNSKEY or CSYNC processing, or if
 the parent forwards the notifications internally to the designated party
-(such as as registrar), the following scheme is used:<a href="#section-3.1-2" class="pilcrow">¶</a></p>
+(such as a registrar), the following scheme is used:<a href="#section-3.1-2" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.1-3">
 <pre>
 *._dsync.example.  IN DSYNC  CDS   scheme port target
@@ -1627,13 +1627,13 @@ software for ensuring consistency.<a href="#section-4.2.2-3" class="pilcrow">¶<
 <p id="section-4.2.3-2">In the most common cases of using generalized notifications the
 recipient is expected to not be a nameserver, but rather some other
 type of service, like a CDS/CSYNC scanner.<a href="#section-4.2.3-2" class="pilcrow">¶</a></p>
-<p id="section-4.2.3-3">However, this will likely not always be true. In particular it seems
+<p id="section-4.2.3-3">However, this will likely not always be true. In particular, it seems
 likely that in cases where the parent is not a large
 delegation-centric zone like a TLD, but rather a smaller zone with a
-small number of delegations there will not be separate services for
+small number of delegations, there will not be separate services for
 everything and the recipient of the NOTIFY(CDS) or NOTIFY(CSYNC) will
 be an authoritative nameserver for the parent zone.<a href="#section-4.2.3-3" class="pilcrow">¶</a></p>
-<p id="section-4.2.3-4">For this reason it seems most reasonable to stay within the the well
+<p id="section-4.2.3-4">For this reason it seems most reasonable to stay within the well
 documented and already supported message format specified in RFC 1996
 and delivered over normal DNS transport, although not necessarily to
 port 53.<a href="#section-4.2.3-4" class="pilcrow">¶</a></p>
@@ -1684,7 +1684,7 @@ scanning schedule in default mode.<a href="#section-4.3-3.1.4" class="pilcrow">�
 SHOULD acknowledge the notification by sending a NOTIFY response
 even when otherwise ignoring the request, combined with a report
 query if feasible (see above). One reason to do this may be a rate
-limit (see <a href="#security" class="auto internal xref">Section 5</a>), in which case "Blocked" (15) maybe a
+limit (see <a href="#security" class="auto internal xref">Section 5</a>), in which case "Blocked" (15) may be a
 suitable extended DNS error code.<a href="#section-4.3-3.2.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
@@ -1693,7 +1693,7 @@ between publication of a new CDS/CDNSKEY record in the child and
 propagation of the resulting DS) will decrease significantly, thereby
 providing improved service to the child zone.<a href="#section-4.3-4" class="pilcrow">¶</a></p>
 <p id="section-4.3-5">If the parent, in addition to scheduling an immediate check for the
-child zone of the notification, also choses to modify the scanning
+child zone of the notification, also chooses to modify the scanning
 schedule (to be less frequent), the cost of providing the scanning
 service will be reduced.<a href="#section-4.3-5" class="pilcrow">¶</a></p>
 <p id="section-4.3-6">Upon receipt of a NOTIFY(CSYNC) to the published address for CSYNC
@@ -1865,6 +1865,7 @@ Joe Abley, Mark Andrews, Christian Elmerot, Ólafur Guðmundsson, Paul
 Wouters, Brian Dickson, Warren Kumari, Patrick Mevzek, Tim Wicinski<a href="#section-7-1" class="pilcrow">¶</a></p>
 </section>
 </div>
+<div id="sec-combined-references">
 <section id="section-8">
       <h2 id="name-references">
 <a href="#section-8" class="section-number selfRef">8. </a><a href="#name-references" class="section-name selfRef">References</a>
@@ -1952,6 +1953,7 @@ Wouters, Brian Dickson, Warren Kumari, Patrick Mevzek, Tim Wicinski<a href="#sec
 </section>
 </div>
 </section>
+</div>
 <div id="context">
 <section id="appendix-A">
       <h2 id="name-efficiency-and-convergence-">
@@ -1972,7 +1974,7 @@ frequent scanning of the primary for changes).<a href="#appendix-A.1-1" class="p
 <p id="appendix-A.1-2">While it is possible to indicate how frequently checks should occur
 (via the SOA Refresh parameter), these checks did not allow catching
 zone changes that fall between checkpoints. <span>[<a href="#RFC1996" class="cite xref">RFC1996</a>]</span> addressed the
-optimization of the time-and-cost trade-off between a seceondary checking
+optimization of the time-and-cost trade-off between a secondary checking
 frequently for new versions of a zone, and infrequent checking, by
 replacing scheduled scanning with the more efficient NOTIFY mechanism.<a href="#appendix-A.1-2" class="pilcrow">¶</a></p>
 </section>
@@ -2113,7 +2115,7 @@ conceivable, the detailed specification is left for future work.<a href="#append
       </ul>
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="appendix-B-21.1">
-          <p id="appendix-B-21.1.1">Add port number flexiblity<a href="#appendix-B-21.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-21.1.1">Add port number flexibility<a href="#appendix-B-21.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal ulEmpty">

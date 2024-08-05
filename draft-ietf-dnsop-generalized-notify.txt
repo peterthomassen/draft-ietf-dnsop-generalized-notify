@@ -5,10 +5,10 @@
 DNSOP Working Group                                          J. Stenstam
 Internet-Draft                           The Swedish Internet Foundation
 Intended status: Standards Track                            P. Thomassen
-Expires: 9 January 2025                deSEC, Secure Systems Engineering
+Expires: 6 February 2025               deSEC, Secure Systems Engineering
                                                                J. Levine
                                                            Standcore LLC
-                                                             8 July 2024
+                                                           5 August 2024
 
 
                      Generalized DNS Notifications
@@ -48,7 +48,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 9 January 2025.
+   This Internet-Draft will expire on 6 February 2025.
 
 Copyright Notice
 
@@ -239,11 +239,10 @@ Table of Contents
 
    Note that generalized NOTIFY messages are but one mechanism for
    improving the efficiency of automated delegation maintenance.  Other
-   alternatives alternatives, such as contacting the parent via an API
-   or DNS Update ([RFC2136]), may (or may not) be more suitable in
-   individual cases.  Like generalized notifications, they similarly
-   require a means for discovering where to send the API or DNS Update
-   requests.
+   alternatives, such as contacting the parent via an API or DNS Update
+   ([RFC2136]), may (or may not) be more suitable in individual cases.
+   Like generalized notifications, they similarly require a means for
+   discovering where to send the API or DNS Update requests.
 
    The scope for the publication mechanism is therefore wider than only
    to support generalized notifications, and a unified approach that
@@ -260,7 +259,7 @@ Table of Contents
 
    If the parent itself performs CDS/CDNSKEY or CSYNC processing, or if
    the parent forwards the notifications internally to the designated
-   party (such as as registrar), the following scheme is used:
+   party (such as a registrar), the following scheme is used:
 
    *._dsync.example.  IN DSYNC  CDS   scheme port target
    *._dsync.example.  IN DSYNC  CSYNC scheme port target
@@ -432,14 +431,14 @@ Table of Contents
    recipient is expected to not be a nameserver, but rather some other
    type of service, like a CDS/CSYNC scanner.
 
-   However, this will likely not always be true.  In particular it seems
-   likely that in cases where the parent is not a large delegation-
-   centric zone like a TLD, but rather a smaller zone with a small
-   number of delegations there will not be separate services for
+   However, this will likely not always be true.  In particular, it
+   seems likely that in cases where the parent is not a large
+   delegation-centric zone like a TLD, but rather a smaller zone with a
+   small number of delegations, there will not be separate services for
    everything and the recipient of the NOTIFY(CDS) or NOTIFY(CSYNC) will
    be an authoritative nameserver for the parent zone.
 
-   For this reason it seems most reasonable to stay within the the well
+   For this reason it seems most reasonable to stay within the well
    documented and already supported message format specified in RFC 1996
    and delivered over normal DNS transport, although not necessarily to
    port 53.
@@ -484,7 +483,7 @@ Table of Contents
        SHOULD acknowledge the notification by sending a NOTIFY response
        even when otherwise ignoring the request, combined with a report
        query if feasible (see above).  One reason to do this may be a
-       rate limit (see Section 5), in which case "Blocked" (15) maybe a
+       rate limit (see Section 5), in which case "Blocked" (15) may be a
        suitable extended DNS error code.
 
    If the parent implements the first option, the convergence time (time
@@ -493,7 +492,7 @@ Table of Contents
    providing improved service to the child zone.
 
    If the parent, in addition to scheduling an immediate check for the
-   child zone of the notification, also choses to modify the scanning
+   child zone of the notification, also chooses to modify the scanning
    schedule (to be less frequent), the cost of providing the scanning
    service will be reduced.
 
@@ -695,7 +694,7 @@ A.1.  Original NOTIFY for Zone Transfer Nudging
    While it is possible to indicate how frequently checks should occur
    (via the SOA Refresh parameter), these checks did not allow catching
    zone changes that fall between checkpoints.  [RFC1996] addressed the
-   optimization of the time-and-cost trade-off between a seceondary
+   optimization of the time-and-cost trade-off between a secondary
    checking frequently for new versions of a zone, and infrequent
    checking, by replacing scheduled scanning with the more efficient
    NOTIFY mechanism.
@@ -771,7 +770,7 @@ Appendix B.  Change History (to be removed before publication)
 
       Mention Ry-to-Rr forwarding to accommodate RRR model
 
-      Add port number flexiblity
+      Add port number flexibility
 
       Add scheme parameter
 
