@@ -38,11 +38,11 @@ informative:
 
 This document extends the use of DNS NOTIFY {{!RFC1996}} beyond conventional
 zone transfer hints, bringing the benefits of ad-hoc notifications to DNS
-delegation maintenance in general.  Use cases include DNSSEC key rollovers
-hints, and quicker changes to a delegation's NS record set.
+delegation maintenance in general.  Use cases include DNSSEC bootstrapping
+and key rollovers hints, and quicker changes to a delegation's NS record set.
 
 To enable this functionality, a method for discovering the receiver endpoint
-for such notification message is introduced, via the new NOTIFY record type.
+for such notification message is introduced, via the new DSYNC record type.
 
 TO BE REMOVED: This document is being collaborated on in Github at:
 [https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify](https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify).
@@ -77,7 +77,7 @@ Readers are expected to be familiar with DNSSEC, including {{!RFC4033}},
 ## Design Requirements
 
 When the parent is interested in notifications for delegation
-maintenance (such as for DS or NS updates), a service will need to be
+maintenance (such as for DS or NS hints), a service will need to be
 made available for accepting these notifications. Depending on the
 context, this service may be run by the parent zone operator themselves,
 or by a designated entity who is in charge of handling the domain's
@@ -142,7 +142,7 @@ specified type. This name MUST resolve to one or more address records.
 For now, the only scheme defined is scheme=1 with the interpretation
 that when a new CDS/CDNSKEY (or CSYNC) is published, a NOTIFY(CDS)
 (or NOTIFY(CSYNC)) should be sent to the address and port listed in
-the corresponding NOTIFY RRset.
+the corresponding DSYNC record.
 
 Example (for the owner names of these records, see {{signaling}}):
 
@@ -182,7 +182,7 @@ and easier that such processing be associated with the insertion of a
 record of a new type, not an existing type like SRV.
 
 
-# Publication of Notification Targets
+# Publication of Notification Targets {#signaling}
 
 To use generalized notifications, it is necessary for the sender to know
 where to direct each NOTIFY message. This section describes the
@@ -199,13 +199,20 @@ The scope for the publication mechanism is therefore wider than only to
 support generalized notifications, and a unified approach that works
 independently of the notification method is specified in this section.
 
-## Signaling Method {#signaling}
-
 Parents participating in the discovery scheme for the purpose of
 delegation maintenance notifications MUST publish endpoint information
-using the record type defined in {{dsyncrdtype}}. A parent MUST NOT
-publish more than one DSYNC record for each combination of rrtype and
-scheme.
+using the record type defined in {{dsyncrdtype}} under the `_dsync`
+domain as described in the following subsection.
+
+It is RECOMMENDED to secure the corresponding zone with DNSSEC.
+A parent MUST NOT publish more than one DSYNC record for each
+combination of rrtype and scheme.
+
+For practical purposes, the parent MAY delegate the `_dsync` domain as a
+separate zone, and/or synthesize records under it. If child-specificity
+is not needed, the parent can publish a wildcard DSYNC record.
+
+## Wildcard Method
 
 If the parent itself performs CDS/CDNSKEY or CSYNC processing, or if
 the parent forwards the notifications internally to the designated party
@@ -214,7 +221,18 @@ the parent forwards the notifications internally to the designated party
     *._dsync.example.  IN DSYNC  CDS   scheme port target
     *._dsync.example.  IN DSYNC  CSYNC scheme port target
 
-It is RECOMMENDED to secure the corresponding zone with DNSSEC.
+To accommodate indirect delegation management models, the parent's
+designated notification target may relay notifications to a third party
+(such as the registrar, in ICANN's model). The details of such
+arrangements are out of scope for this document.
+
+In case the parent does not need child-specificity, the wildcard label
+may be dropped from the DSYNC owner name (i.e., it may be published at
+the `_dsync` label instead). While this practice enables zone structures
+without wildcards, it also requires an additional step during discovery
+(see {{discovery}}), and is therefore NOT RECOMMENDED.
+
+## Child-specific Method
 
 It is also possible to publish child-specific records, where the
 wildcard label is replaced by the child's FQDN with the parent zone's
@@ -227,21 +245,6 @@ the parent may publish this information as follows:
 
     child._dsync.example.  IN DSYNC  CDS  1 5300 rr-endpoint.example.
 
-In case the parent does not need child-specificity, the wildcard label
-may be dropped from the DSYNC owner name (i.e., it may be published at
-the `_dsync` label instead). While this practice enables zone structures
-without wildcards, it also requires an additional step during discovery
-(see {{discovery}}), and is therefore NOT RECOMMENDED.
-
-For practical purposes, the parent MAY delegate the `_dsync` domain as a
-separate zone, and/or synthesize records under it. If child-specificity
-is not needed, the parent can publish a wildcard DSYNC record.
-
-To accommodate indirect delegation management models, the parent's
-designated notification target may relay notifications to a third party
-(such as the registrar, in ICANN's model). The details of such
-arrangements are out of scope for this document.
-
 
 # Delegation Maintenance: CDS/CDNSKEY and CSYNC Notifications
 
@@ -249,15 +252,21 @@ Delegation maintenance notifications address the inefficiencies related
 to scanning child zones for CDS/CDNSKEY records {{!RFC7344}}. (For an
 overview of the issues, see {{context}}.)
 
-Delegation maintenance NOTIFY messages MUST be formatted as described in
+NOTIFY messages for delegation maintenance MUST be formatted as described in
 {{!RFC1996}}, with the `qtype` field replaced as appropriate.
 
 To address the CDS/CDNSKEY dichotomy, the NOTIFY(CDS) message (with
 `qtype=CDS`) is defined to indicate any child-side changes pertaining
-to an upcoming update of DS records. Upon receipt of NOTIFY(CDS), the
-recipient (the parent registry or a registrar) SHOULD initiate the same DNS
-lookups and verifications that would otherwise be triggered based on a
-timer.
+to an upcoming update of DS records.
+As the child DNS operator generally is unaware of whether the
+parent consumes CDS records or prefers CDNSKEY, or when that policy
+changes, it seems advisable to publish both types of records,
+preferably using automation features of common authoritative nameserver
+software for ensuring consistency.
+
+Upon receipt of NOTIFY(CDS), the recipient (the parent registry or a
+registrar) SHOULD initiate the same DNS lookups and verifications that
+would otherwise be triggered based on a timer.
 
 The CSYNC {{!RFC7477}} inefficiency may be similarly treated, with the
 child sending a NOTIFY(CSYNC) message (with `qtype=CSYNC`) to an address
@@ -302,8 +311,8 @@ the notification sender MUST perform the following procedure:
 ## Sending Notifications
 
 When changing a CDS/CDNSKEY/CSYNC RRset in the child zone, the DNS
-operator SHOULD send a suitable NOTIFY message to the endpoint located
-as described in the previous section.
+operator SHOULD send a suitable notification to one of the endpoints
+discovered as described in the previous section.
 
 A NOTIFY message can only carry information about changes concerning one
 child zone. When there are changes to several child zones, the sender
@@ -311,14 +320,14 @@ MUST send a separate notification for each one.
 
 When a primary name server publishes a new RRset in the child, there
 typically is a time delay until all publicly visible copies of the zone
-will have been updated. If the primary sends a NOTIFY at the exact
+will have been updated. If the primary sends a notification at the exact
 time of publication of the new zone, there is a potential for the
 parent to attempt CDS/CDNSKEY/CSYNC processing before the updated zone
 is visible. In this case the parent may draw the wrong conclusion (“the
 CDS RRset has not been updated”).
 
-It is therefore RECOMMENDED that the child delays sending NOTIFY
-messages to the recipient until a consistent public view of the pertinent
+It is therefore RECOMMENDED that the child delays sending notifications
+to the recipient until a consistent public view of the pertinent
 records is ensured.
 
 ### Timeouts and Error Handling
@@ -343,13 +352,6 @@ child's delegation in the parent zone.
 
 ### Roles
 
-Because of the security model where a notification by itself never
-causes a change (it can only speed up the time until the next
-check for the same thing), the sender's identity is not crucial.
-This opens up the possibility of having an arbitrary party (e.g., a
-side-car service) send the notifications, enabling this functionality
-even before the emergence of native support in nameserver software.
-
 While the CDS/CDNSKEY/CSYNC processing following the receipt of a NOTIFY
 will often be performed by the registry, the protocol anticipates that
 in some contexts (especially for ICANN gTLDs), registrars may take on
@@ -361,11 +363,12 @@ only offers the possibility to arrange things such that from the child
 perspective, it is inconsequential how the parent-side parties are
 organized: notifications are simply sent to the published address.
 
-In the general case, the child DNS operator is unaware of whether the
-parent consumes CDS records or prefers CDNSKEY, or when that policy
-changes. It therefore seems advisable to publish both types of records,
-preferably using automation features of common authoritative nameserver
-software for ensuring consistency.
+Because of the security model where a notification by itself never
+causes a change (it can only speed up the time until the next
+check for the same thing), the sender's identity is not crucial.
+This opens up the possibility of having an arbitrary party (e.g., a
+side-car service) send the notifications, enabling this functionality
+even before the emergence of native support in nameserver software.
 
 ### Rationale for Using the DNS Message Format
 
@@ -591,6 +594,10 @@ conceivable, the detailed specification is left for future work.
 
 
 # Change History (to be removed before publication)
+
+* draft-ietf-dnsop-generalized-notify-03
+
+> Editorial changes
 
 * draft-ietf-dnsop-generalized-notify-02
 
