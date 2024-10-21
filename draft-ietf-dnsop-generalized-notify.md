@@ -72,7 +72,7 @@ is possible.
 
 Readers are expected to be familiar with DNSSEC, including {{!RFC4033}},
 {{!RFC4034}}, {{!RFC4035}}, {{?RFC6781}}, {{!RFC7344}}, {{!RFC7477}},
-{{?RFC7583}}, and {{?RFC8901}}.
+{{?RFC7583}}, {{?RFC8078}}, {{?RFC8901}}, and {{?RFC9615}}.
 
 ## Design Requirements
 
@@ -140,7 +140,7 @@ specified type. This name MUST resolve to one or more address records.
 ## Semantics
 
 For now, the only scheme defined is scheme=1 with the interpretation
-that when a new CDS/CDNSKEY (or CSYNC) is published, a NOTIFY(CDS)
+that when a new CDS/CDNSKEY (or CSYNC) RRset is published, a NOTIFY(CDS)
 (or NOTIFY(CSYNC)) should be sent to the address and port listed in
 the corresponding DSYNC record.
 
@@ -220,8 +220,9 @@ the parent may publish this information as follows:
 # Delegation Maintenance: CDS/CDNSKEY and CSYNC Notifications
 
 Delegation maintenance notifications address the inefficiencies related
-to scanning child zones for CDS/CDNSKEY records {{!RFC7344}}. (For an
-overview of the issues, see {{context}}.)
+to scanning child zones for CDS/CDNSKEY records
+{{!RFC7344}}{{!RFC8078}}{{!RFC9615}}. (For an overview of the issues,
+see {{context}}.)
 
 NOTIFY messages for delegation maintenance MUST be formatted as described in
 {{!RFC1996}}, with the `qtype` field replaced as appropriate.
@@ -236,8 +237,10 @@ preferably using automation features of common authoritative nameserver
 software for ensuring consistency.
 
 Upon receipt of NOTIFY(CDS), the recipient (the parent registry or a
-registrar) SHOULD initiate the same DNS lookups and verifications that
-would otherwise be triggered based on a timer.
+registrar) SHOULD initiate the same DNS lookups and verifications for
+DNSSEC bootstrapping {{!RFC9615}} or DS maintenance
+{{!RFC7344}}{{!RFC8078}} that would otherwise be triggered based on a
+timer.
 
 The CSYNC {{!RFC7477}} inefficiency may be similarly treated, with the
 child sending a NOTIFY(CSYNC) message (with `qtype=CSYNC`) to an address
@@ -281,9 +284,9 @@ the notification sender MUST perform the following procedure:
 
 ## Sending Notifications
 
-When changing a CDS/CDNSKEY/CSYNC RRset in the child zone, the DNS
-operator SHOULD send a suitable notification to one of the endpoints
-discovered as described in the previous section.
+When creating or changing a CDS/CDNSKEY/CSYNC RRset in the child zone,
+the DNS operator SHOULD send a suitable notification to one of the
+endpoints discovered as described in the previous section.
 
 A NOTIFY message can only carry information about changes concerning one
 child zone. When there are changes to several child zones, the sender
@@ -362,10 +365,10 @@ the receiving side (parent registry or registrar) has two options:
      a report query with an appropriate extended DNS error code as
      described in {{!RFC8914}}.
 
-     If the check finds that the CDS/CDNSKEY RRset has indeed changed,
-     the parent MAY reset the scanning timer for children for which
-     NOTIFY(CDS) is received, or reduce the periodic scanning frequency
-     accordingly (e.g. to every two weeks).
+     If the check finds that the CDS/CDNSKEY RRset is indeed new or has
+     changed, the parent MAY reset the scanning timer for children for
+     which NOTIFY(CDS) is received, or reduce the periodic scanning
+     frequency accordingly (e.g. to every two weeks).
      This will decrease the scanning effort for the parent.
      If a CDS/CDNSKEY change is then detected (without having received
      a notification), the parent SHOULD clear that state and revert to
@@ -547,6 +550,8 @@ conceivable, the detailed specification is left for future work.
 # Change History (to be removed before publication)
 
 * draft-ietf-dnsop-generalized-notify-03
+
+> Include DNSSEC bootstrapping use case
 
 > Remove sections with approaches not pursued
 
