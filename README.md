@@ -1,12 +1,23 @@
-#  Generalized DNS Notifications
+# Generalized DNS Notifications
 
-## draft-ietf-dnsop-generalized-notify
+This is the working area for the IETF [DNSOP Working Group](https://datatracker.ietf.org/wg/dnsop/documents/) Internet-Draft, "Generalized DNS Notifications".
 
-* [Editor's Copy](https://peterthomassen.github.io/draft-ietf-dnsop-generalized-notify/#go.draft-ietf-dnsop-generalized-notify-latest.html)
-* [Individual Draft](https://datatracker.ietf.org/doc/draft-ietf-dnsop-generalized-notify/)
-* [Compare Editor's Copy to Individual Draft](https://peterthomassen.github.io/draft-ietf-dnsop-generalized-notify/#go.draft-ietf-dnsop-generalized-notify-latest.diff)
+* [Editor's Copy](https://peterthomassen.github.io/draft-thomassen-dnsop-generalized-dns-notify/#go.draft-ietf-dnsop-generalized-notify.html)
+* [Datatracker Page](https://datatracker.ietf.org/doc/draft-ietf-dnsop-generalized-notify)
+* [Working Group Draft](https://datatracker.ietf.org/doc/html/draft-ietf-dnsop-generalized-notify)
+* [Compare Editor's Copy to Working Group Draft](https://peterthomassen.github.io/draft-thomassen-dnsop-generalized-dns-notify/#go.draft-ietf-dnsop-generalized-notify.diff)
 
-## Building the Draft
+
+## Contributing
+
+See the
+[guidelines for contributions](https://github.com/peterthomassen/draft-thomassen-dnsop-generalized-dns-notify/blob/main/CONTRIBUTING.md).
+
+Contributions can be made by creating pull requests.
+The GitHub interface supports creating pull requests using the Edit (✏) button.
+
+
+## Command Line Usage
 
 Formatted text and HTML versions of the draft can be built using `make`.
 
@@ -14,6 +25,6 @@ Formatted text and HTML versions of the draft can be built using `make`.
 $ make
 ```
 
-This requires that you have the necessary software installed.  See
-[the instructions](https://github.com/martinthomson/i-d-template/blob/master/doc/SETUP.md).
+Command line usage requires that you have the necessary software installed.  See
+[the instructions](https://github.com/martinthomson/i-d-template/blob/main/doc/SETUP.md).
 
