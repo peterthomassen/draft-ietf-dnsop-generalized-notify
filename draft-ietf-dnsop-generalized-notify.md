@@ -152,35 +152,6 @@ Example (for the owner names of these records, see {{signaling}}):
 Should a need for other mechanisms arise, other schemes may be defined
 to deal with such requirements using alternative logic.
 
-## Rationale
-
-(RFC Editor: This subsection is to be removed before publication)
-
-It may look like it's possible to store the same information in an SRV
-record. However, this would require indicating the RRtype via a label in
-the owner name, leading to name space pollution. It would also require
-changing the semantics of one of the integer fields of the SRV record.
-
-Such overloading has not been a good idea in the past. Furthermore, as
-the generalized notifications are a new proposal with no prior
-deployments, there is an opportunity to avoid repeating mistakes.
-
-The DSYNC record type also provides a cleaner solution for bundling all
-the new types of notification signaling in one RRset, like:
-
-    IN DSYNC  CDS     1  59   scanner.example.net.
-    IN DSYNC  CSYNC   1  59   scanner.example.net.
-
-For DSYNC records indicating CDS/CDNSKEY/CSYNC notification targets, no
-special processing needs to be applied by the authoritative nameserver
-upon insertion of a DSYNC record. The nameserver can thus be "unaware".
-
-Future use cases (such as for multi-signer key exchange) may require the
-nameserver to trigger special operations, for example when a DSYNC
-record is inserted during onboarding of a new signer. It seems cleaner
-and easier that such processing be associated with the insertion of a
-record of a new type, not an existing type like SRV.
-
 
 # Publication of Notification Targets {#signaling}
 
@@ -369,26 +340,6 @@ check for the same thing), the sender's identity is not crucial.
 This opens up the possibility of having an arbitrary party (e.g., a
 side-car service) send the notifications, enabling this functionality
 even before the emergence of native support in nameserver software.
-
-### Rationale for Using the DNS Message Format
-
-(RFC Editor: This subsection is to be removed before publication)
-
-In the most common cases of using generalized notifications the
-recipient is expected to not be a nameserver, but rather some other
-type of service, like a CDS/CSYNC scanner.
-
-However, this will likely not always be true. In particular, it seems
-likely that in cases where the parent is not a large
-delegation-centric zone like a TLD, but rather a smaller zone with a
-small number of delegations, there will not be separate services for
-everything and the recipient of the NOTIFY(CDS) or NOTIFY(CSYNC) will
-be an authoritative nameserver for the parent zone.
-
-For this reason it seems most reasonable to stay within the well
-documented and already supported message format specified in RFC 1996
-and delivered over normal DNS transport, although not necessarily to
-port 53.
 
 ## Processing of NOTIFY Messages
 
@@ -596,6 +547,8 @@ conceivable, the detailed specification is left for future work.
 # Change History (to be removed before publication)
 
 * draft-ietf-dnsop-generalized-notify-03
+
+> Remove sections with approaches not pursued
 
 > Editorial changes
 
