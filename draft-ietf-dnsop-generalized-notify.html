@@ -11,31 +11,31 @@
 <meta content="
        This document extends the use of DNS NOTIFY   beyond conventional
 zone transfer hints, bringing the benefits of ad-hoc notifications to DNS
-delegation maintenance in general.  Use cases include DNSSEC key rollovers
-hints, and quicker changes to a delegation's NS record set. 
+delegation maintenance in general.  Use cases include DNSSEC bootstrapping
+and key rollovers hints, and quicker changes to a delegation's NS record set. 
        To enable this functionality, a method for discovering the receiver endpoint
-for such notification message is introduced, via the new NOTIFY record type. 
+for such notification message is introduced, via the new DSYNC record type. 
        TO BE REMOVED: This document is being collaborated on in Github at:
  https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify .
 The most recent working version of the document, open issues, etc. should all be
 available there.  The authors (gratefully) accept pull requests. 
     " name="description">
-<meta content="xml2rfc 3.22.0" name="generator">
+<meta content="xml2rfc 3.23.2" name="generator">
 <meta content="Internet-Draft" name="keyword">
 <meta content="draft-ietf-dnsop-generalized-notify-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.22.0
-    Python 3.12.3
+  xml2rfc 3.23.2
+    Python 3.12.7
     ConfigArgParse 1.7
-    google-i18n-address 3.1.0
+    google-i18n-address 3.1.1
     intervaltree 3.1.0
     Jinja2 3.1.4
     lxml 4.9.4
-    platformdirs 4.2.2
+    platformdirs 4.3.6
     pycountry 22.3.5
     PyYAML 6.0.1
     requests 2.32.3
-    setuptools 69.5.1
+    setuptools 70.3.0
     wcwidth 0.2.13
 -->
 <link href="draft-ietf-dnsop-generalized-notify.xml" rel="alternate" type="application/rfc+xml">
@@ -1035,11 +1035,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">Generalized Notifications</td>
-<td class="right">August 2024</td>
+<td class="right">October 2024</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Stenstam, et al.</td>
-<td class="center">Expires 6 February 2025</td>
+<td class="center">Expires 24 April 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1052,12 +1052,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-dnsop-generalized-notify-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-08-05" class="published">5 August 2024</time>
+<time datetime="2024-10-21" class="published">21 October 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-02-06">6 February 2025</time></dd>
+<dd class="expires"><time datetime="2025-04-24">24 April 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1080,10 +1080,10 @@ svg :is([fill="white"], [fill^="#fff"]) {
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
 <p id="section-abstract-1">This document extends the use of DNS NOTIFY <span>[<a href="#RFC1996" class="cite xref">RFC1996</a>]</span> beyond conventional
 zone transfer hints, bringing the benefits of ad-hoc notifications to DNS
-delegation maintenance in general.  Use cases include DNSSEC key rollovers
-hints, and quicker changes to a delegation's NS record set.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+delegation maintenance in general.  Use cases include DNSSEC bootstrapping
+and key rollovers hints, and quicker changes to a delegation's NS record set.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 <p id="section-abstract-2">To enable this functionality, a method for discovering the receiver endpoint
-for such notification message is introduced, via the new NOTIFY record type.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
+for such notification message is introduced, via the new DSYNC record type.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
 <p id="section-abstract-3">TO BE REMOVED: This document is being collaborated on in Github at:
 <a href="https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify">https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify</a>.
 The most recent working version of the document, open issues, etc. should all be
@@ -1108,7 +1108,7 @@ available there.  The authors (gratefully) accept pull requests.<a href="#sectio
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 6 February 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 24 April 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1157,16 +1157,16 @@ available there.  The authors (gratefully) accept pull requests.<a href="#sectio
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.2">
                 <p id="section-toc.1-1.2.2.2.1"><a href="#section-2.2" class="auto internal xref">2.2</a>.  <a href="#name-semantics" class="internal xref">Semantics</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.3">
-                <p id="section-toc.1-1.2.2.3.1"><a href="#section-2.3" class="auto internal xref">2.3</a>.  <a href="#name-rationale" class="internal xref">Rationale</a></p>
-</li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
             <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-publication-of-notification" class="internal xref">Publication of Notification Targets</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1">
-                <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-signaling-method" class="internal xref">Signaling Method</a></p>
+                <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-wildcard-method" class="internal xref">Wildcard Method</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2">
+                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-child-specific-method" class="internal xref">Child-specific Method</a></p>
 </li>
             </ul>
 </li>
@@ -1184,9 +1184,6 @@ available there.  The authors (gratefully) accept pull requests.<a href="#sectio
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2.2.2">
                     <p id="section-toc.1-1.4.2.2.2.2.1"><a href="#section-4.2.2" class="auto internal xref">4.2.2</a>.  <a href="#name-roles" class="internal xref">Roles</a></p>
-</li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2.2.3">
-                    <p id="section-toc.1-1.4.2.2.2.3.1"><a href="#section-4.2.3" class="auto internal xref">4.2.3</a>.  <a href="#name-rationale-for-using-the-dns" class="internal xref">Rationale for Using the DNS Message Format</a></p>
 </li>
                 </ul>
 </li>
@@ -1265,14 +1262,14 @@ Future extension for further use cases (such as multi-signer key exchange)
 is possible.<a href="#section-1-3" class="pilcrow">¶</a></p>
 <p id="section-1-4">Readers are expected to be familiar with DNSSEC, including <span>[<a href="#RFC4033" class="cite xref">RFC4033</a>]</span>,
 <span>[<a href="#RFC4034" class="cite xref">RFC4034</a>]</span>, <span>[<a href="#RFC4035" class="cite xref">RFC4035</a>]</span>, <span>[<a href="#RFC6781" class="cite xref">RFC6781</a>]</span>, <span>[<a href="#RFC7344" class="cite xref">RFC7344</a>]</span>, <span>[<a href="#RFC7477" class="cite xref">RFC7477</a>]</span>,
-<span>[<a href="#RFC7583" class="cite xref">RFC7583</a>]</span>, and <span>[<a href="#RFC8901" class="cite xref">RFC8901</a>]</span>.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<span>[<a href="#RFC7583" class="cite xref">RFC7583</a>]</span>, <span>[<a href="#RFC8078" class="cite xref">RFC8078</a>]</span>, <span>[<a href="#RFC8901" class="cite xref">RFC8901</a>]</span>, and <span>[<a href="#RFC9615" class="cite xref">RFC9615</a>]</span>.<a href="#section-1-4" class="pilcrow">¶</a></p>
 <div id="design-requirements">
 <section id="section-1.1">
         <h3 id="name-design-requirements">
 <a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-design-requirements" class="section-name selfRef">Design Requirements</a>
         </h3>
 <p id="section-1.1-1">When the parent is interested in notifications for delegation
-maintenance (such as for DS or NS updates), a service will need to be
+maintenance (such as for DS or NS hints), a service will need to be
 made available for accepting these notifications. Depending on the
 context, this service may be run by the parent zone operator themselves,
 or by a designated entity who is in charge of handling the domain's
@@ -1287,7 +1284,7 @@ delegation-specific way, that is, at a child-specific name. (A catch-all
 endpoint may be indicated by wildcarding.)<a href="#section-1.1-2" class="pilcrow">¶</a></p>
 <p id="section-1.1-3">The solution proposed here is thus for the parent to publish the address
 where it listens for notifications, in a child-specific way (see
-<a href="#signaling" class="auto internal xref">Section 3.1</a>). Potential senders, knowing the name of the parent zone,
+<a href="#signaling" class="auto internal xref">Section 3</a>). Potential senders, knowing the name of the parent zone,
 can then simply look up that information (see <a href="#discovery" class="auto internal xref">Section 4.1</a>).<a href="#section-1.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1367,10 +1364,10 @@ specified type. This name MUST resolve to one or more address records.<a href="#
 <a href="#section-2.2" class="section-number selfRef">2.2. </a><a href="#name-semantics" class="section-name selfRef">Semantics</a>
         </h3>
 <p id="section-2.2-1">For now, the only scheme defined is scheme=1 with the interpretation
-that when a new CDS/CDNSKEY (or CSYNC) is published, a NOTIFY(CDS)
+that when a new CDS/CDNSKEY (or CSYNC) RRset is published, a NOTIFY(CDS)
 (or NOTIFY(CSYNC)) should be sent to the address and port listed in
-the corresponding NOTIFY RRset.<a href="#section-2.2-1" class="pilcrow">¶</a></p>
-<p id="section-2.2-2">Example (for the owner names of these records, see <a href="#signaling" class="auto internal xref">Section 3.1</a>):<a href="#section-2.2-2" class="pilcrow">¶</a></p>
+the corresponding DSYNC record.<a href="#section-2.2-1" class="pilcrow">¶</a></p>
+<p id="section-2.2-2">Example (for the owner names of these records, see <a href="#signaling" class="auto internal xref">Section 3</a>):<a href="#section-2.2-2" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.2-3">
 <pre>
 IN DSYNC CDS   1 5359 cds-scanner.example.net.
@@ -1381,40 +1378,9 @@ IN DSYNC CSYNC 1 5360 csync-scanner.example.net.
 to deal with such requirements using alternative logic.<a href="#section-2.2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="rationale">
-<section id="section-2.3">
-        <h3 id="name-rationale">
-<a href="#section-2.3" class="section-number selfRef">2.3. </a><a href="#name-rationale" class="section-name selfRef">Rationale</a>
-        </h3>
-<p id="section-2.3-1">(RFC Editor: This subsection is to be removed before publication)<a href="#section-2.3-1" class="pilcrow">¶</a></p>
-<p id="section-2.3-2">It may look like it's possible to store the same information in an SRV
-record. However, this would require indicating the RRtype via a label in
-the owner name, leading to name space pollution. It would also require
-changing the semantics of one of the integer fields of the SRV record.<a href="#section-2.3-2" class="pilcrow">¶</a></p>
-<p id="section-2.3-3">Such overloading has not been a good idea in the past. Furthermore, as
-the generalized notifications are a new proposal with no prior
-deployments, there is an opportunity to avoid repeating mistakes.<a href="#section-2.3-3" class="pilcrow">¶</a></p>
-<p id="section-2.3-4">The DSYNC record type also provides a cleaner solution for bundling all
-the new types of notification signaling in one RRset, like:<a href="#section-2.3-4" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-2.3-5">
-<pre>
-IN DSYNC  CDS     1  59   scanner.example.net.
-IN DSYNC  CSYNC   1  59   scanner.example.net.
-</pre><a href="#section-2.3-5" class="pilcrow">¶</a>
-</div>
-<p id="section-2.3-6">For DSYNC records indicating CDS/CDNSKEY/CSYNC notification targets, no
-special processing needs to be applied by the authoritative nameserver
-upon insertion of a DSYNC record. The nameserver can thus be "unaware".<a href="#section-2.3-6" class="pilcrow">¶</a></p>
-<p id="section-2.3-7">Future use cases (such as for multi-signer key exchange) may require the
-nameserver to trigger special operations, for example when a DSYNC
-record is inserted during onboarding of a new signer. It seems cleaner
-and easier that such processing be associated with the insertion of a
-record of a new type, not an existing type like SRV.<a href="#section-2.3-7" class="pilcrow">¶</a></p>
 </section>
 </div>
-</section>
-</div>
-<div id="publication-of-notification-targets">
+<div id="signaling">
 <section id="section-3">
       <h2 id="name-publication-of-notification">
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-publication-of-notification" class="section-name selfRef">Publication of Notification Targets</a>
@@ -1431,50 +1397,58 @@ a means for discovering where to send the API or DNS Update requests.<a href="#s
 <p id="section-3-3">The scope for the publication mechanism is therefore wider than only to
 support generalized notifications, and a unified approach that works
 independently of the notification method is specified in this section.<a href="#section-3-3" class="pilcrow">¶</a></p>
-<div id="signaling">
-<section id="section-3.1">
-        <h3 id="name-signaling-method">
-<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-signaling-method" class="section-name selfRef">Signaling Method</a>
-        </h3>
-<p id="section-3.1-1">Parents participating in the discovery scheme for the purpose of
+<p id="section-3-4">Parents participating in the discovery scheme for the purpose of
 delegation maintenance notifications MUST publish endpoint information
-using the record type defined in <a href="#dsyncrdtype" class="auto internal xref">Section 2</a>. A parent MUST NOT
-publish more than one DSYNC record for each combination of rrtype and
-scheme.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
-<p id="section-3.1-2">If the parent itself performs CDS/CDNSKEY or CSYNC processing, or if
+using the record type defined in <a href="#dsyncrdtype" class="auto internal xref">Section 2</a> under the <code>_dsync</code>
+domain as described in the following subsection.<a href="#section-3-4" class="pilcrow">¶</a></p>
+<p id="section-3-5">It is RECOMMENDED to secure the corresponding zone with DNSSEC.
+A parent MUST NOT publish more than one DSYNC record for each
+combination of rrtype and scheme.<a href="#section-3-5" class="pilcrow">¶</a></p>
+<p id="section-3-6">For practical purposes, the parent MAY delegate the <code>_dsync</code> domain as a
+separate zone, and/or synthesize records under it. If child-specificity
+is not needed, the parent can publish a wildcard DSYNC record.<a href="#section-3-6" class="pilcrow">¶</a></p>
+<div id="wildcard-method">
+<section id="section-3.1">
+        <h3 id="name-wildcard-method">
+<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-wildcard-method" class="section-name selfRef">Wildcard Method</a>
+        </h3>
+<p id="section-3.1-1">If the parent itself performs CDS/CDNSKEY or CSYNC processing, or if
 the parent forwards the notifications internally to the designated party
-(such as a registrar), the following scheme is used:<a href="#section-3.1-2" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.1-3">
+(such as a registrar), the following scheme is used:<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.1-2">
 <pre>
 *._dsync.example.  IN DSYNC  CDS   scheme port target
 *._dsync.example.  IN DSYNC  CSYNC scheme port target
-</pre><a href="#section-3.1-3" class="pilcrow">¶</a>
+</pre><a href="#section-3.1-2" class="pilcrow">¶</a>
 </div>
-<p id="section-3.1-4">It is RECOMMENDED to secure the corresponding zone with DNSSEC.<a href="#section-3.1-4" class="pilcrow">¶</a></p>
-<p id="section-3.1-5">It is also possible to publish child-specific records, where the
-wildcard label is replaced by the child's FQDN with the parent zone's
-labels stripped.<a href="#section-3.1-5" class="pilcrow">¶</a></p>
-<p id="section-3.1-6">As an example, consider a registrar offering domains like
-<code>child.example</code>, delegated from <code>example</code> zone. If the registrar
-provides the notification endpoint, e.g., <code>rr-endpoint.example:5300</code>,
-the parent may publish this information as follows:<a href="#section-3.1-6" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.1-7">
-<pre>
-child._dsync.example.  IN DSYNC  CDS  1 5300 rr-endpoint.example.
-</pre><a href="#section-3.1-7" class="pilcrow">¶</a>
-</div>
-<p id="section-3.1-8">In case the parent does not need child-specificity, the wildcard label
+<p id="section-3.1-3">To accommodate indirect delegation management models, the parent's
+designated notification target may relay notifications to a third party
+(such as the registrar, in ICANN's model). The details of such
+arrangements are out of scope for this document.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
+<p id="section-3.1-4">In case the parent does not need child-specificity, the wildcard label
 may be dropped from the DSYNC owner name (i.e., it may be published at
 the <code>_dsync</code> label instead). While this practice enables zone structures
 without wildcards, it also requires an additional step during discovery
-(see <a href="#discovery" class="auto internal xref">Section 4.1</a>), and is therefore NOT RECOMMENDED.<a href="#section-3.1-8" class="pilcrow">¶</a></p>
-<p id="section-3.1-9">For practical purposes, the parent MAY delegate the <code>_dsync</code> domain as a
-separate zone, and/or synthesize records under it. If child-specificity
-is not needed, the parent can publish a wildcard DSYNC record.<a href="#section-3.1-9" class="pilcrow">¶</a></p>
-<p id="section-3.1-10">To accommodate indirect delegation management models, the parent's
-designated notification target may relay notifications to a third party
-(such as the registrar, in ICANN's model). The details of such
-arrangements are out of scope for this document.<a href="#section-3.1-10" class="pilcrow">¶</a></p>
+(see <a href="#discovery" class="auto internal xref">Section 4.1</a>), and is therefore NOT RECOMMENDED.<a href="#section-3.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="child-specific-method">
+<section id="section-3.2">
+        <h3 id="name-child-specific-method">
+<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-child-specific-method" class="section-name selfRef">Child-specific Method</a>
+        </h3>
+<p id="section-3.2-1">It is also possible to publish child-specific records, where the
+wildcard label is replaced by the child's FQDN with the parent zone's
+labels stripped.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.2-2">As an example, consider a registrar offering domains like
+<code>child.example</code>, delegated from <code>example</code> zone. If the registrar
+provides the notification endpoint, e.g., <code>rr-endpoint.example:5300</code>,
+the parent may publish this information as follows:<a href="#section-3.2-2" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.2-3">
+<pre>
+child._dsync.example.  IN DSYNC  CDS  1 5300 rr-endpoint.example.
+</pre><a href="#section-3.2-3" class="pilcrow">¶</a>
+</div>
 </section>
 </div>
 </section>
@@ -1485,22 +1459,30 @@ arrangements are out of scope for this document.<a href="#section-3.1-10" class=
 <a href="#section-4" class="section-number selfRef">4. </a><a href="#name-delegation-maintenance-cds-" class="section-name selfRef">Delegation Maintenance: CDS/CDNSKEY and CSYNC Notifications</a>
       </h2>
 <p id="section-4-1">Delegation maintenance notifications address the inefficiencies related
-to scanning child zones for CDS/CDNSKEY records <span>[<a href="#RFC7344" class="cite xref">RFC7344</a>]</span>. (For an
-overview of the issues, see <a href="#context" class="auto internal xref">Appendix A</a>.)<a href="#section-4-1" class="pilcrow">¶</a></p>
-<p id="section-4-2">Delegation maintenance NOTIFY messages MUST be formatted as described in
+to scanning child zones for CDS/CDNSKEY records
+<span>[<a href="#RFC7344" class="cite xref">RFC7344</a>]</span><span>[<a href="#RFC8078" class="cite xref">RFC8078</a>]</span><span>[<a href="#RFC9615" class="cite xref">RFC9615</a>]</span>. (For an overview of the issues,
+see <a href="#context" class="auto internal xref">Appendix A</a>.)<a href="#section-4-1" class="pilcrow">¶</a></p>
+<p id="section-4-2">NOTIFY messages for delegation maintenance MUST be formatted as described in
 <span>[<a href="#RFC1996" class="cite xref">RFC1996</a>]</span>, with the <code>qtype</code> field replaced as appropriate.<a href="#section-4-2" class="pilcrow">¶</a></p>
 <p id="section-4-3">To address the CDS/CDNSKEY dichotomy, the NOTIFY(CDS) message (with
 <code>qtype=CDS</code>) is defined to indicate any child-side changes pertaining
-to an upcoming update of DS records. Upon receipt of NOTIFY(CDS), the
-recipient (the parent registry or a registrar) SHOULD initiate the same DNS
-lookups and verifications that would otherwise be triggered based on a
-timer.<a href="#section-4-3" class="pilcrow">¶</a></p>
-<p id="section-4-4">The CSYNC <span>[<a href="#RFC7477" class="cite xref">RFC7477</a>]</span> inefficiency may be similarly treated, with the
+to an upcoming update of DS records.
+As the child DNS operator generally is unaware of whether the
+parent consumes CDS records or prefers CDNSKEY, or when that policy
+changes, it seems advisable to publish both types of records,
+preferably using automation features of common authoritative nameserver
+software for ensuring consistency.<a href="#section-4-3" class="pilcrow">¶</a></p>
+<p id="section-4-4">Upon receipt of NOTIFY(CDS), the recipient (the parent registry or a
+registrar) SHOULD initiate the same DNS lookups and verifications for
+DNSSEC bootstrapping <span>[<a href="#RFC9615" class="cite xref">RFC9615</a>]</span> or DS maintenance
+<span>[<a href="#RFC7344" class="cite xref">RFC7344</a>]</span><span>[<a href="#RFC8078" class="cite xref">RFC8078</a>]</span> that would otherwise be triggered based on a
+timer.<a href="#section-4-4" class="pilcrow">¶</a></p>
+<p id="section-4-5">The CSYNC <span>[<a href="#RFC7477" class="cite xref">RFC7477</a>]</span> inefficiency may be similarly treated, with the
 child sending a NOTIFY(CSYNC) message (with <code>qtype=CSYNC</code>) to an address
-where the parent (or a registrar) is listening to CSYNC notifications.<a href="#section-4-4" class="pilcrow">¶</a></p>
-<p id="section-4-5">In both cases the notification will speed up processing times by
+where the parent (or a registrar) is listening to CSYNC notifications.<a href="#section-4-5" class="pilcrow">¶</a></p>
+<p id="section-4-6">In both cases the notification will speed up processing times by
 providing the recipient with a hint that a particular child zone has
-published new CDS, CDNSKEY and/or CSYNC records.<a href="#section-4-5" class="pilcrow">¶</a></p>
+published new CDS, CDNSKEY and/or CSYNC records.<a href="#section-4-6" class="pilcrow">¶</a></p>
 <div id="discovery">
 <section id="section-4.1">
         <h3 id="name-endpoint-discovery">
@@ -1552,21 +1534,21 @@ as <code>_dsync.jp</code>), and go to step 2.
         <h3 id="name-sending-notifications">
 <a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-sending-notifications" class="section-name selfRef">Sending Notifications</a>
         </h3>
-<p id="section-4.2-1">When changing a CDS/CDNSKEY/CSYNC RRset in the child zone, the DNS
-operator SHOULD send a suitable NOTIFY message to the endpoint located
-as described in the previous section.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
+<p id="section-4.2-1">When creating or changing a CDS/CDNSKEY/CSYNC RRset in the child zone,
+the DNS operator SHOULD send a suitable notification to one of the
+endpoints discovered as described in the previous section.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
 <p id="section-4.2-2">A NOTIFY message can only carry information about changes concerning one
 child zone. When there are changes to several child zones, the sender
 MUST send a separate notification for each one.<a href="#section-4.2-2" class="pilcrow">¶</a></p>
 <p id="section-4.2-3">When a primary name server publishes a new RRset in the child, there
 typically is a time delay until all publicly visible copies of the zone
-will have been updated. If the primary sends a NOTIFY at the exact
+will have been updated. If the primary sends a notification at the exact
 time of publication of the new zone, there is a potential for the
 parent to attempt CDS/CDNSKEY/CSYNC processing before the updated zone
 is visible. In this case the parent may draw the wrong conclusion (“the
 CDS RRset has not been updated”).<a href="#section-4.2-3" class="pilcrow">¶</a></p>
-<p id="section-4.2-4">It is therefore RECOMMENDED that the child delays sending NOTIFY
-messages to the recipient until a consistent public view of the pertinent
+<p id="section-4.2-4">It is therefore RECOMMENDED that the child delays sending notifications
+to the recipient until a consistent public view of the pertinent
 records is ensured.<a href="#section-4.2-4" class="pilcrow">¶</a></p>
 <div id="timeouts-and-error-handling">
 <section id="section-4.2.1">
@@ -1595,13 +1577,7 @@ child's delegation in the parent zone.<a href="#section-4.2.1-3" class="pilcrow"
           <h4 id="name-roles">
 <a href="#section-4.2.2" class="section-number selfRef">4.2.2. </a><a href="#name-roles" class="section-name selfRef">Roles</a>
           </h4>
-<p id="section-4.2.2-1">Because of the security model where a notification by itself never
-causes a change (it can only speed up the time until the next
-check for the same thing), the sender's identity is not crucial.
-This opens up the possibility of having an arbitrary party (e.g., a
-side-car service) send the notifications, enabling this functionality
-even before the emergence of native support in nameserver software.<a href="#section-4.2.2-1" class="pilcrow">¶</a></p>
-<p id="section-4.2.2-2">While the CDS/CDNSKEY/CSYNC processing following the receipt of a NOTIFY
+<p id="section-4.2.2-1">While the CDS/CDNSKEY/CSYNC processing following the receipt of a NOTIFY
 will often be performed by the registry, the protocol anticipates that
 in some contexts (especially for ICANN gTLDs), registrars may take on
 the task. In such cases, the parent may publish the current registrar
@@ -1610,33 +1586,13 @@ appropriate target. The mechanics of how this is arranged between
 registry and registrar are out of scope for this document; the protocol
 only offers the possibility to arrange things such that from the child
 perspective, it is inconsequential how the parent-side parties are
-organized: notifications are simply sent to the published address.<a href="#section-4.2.2-2" class="pilcrow">¶</a></p>
-<p id="section-4.2.2-3">In the general case, the child DNS operator is unaware of whether the
-parent consumes CDS records or prefers CDNSKEY, or when that policy
-changes. It therefore seems advisable to publish both types of records,
-preferably using automation features of common authoritative nameserver
-software for ensuring consistency.<a href="#section-4.2.2-3" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="rationale-for-using-the-dns-message-format">
-<section id="section-4.2.3">
-          <h4 id="name-rationale-for-using-the-dns">
-<a href="#section-4.2.3" class="section-number selfRef">4.2.3. </a><a href="#name-rationale-for-using-the-dns" class="section-name selfRef">Rationale for Using the DNS Message Format</a>
-          </h4>
-<p id="section-4.2.3-1">(RFC Editor: This subsection is to be removed before publication)<a href="#section-4.2.3-1" class="pilcrow">¶</a></p>
-<p id="section-4.2.3-2">In the most common cases of using generalized notifications the
-recipient is expected to not be a nameserver, but rather some other
-type of service, like a CDS/CSYNC scanner.<a href="#section-4.2.3-2" class="pilcrow">¶</a></p>
-<p id="section-4.2.3-3">However, this will likely not always be true. In particular, it seems
-likely that in cases where the parent is not a large
-delegation-centric zone like a TLD, but rather a smaller zone with a
-small number of delegations, there will not be separate services for
-everything and the recipient of the NOTIFY(CDS) or NOTIFY(CSYNC) will
-be an authoritative nameserver for the parent zone.<a href="#section-4.2.3-3" class="pilcrow">¶</a></p>
-<p id="section-4.2.3-4">For this reason it seems most reasonable to stay within the well
-documented and already supported message format specified in RFC 1996
-and delivered over normal DNS transport, although not necessarily to
-port 53.<a href="#section-4.2.3-4" class="pilcrow">¶</a></p>
+organized: notifications are simply sent to the published address.<a href="#section-4.2.2-1" class="pilcrow">¶</a></p>
+<p id="section-4.2.2-2">Because of the security model where a notification by itself never
+causes a change (it can only speed up the time until the next
+check for the same thing), the sender's identity is not crucial.
+This opens up the possibility of having an arbitrary party (e.g., a
+side-car service) send the notifications, enabling this functionality
+even before the emergence of native support in nameserver software.<a href="#section-4.2.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1665,10 +1621,10 @@ report any errors occuring during CDS/CDNSKEY processing by sending
 a report query with an appropriate extended DNS error code as
 described in <span>[<a href="#RFC8914" class="cite xref">RFC8914</a>]</span>.<a href="#section-4.3-3.1.2" class="pilcrow">¶</a></p>
 <p id="section-4.3-3.1.3">
-If the check finds that the CDS/CDNSKEY RRset has indeed changed,
-the parent MAY reset the scanning timer for children for which
-NOTIFY(CDS) is received, or reduce the periodic scanning frequency
-accordingly (e.g. to every two weeks).
+If the check finds that the CDS/CDNSKEY RRset is indeed new or has
+changed, the parent MAY reset the scanning timer for children for
+which NOTIFY(CDS) is received, or reduce the periodic scanning
+frequency accordingly (e.g. to every two weeks).
 This will decrease the scanning effort for the parent.
 If a CDS/CDNSKEY change is then detected (without having received
 a notification), the parent SHOULD clear that state and revert to
@@ -1908,6 +1864,10 @@ Wouters, Brian Dickson, Warren Kumari, Patrick Mevzek, Tim Wicinski<a href="#sec
         <dd>
 <span class="refAuthor">Hardaker, W.</span>, <span class="refTitle">"Child-to-Parent Synchronization in DNS"</span>, <span class="seriesInfo">RFC 7477</span>, <span class="seriesInfo">DOI 10.17487/RFC7477</span>, <time datetime="2015-03" class="refDate">March 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7477">https://www.rfc-editor.org/rfc/rfc7477</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC8078">[RFC8078]</dt>
+        <dd>
+<span class="refAuthor">Gudmundsson, O.</span> and <span class="refAuthor">P. Wouters</span>, <span class="refTitle">"Managing DS Records from the Parent via CDS/CDNSKEY"</span>, <span class="seriesInfo">RFC 8078</span>, <span class="seriesInfo">DOI 10.17487/RFC8078</span>, <time datetime="2017-03" class="refDate">March 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8078">https://www.rfc-editor.org/rfc/rfc8078</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC8174">[RFC8174]</dt>
         <dd>
 <span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
@@ -1921,8 +1881,12 @@ Wouters, Brian Dickson, Warren Kumari, Patrick Mevzek, Tim Wicinski<a href="#sec
 <span class="refAuthor">Kumari, W.</span>, <span class="refAuthor">Hunt, E.</span>, <span class="refAuthor">Arends, R.</span>, <span class="refAuthor">Hardaker, W.</span>, and <span class="refAuthor">D. Lawrence</span>, <span class="refTitle">"Extended DNS Errors"</span>, <span class="seriesInfo">RFC 8914</span>, <span class="seriesInfo">DOI 10.17487/RFC8914</span>, <time datetime="2020-10" class="refDate">October 2020</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8914">https://www.rfc-editor.org/rfc/rfc8914</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC9567">[RFC9567]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Arends, R.</span> and <span class="refAuthor">M. Larson</span>, <span class="refTitle">"DNS Error Reporting"</span>, <span class="seriesInfo">RFC 9567</span>, <span class="seriesInfo">DOI 10.17487/RFC9567</span>, <time datetime="2024-04" class="refDate">April 2024</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9567">https://www.rfc-editor.org/rfc/rfc9567</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9615">[RFC9615]</dt>
+      <dd>
+<span class="refAuthor">Thomassen, P.</span> and <span class="refAuthor">N. Wisiol</span>, <span class="refTitle">"Automatic DNSSEC Bootstrapping Using Authenticated Signals from the Zone's Operator"</span>, <span class="seriesInfo">RFC 9615</span>, <span class="seriesInfo">DOI 10.17487/RFC9615</span>, <time datetime="2024-07" class="refDate">July 2024</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9615">https://www.rfc-editor.org/rfc/rfc9615</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
@@ -1935,7 +1899,7 @@ Wouters, Brian Dickson, Warren Kumari, Patrick Mevzek, Tim Wicinski<a href="#sec
 <dl class="references">
 <dt id="I-D.ietf-dnsop-dnssec-automation">[I-D.ietf-dnsop-dnssec-automation]</dt>
         <dd>
-<span class="refAuthor">Wisser, U.</span>, <span class="refAuthor">Huque, S.</span>, and <span class="refAuthor">J. Stenstam</span>, <span class="refTitle">"DNSSEC automation"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-dnsop-dnssec-automation-02</span>, <time datetime="2023-10-22" class="refDate">22 October 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-dnsop-dnssec-automation-02">https://datatracker.ietf.org/doc/html/draft-ietf-dnsop-dnssec-automation-02</a>&gt;</span>. </dd>
+<span class="refAuthor">Wisser, U.</span>, <span class="refAuthor">Huque, S.</span>, and <span class="refAuthor">J. Stenstam</span>, <span class="refTitle">"DNSSEC automation"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-dnsop-dnssec-automation-03</span>, <time datetime="2024-10-19" class="refDate">19 October 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-dnsop-dnssec-automation-03">https://datatracker.ietf.org/doc/html/draft-ietf-dnsop-dnssec-automation-03</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC6781">[RFC6781]</dt>
         <dd>
@@ -2015,132 +1979,152 @@ conceivable, the detailed specification is left for future work.<a href="#append
       </h2>
 <ul class="normal">
 <li class="normal" id="appendix-B-1.1">
-          <p id="appendix-B-1.1.1">draft-ietf-dnsop-generalized-notify-02<a href="#appendix-B-1.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-1.1.1">draft-ietf-dnsop-generalized-notify-03<a href="#appendix-B-1.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="appendix-B-2.1">
-          <p id="appendix-B-2.1.1">Nits by Tim Wicinski<a href="#appendix-B-2.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-2.1.1">Include DNSSEC bootstrapping use case<a href="#appendix-B-2.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="appendix-B-3.1">
-          <p id="appendix-B-3.1.1">Dnsdir feedback<a href="#appendix-B-3.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-3.1.1">Remove sections with approaches not pursued<a href="#appendix-B-3.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="appendix-B-4.1">
-          <p id="appendix-B-4.1.1">Specify timeout and error handling<a href="#appendix-B-4.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-4.1.1">Editorial changes<a href="#appendix-B-4.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="appendix-B-5.1">
-          <p id="appendix-B-5.1.1">Editorial nits<a href="#appendix-B-5.1.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-B-5.1">
+          <p id="appendix-B-5.1.1">draft-ietf-dnsop-generalized-notify-02<a href="#appendix-B-5.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="appendix-B-6.1">
-          <p id="appendix-B-6.1.1">Reserve scheme value 0<a href="#appendix-B-6.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-6.1.1">Nits by Tim Wicinski<a href="#appendix-B-6.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<ul class="normal">
-<li class="normal" id="appendix-B-7.1">
-          <p id="appendix-B-7.1.1">draft-ietf-dnsop-generalized-notify-01<a href="#appendix-B-7.1.1" class="pilcrow">¶</a></p>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="appendix-B-7.1">
+          <p id="appendix-B-7.1.1">Dnsdir feedback<a href="#appendix-B-7.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="appendix-B-8.1">
-          <p id="appendix-B-8.1.1">Reserve scheme values 128-255<a href="#appendix-B-8.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-8.1.1">Specify timeout and error handling<a href="#appendix-B-8.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="appendix-B-9.1">
-          <p id="appendix-B-9.1.1">Rename NOTIFY rrtype to DSYNC (to distinguish from NOTIFY message)<a href="#appendix-B-9.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-9.1.1">Editorial nits<a href="#appendix-B-9.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="appendix-B-10.1">
-          <p id="appendix-B-10.1.1">Describe endpoint discovery<a href="#appendix-B-10.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-10.1.1">Reserve scheme value 0<a href="#appendix-B-10.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="appendix-B-11.1">
-          <p id="appendix-B-11.1.1">Discussion on garbage notifications<a href="#appendix-B-11.1.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-B-11.1">
+          <p id="appendix-B-11.1.1">draft-ietf-dnsop-generalized-notify-01<a href="#appendix-B-11.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="appendix-B-12.1">
-          <p id="appendix-B-12.1.1">More discussion on amplification risks<a href="#appendix-B-12.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-12.1.1">Reserve scheme values 128-255<a href="#appendix-B-12.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="appendix-B-13.1">
-          <p id="appendix-B-13.1.1">Clean-up, editorial changes<a href="#appendix-B-13.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-13.1.1">Rename NOTIFY rrtype to DSYNC (to distinguish from NOTIFY message)<a href="#appendix-B-13.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<ul class="normal">
-<li class="normal" id="appendix-B-14.1">
-          <p id="appendix-B-14.1.1">draft-ietf-dnsop-generalized-notify-00<a href="#appendix-B-14.1.1" class="pilcrow">¶</a></p>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="appendix-B-14.1">
+          <p id="appendix-B-14.1.1">Describe endpoint discovery<a href="#appendix-B-14.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="appendix-B-15.1">
-          <p id="appendix-B-15.1.1">Revision after adoption.<a href="#appendix-B-15.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-15.1.1">Discussion on garbage notifications<a href="#appendix-B-15.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<ul class="normal">
-<li class="normal" id="appendix-B-16.1">
-          <p id="appendix-B-16.1.1">draft-thomassen-dnsop-generalized-dns-notify-02<a href="#appendix-B-16.1.1" class="pilcrow">¶</a></p>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="appendix-B-16.1">
+          <p id="appendix-B-16.1.1">More discussion on amplification risks<a href="#appendix-B-16.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="appendix-B-17.1">
-          <p id="appendix-B-17.1.1">Add rationale for staying in band<a href="#appendix-B-17.1.1" class="pilcrow">¶</a></p>
-</li>
-      </ul>
-<ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="appendix-B-18.1">
-          <p id="appendix-B-18.1.1">Add John as an author<a href="#appendix-B-18.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-17.1.1">Clean-up, editorial changes<a href="#appendix-B-17.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal">
-<li class="normal" id="appendix-B-19.1">
-          <p id="appendix-B-19.1.1">draft-thomassen-dnsop-generalized-dns-notify-01<a href="#appendix-B-19.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-B-18.1">
+          <p id="appendix-B-18.1.1">draft-ietf-dnsop-generalized-notify-00<a href="#appendix-B-18.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="appendix-B-20.1">
-          <p id="appendix-B-20.1.1">Mention Ry-to-Rr forwarding to accommodate RRR model<a href="#appendix-B-20.1.1" class="pilcrow">¶</a></p>
+<li class="normal ulEmpty" id="appendix-B-19.1">
+          <p id="appendix-B-19.1.1">Revision after adoption.<a href="#appendix-B-19.1.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<ul class="normal">
+<li class="normal" id="appendix-B-20.1">
+          <p id="appendix-B-20.1.1">draft-thomassen-dnsop-generalized-dns-notify-02<a href="#appendix-B-20.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="appendix-B-21.1">
-          <p id="appendix-B-21.1.1">Add port number flexibility<a href="#appendix-B-21.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-21.1.1">Add rationale for staying in band<a href="#appendix-B-21.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="appendix-B-22.1">
-          <p id="appendix-B-22.1.1">Add scheme parameter<a href="#appendix-B-22.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-22.1.1">Add John as an author<a href="#appendix-B-22.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="appendix-B-23.1">
-          <p id="appendix-B-23.1.1">Drop SRV-based alternative in favour of new NOTIFY RR<a href="#appendix-B-23.1.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-B-23.1">
+          <p id="appendix-B-23.1.1">draft-thomassen-dnsop-generalized-dns-notify-01<a href="#appendix-B-23.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="appendix-B-24.1">
-          <p id="appendix-B-24.1.1">Editorial improvements<a href="#appendix-B-24.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-24.1.1">Mention Ry-to-Rr forwarding to accommodate RRR model<a href="#appendix-B-24.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<ul class="normal">
-<li class="normal" id="appendix-B-25.1">
-          <p id="appendix-B-25.1.1">draft-thomassen-dnsop-generalized-dns-notify-00<a href="#appendix-B-25.1.1" class="pilcrow">¶</a></p>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="appendix-B-25.1">
+          <p id="appendix-B-25.1.1">Add port number flexibility<a href="#appendix-B-25.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="appendix-B-26.1">
-          <p id="appendix-B-26.1.1">Initial public draft.<a href="#appendix-B-26.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-26.1.1">Add scheme parameter<a href="#appendix-B-26.1.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="appendix-B-27.1">
+          <p id="appendix-B-27.1.1">Drop SRV-based alternative in favour of new NOTIFY RR<a href="#appendix-B-27.1.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="appendix-B-28.1">
+          <p id="appendix-B-28.1.1">Editorial improvements<a href="#appendix-B-28.1.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<ul class="normal">
+<li class="normal" id="appendix-B-29.1">
+          <p id="appendix-B-29.1.1">draft-thomassen-dnsop-generalized-dns-notify-00<a href="#appendix-B-29.1.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="appendix-B-30.1">
+          <p id="appendix-B-30.1.1">Initial public draft.<a href="#appendix-B-30.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 </section>
