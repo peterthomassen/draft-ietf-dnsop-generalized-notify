@@ -1,0 +1,1357 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2024-10-22T00:37:23.738445+00:00",
+  "repo": "peterthomassen/draft-ietf-dnsop-generalized-notify",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "documentation",
+      "description": "Improvements or additions to documentation",
+      "color": "0075ca"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [
+    {
+      "number": 1,
+      "id": "I_kwDOIax6Es5WUgbn",
+      "title": "A couple of things that need resolution",
+      "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/issues/1",
+      "state": "CLOSED",
+      "author": "johanix",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "- [x] In the multi-signer case we can either use examples with a controller (like MUSIC), without a controller or both. The issue is not what the pros and cons are from a multi-signer perspective but what makes this draft easiest to read and understand.\r\n- [x] It would be nice if we could close the NOTIFY(NS) issue. But my head hurts thinking about it.\r\n- [x] Fix the reference to the multi-signer draft (and RFC).",
+      "createdAt": "2022-11-14T14:56:15Z",
+      "updatedAt": "2024-01-25T12:45:27Z",
+      "closedAt": "2024-01-25T12:45:26Z",
+      "comments": [
+        {
+          "author": "peterthomassen",
+          "authorAssociation": "OWNER",
+          "body": "> * [x]  It would be nice if we could close the NOTIFY(NS) issue. But my head hurts thinking about it.\r\n\r\nOut of scope: If signed, that should be NOTIFY(CSYNC), and if unsigned, if should be using draft-johani-dnsop-delegation-mgmt-via-ddns.",
+          "createdAt": "2024-01-25T12:43:18Z",
+          "updatedAt": "2024-01-25T12:43:18Z"
+        },
+        {
+          "author": "peterthomassen",
+          "authorAssociation": "OWNER",
+          "body": "> [x] In the multi-signer case we can either use examples with a controller (like MUSIC), without a controller or both. The issue is not what the pros and cons are from a multi-signer perspective but what makes this draft easiest to read and understand.\r\n\r\nKeeping out of scope for now, focus on NOTIFY(CDS) and NOTIFY(CSYNC) first, then reuse some of it later on.",
+          "createdAt": "2024-01-25T12:45:26Z",
+          "updatedAt": "2024-01-25T12:45:26Z"
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "id": "I_kwDOIax6Es5XIxMR",
+      "title": "What is the best name of the draft?",
+      "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/issues/2",
+      "state": "CLOSED",
+      "author": "johanix",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "...versed-notify\r\n\r\n...generalized-dns-notifications\r\n\r\n...other?\r\n",
+      "createdAt": "2022-11-23T14:59:09Z",
+      "updatedAt": "2022-11-24T12:41:42Z",
+      "closedAt": "2022-11-24T12:41:42Z",
+      "comments": [
+        {
+          "author": "peterthomassen",
+          "authorAssociation": "OWNER",
+          "body": "...generalized-dns-notifications",
+          "createdAt": "2022-11-24T12:41:23Z",
+          "updatedAt": "2022-11-24T12:41:23Z"
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "id": "I_kwDOIax6Es5XOBTp",
+      "title": "Add IANA registry",
+      "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/issues/3",
+      "state": "CLOSED",
+      "author": "peterthomassen",
+      "authorAssociation": "OWNER",
+      "assignees": [
+        "peterthomassen"
+      ],
+      "labels": [],
+      "body": "- one row per \"usecase\"\r\n- specify (at least) two columns: notification type, location of notification pointer records; what else?\r\n- allows deferring to later whether NOTIFY(NS) should be included\r\n- allows deferring to later where multi-signer notification pointer records should live (under child domain or under NS hostnames?)\r\n- allows adding notification types without new RFC --> figure out how to define the registry such that this is possible",
+      "createdAt": "2022-11-24T12:45:59Z",
+      "updatedAt": "2022-11-28T20:50:21Z",
+      "closedAt": "2022-11-28T20:50:21Z",
+      "comments": []
+    },
+    {
+      "number": 4,
+      "id": "I_kwDOIax6Es5XOBnF",
+      "title": "fold CDNSKEY into CDS",
+      "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/issues/4",
+      "state": "CLOSED",
+      "author": "peterthomassen",
+      "authorAssociation": "OWNER",
+      "assignees": [
+        "peterthomassen"
+      ],
+      "labels": [],
+      "body": "- say that NOTIFY(CDS) should trigger CDS and/or CDNSKEY at the parent (up to local policy)\r\n- until someone wants to discuss the issue",
+      "createdAt": "2022-11-24T12:46:57Z",
+      "updatedAt": "2022-11-25T14:58:42Z",
+      "closedAt": "2022-11-25T14:58:42Z",
+      "comments": []
+    },
+    {
+      "number": 5,
+      "id": "I_kwDOIax6Es5XOB1v",
+      "title": "Security Considerations: suggest rate limit",
+      "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/issues/5",
+      "state": "CLOSED",
+      "author": "peterthomassen",
+      "authorAssociation": "OWNER",
+      "assignees": [
+        "peterthomassen"
+      ],
+      "labels": [],
+      "body": "- mention that some kind of rate limit for NOTIFY(*) processing should mitigate any adverse avalanche effects",
+      "createdAt": "2022-11-24T12:47:42Z",
+      "updatedAt": "2022-11-25T14:58:42Z",
+      "closedAt": "2022-11-25T14:58:42Z",
+      "comments": []
+    },
+    {
+      "number": 6,
+      "id": "I_kwDOIax6Es5XOB68",
+      "title": "shorten _cds-notifications (and similar)?",
+      "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/issues/6",
+      "state": "CLOSED",
+      "author": "peterthomassen",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-11-24T12:47:58Z",
+      "updatedAt": "2024-01-25T12:37:52Z",
+      "closedAt": "2024-01-25T12:37:52Z",
+      "comments": [
+        {
+          "author": "peterthomassen",
+          "authorAssociation": "OWNER",
+          "body": "OBE",
+          "createdAt": "2024-01-25T12:37:48Z",
+          "updatedAt": "2024-01-25T12:37:48Z"
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "id": "I_kwDOIax6Es5XOCdu",
+      "title": "mention possibility for reducing scanning frequency",
+      "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/issues/7",
+      "state": "CLOSED",
+      "author": "peterthomassen",
+      "authorAssociation": "OWNER",
+      "assignees": [
+        "peterthomassen"
+      ],
+      "labels": [],
+      "body": "- for parents with existing scanning (they can reduce for children known to send NOTIFY)\r\n  - for other children, this would be a backwards-incompatible change\r\n- and for parents who introduce CDS/CDNSKEY support for the first time; can use low-frequency scanning for all children\r\n  - as the scanning is new, there is no backwards-compatibility problem",
+      "createdAt": "2022-11-24T12:49:51Z",
+      "updatedAt": "2022-11-25T14:58:43Z",
+      "closedAt": "2022-11-25T14:58:43Z",
+      "comments": []
+    },
+    {
+      "number": 9,
+      "id": "I_kwDOIax6Es5XPQcX",
+      "title": "Expand abstract",
+      "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/issues/9",
+      "state": "CLOSED",
+      "author": "peterthomassen",
+      "authorAssociation": "OWNER",
+      "assignees": [
+        "peterthomassen"
+      ],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-11-24T17:00:41Z",
+      "updatedAt": "2022-11-28T20:50:20Z",
+      "closedAt": "2022-11-28T20:50:20Z",
+      "comments": []
+    },
+    {
+      "number": 10,
+      "id": "I_kwDOIax6Es5XTaFF",
+      "title": "Sorting out the options for the parent on receipt of a NOTIFY(CDS)",
+      "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/issues/10",
+      "state": "CLOSED",
+      "author": "johanix",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "peterthomassen"
+      ],
+      "labels": [],
+      "body": "This is my view:\r\n\r\n1. Schedule immediate check. Reset \"refresh\" to max value (i.e. in practice, put this child at the end of the queue, but don't put it on a separate slower queue.\r\n2. Schedule immediate check. Put child of a slow-burner queue used for children known to issue NOTIFY(CDS).\r\n3. Ignore.\r\n\r\nOption one improves service but doesn't reduce cost. Option two improves service and reduces cost (apart from implementation complexity). Option three is a no-op.\r\n\r\nIs this sthe same as your view, or am I missing some important detail in the current text?",
+      "createdAt": "2022-11-25T15:46:30Z",
+      "updatedAt": "2022-11-28T20:50:20Z",
+      "closedAt": "2022-11-28T20:50:20Z",
+      "comments": [
+        {
+          "author": "peterthomassen",
+          "authorAssociation": "OWNER",
+          "body": "I think 1&2 are very similar, and don't need to be spelled out separately. I merged 1&2 together, and now the sentence just says:\r\n```\r\n     The parent MAY reset the scanning timer for children for which\r\n     NOTIFY(CDS) is received, or reduce the periodic scanning frequency\r\n     accordingly (e.g. to every two weeks).\r\n```\r\n\r\nIMO the details of that are local policy, so don't need to go into the document. (Perhaps operators will come up with yet different algorithms for handling children known to support NOTIFY(CDS), so our enumeration may not be comprehensive anyway.)",
+          "createdAt": "2022-11-26T15:07:47Z",
+          "updatedAt": "2022-11-28T15:04:17Z"
+        }
+      ]
+    },
+    {
+      "number": 11,
+      "id": "I_kwDOIax6Es5XTd-t",
+      "title": "Should we add a bit of document complexity by going into *responses* to NOTIFY(*)?",
+      "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/issues/11",
+      "state": "CLOSED",
+      "author": "johanix",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Most people are more or less unaware that NOTIFY is a message with a response. \r\n\r\nAs the aim is to get away from as much brute-force scanning as possible (i.e. try to do one better than RFC 1996 did for NOTIFY(SOA) to replace the refresh counter) I think it would be helpful to point out that there are responses and the response may be used as a signalling mechanism. I.e.:\r\n\r\nchild sends NOTIFY(CDS). Parent may respond with:\r\n\r\nNOERROR: all good, we support NOTIFY(CDS) and your request will be dealt with shortly\r\n\r\nREFUSED: we don't care about NOTIFY(CDS) (in spite of having a notification address published). We'll just continue to do inefficient scanning.\r\n\r\nAny other alternative?\r\n",
+      "createdAt": "2022-11-25T16:03:26Z",
+      "updatedAt": "2024-07-08T20:03:51Z",
+      "closedAt": "2024-07-08T20:03:51Z",
+      "comments": [
+        {
+          "author": "johanix",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I argue to leave it out from the first draft. But I think for the long term goal it may be the thing that tilts the balance.\r\n",
+          "createdAt": "2022-11-25T16:06:54Z",
+          "updatedAt": "2022-11-25T16:06:54Z"
+        },
+        {
+          "author": "peterthomassen",
+          "authorAssociation": "OWNER",
+          "body": "Ack (leave out for now, discuss later)",
+          "createdAt": "2022-11-26T15:08:17Z",
+          "updatedAt": "2022-11-26T15:08:17Z"
+        },
+        {
+          "author": "peterthomassen",
+          "authorAssociation": "OWNER",
+          "body": "add something https://datatracker.ietf.org/doc/html/draft-johani-dnsop-delegation-mgmt-via-ddns-01#name-interpretation-of-the-respo",
+          "createdAt": "2024-01-25T12:37:16Z",
+          "updatedAt": "2024-01-25T12:37:16Z"
+        }
+      ]
+    },
+    {
+      "number": 13,
+      "id": "I_kwDOIax6Es5XcH3X",
+      "title": "Add RRSIG(Question) to Additional section",
+      "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/issues/13",
+      "state": "CLOSED",
+      "author": "brian-peter-dickson",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "It would be ideal to include any/all RRSIGs along with the record used for the Notify.\r\nThis would prevent garbage submissions (attacks), at least in theory.\r\nSince the Question section currently can only have one RR, the obvious placement would be the Additional section.\r\n\r\nA recipient could do whatever level of sanity checks, verifications, and validations it desire, possibly sequentially to limit the ability of anyone to induce the requester to do work.\r\n\r\nE.g. first, check for the presence of RRSIGs (reject any Notifies without one). Then check that the Key Tag is a match for one of the DNSKEYs with SEP set. Then check against existing records (ignore Notifies where the record in the Question is not \"new\"). Then actually do signature verification.",
+      "createdAt": "2022-11-28T19:41:31Z",
+      "updatedAt": "2024-02-07T19:44:51Z",
+      "closedAt": "2024-02-07T19:44:51Z",
+      "comments": [
+        {
+          "author": "johanix",
+          "authorAssociation": "COLLABORATOR",
+          "body": "The Question section is not limited to only have one RR. The problem has traditionally been how to interpret a DNS message with \"multiple queries\". In this case (sending Notifies) I think the interpretation is at least manageable. \r\n\r\nAs a case in point, I have code that sends both a Notify(CDS) and a Notify(CSYNC) in the same message to my test service. This has a rather obvious interpretation and works perfectly.\r\n\r\nRegarding attaching the RRSIGs to, eg. the Notify(CDS) I don't see how that would solve the problem with garbage Notifications as both the RR and the RRSIG(RR) are publically available. The only thing this would do is to make it trivially more complicated to construct the garbage. \r\n\r\nTo my mind the way to deal with the risk of garbage Notifications is the same as for normal Notifies (i.e. Notify(SOA)): ensure that receipt of a Notify does not in any way change the logic for what is required for the zone to be updated. In the Notify(SOA) case this is well known (secondary queries for the SOA, only a bit earlier than otherwise, and makes a decision). In the Notify(CDS) or Notify(CSYNC) cases I believe in similar logic: do the same scan as would otherwise happen later and make the same decision as would otherwise still have happened.\r\n\r\nAssuming that the way to deal with garbage notifications becomes, I hope, mostly a matter of guarding the service with some sort of reasonable rate-limiting defence.",
+          "createdAt": "2023-01-24T16:40:30Z",
+          "updatedAt": "2023-01-24T16:40:30Z"
+        },
+        {
+          "author": "peterthomassen",
+          "authorAssociation": "OWNER",
+          "body": "I'm going to push a commit to address this concern; the changes will be part of the next revision. As the document has been adopted, I'm closing this here; please re-raise on the DNSOP list if needed.",
+          "createdAt": "2024-02-07T19:44:31Z",
+          "updatedAt": "2024-02-07T19:44:31Z"
+        }
+      ]
+    },
+    {
+      "number": 14,
+      "id": "I_kwDOIax6Es5XcKhN",
+      "title": "Destination for gTLDs?",
+      "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/issues/14",
+      "state": "CLOSED",
+      "author": "brian-peter-dickson",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Maybe add a section to discuss the open question of how to direct Notify messages when the TLD is using the RRR model.\r\nIn RRR, the Registrant is not allowed to communicate directly with the Registry.\r\nIn other words, the Registrant would need to send the Notify to the Registrar, presumably on some pre-agreed-upon destination IP.\r\n\r\nThat IP may need to be established on a per-domain basis (not necessarily unique, but also not globally identical for all domains at a given Registrar).\r\nThe agreement might be done via publishing in DNS, but that does come with some risk for discovery and DOS/abuse.\r\n\r\nThinking out loud, given that the Registrant operates a DNSSEC signed zone and publishes a public key while possessing a private key, the Registrar could theoretically encrypt the information using the Registrant's public key, which would restrict the ability to decrypt the information to only the Registrant.\r\nOTOH, that might not scale very well, so it's just a placeholder idea for now.\r\nACLs might work, but similarly have scaling issues.\r\n\r\nSome kind of pub/sub thing to allow Registrants to publish information about their Notifier systems, that the Registrar could discover (at scale) might be a method. The Registrant would use some well-known publication point (underscore name), and sign the record (preventing forgery).\r\n\r\nRegistrar would discover the publication point via polling, and then acknowledge at its own publication point, allowing the Registrant to know it is okay to use the address (however that address is learned.)",
+      "createdAt": "2022-11-28T19:51:19Z",
+      "updatedAt": "2024-03-04T01:32:54Z",
+      "closedAt": "2024-03-04T01:32:54Z",
+      "comments": [
+        {
+          "author": "johanix",
+          "authorAssociation": "COLLABORATOR",
+          "body": "HI Brian,\r\n\r\nI agree that this is something that warrants careful thought. However, my feeling is that the discussion must happen in the working group. I.e. while agreeing with you I think we should defer this until the document has been adopted (assuming it will be).\r\n\r\nJohan Stenstam",
+          "createdAt": "2023-01-24T16:26:14Z",
+          "updatedAt": "2023-01-24T16:26:14Z"
+        },
+        {
+          "author": "peterthomassen",
+          "authorAssociation": "OWNER",
+          "body": "> how to direct Notify messages when the TLD is using the RRR model. In RRR, the Registrant is not allowed to communicate directly with the Registry. In other words, the Registrant would need to send the Notify to the Registrar, presumably on some pre-agreed-upon destination IP.\r\n> \r\n> That IP may need to be established on a per-domain basis\r\n\r\nFor reference, this draft from 2013 has a section on a related problem: https://datatracker.ietf.org/doc/html/draft-andrews-dnsop-update-parent-zones-04#section-7\r\n\r\nBut I agree with Johan that we should see what the WG thinks before adding complexity to the document.",
+          "createdAt": "2023-01-25T14:13:59Z",
+          "updatedAt": "2023-01-25T14:13:59Z"
+        }
+      ]
+    },
+    {
+      "number": 17,
+      "id": "I_kwDOIax6Es5hvfCk",
+      "title": "Consider impact of encrypted transports on amplification attacks",
+      "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/issues/17",
+      "state": "CLOSED",
+      "author": "bemasc",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "If a single UDP NOTIFY packet can cause the parent and child servers to establish an encrypted connection, this may represent a form of amplification: the resources consumed by the victim are much larger than the resources expended by the attacker.\r\n\r\nAlso, QUIC Initials are large, and may create a risk of classical amplification.",
+      "createdAt": "2023-03-24T18:12:12Z",
+      "updatedAt": "2024-02-07T19:44:50Z",
+      "closedAt": "2024-02-07T19:44:50Z",
+      "comments": [
+        {
+          "author": "peterthomassen",
+          "authorAssociation": "OWNER",
+          "body": "Thanks for your feedback. - Do you think the problem could be addressed by mandating TCP?",
+          "createdAt": "2023-04-14T19:54:22Z",
+          "updatedAt": "2023-04-14T19:54:22Z"
+        },
+        {
+          "author": "johanix",
+          "authorAssociation": "COLLABORATOR",
+          "body": "While I agree with this my immediate response is that the standard way of dealing with amplification attacks is RRL and in this case RRL ought to work extremely well. While it can be argued that a single source has a need to send a certain volume of queries, sometimes even for the same data, this cannot be said for these notifications. It is clearly enough to accept one notification per child zone and suitable time unit.\r\n\r\nSo I think that there exists standard measures to deal with this issue.",
+          "createdAt": "2023-04-18T11:38:10Z",
+          "updatedAt": "2023-04-18T11:38:10Z"
+        },
+        {
+          "author": "bemasc",
+          "authorAssociation": "NONE",
+          "body": "> Do you think the problem could be addressed by mandating TCP?\r\n\r\nI wouldn't mandate TCP when we also have UDP+COOKIE, TLS, QUIC, etc.  That aside, I think a rate limit by source IP would also be required.  (Even then, it's not clear what to say about IPv6, or attackers who control large IPv4 blocks.)\r\n\r\n> It is clearly enough to accept one notification per child zone and suitable time unit.\r\n\r\nIs it?  What about an attacker who deliberately exhausts the child zone's quota to prevent rapid key rotation after a compromise?  What about an attacker who sends one NOTIFY for each child zone in order to attack a large registry?",
+          "createdAt": "2023-04-18T21:00:43Z",
+          "updatedAt": "2023-04-18T21:00:43Z"
+        },
+        {
+          "author": "peterthomassen",
+          "authorAssociation": "OWNER",
+          "body": "I'm going to push a commit to address this concern; the changes will be part of the next revision. As the document has been adopted, I'm closing this here; please re-raise on the DNSOP list if needed.",
+          "createdAt": "2024-02-07T19:43:01Z",
+          "updatedAt": "2024-02-07T19:43:01Z"
+        }
+      ]
+    },
+    {
+      "number": 19,
+      "id": "I_kwDOIax6Es5ydEVT",
+      "title": "Support for NOTIFY(SOA)",
+      "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/issues/19",
+      "state": "CLOSED",
+      "author": "kpfleming",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Recently I'd been considering writing up something which would allow for *dynamic* registration of NOTIFY(SOA) targets... and then this draft came along and addressed most of what I was going to propose :-)\r\n\r\nIn various operational scenarios the list of secondary servers, and other servers who are interested in SOA RR changes, is not fixed, but changes as servers are brought online and offline. In my experience (primarily with PowerDNS), this requires making configuration changes at the primary server to make it aware of the current list of NOTIFY(SOA) targets. In PowerDNS this information is stored in 'zone metadata' (outside of the zone contents), but this draft provides a way for that metadata to be both standardized and stored within the zone contents.\r\n\r\nThe ability to host a NOTIFY(SOA) record for each target, combined with the ability for those targets to use TSIG-authenticated UPDATE to add (or remove) their own NOTIFY(SOA) records, would provide a nice solution to this problem.",
+      "createdAt": "2023-09-30T11:27:05Z",
+      "updatedAt": "2024-01-25T12:23:02Z",
+      "closedAt": "2024-01-25T12:23:02Z",
+      "comments": [
+        {
+          "author": "peterthomassen",
+          "authorAssociation": "OWNER",
+          "body": "Aren't catalog zones (RFC 9432) the solution for that? (You'd be doing your DDNS update on the catalog zone for the relevant secondary.)",
+          "createdAt": "2023-09-30T20:25:42Z",
+          "updatedAt": "2023-09-30T20:25:42Z"
+        },
+        {
+          "author": "kpfleming",
+          "authorAssociation": "NONE",
+          "body": "In my experience so far, catalog zones handle the *what* for zone replication, but not the *when*.\r\n\r\nIf it helps, here's the scenario:\r\n\r\nHidden primary authoritative server P has a list of zones.\r\n\r\nSome of those zones have public secondaries (A, B,  and C) which are listed in the NS RRsets of the relevant zones. P uses those lists to send NOTIFY(SOA) to A, B and C when appropriate.\r\n\r\nThere are additional non-public secondaries D and E, which are not listed in the NS RRsets of any of the zones. In addition there are recursive resolvers F and G which also desire to receive NOTIFY(SOA) from P when the zone contents are changed.\r\n\r\nToday P must have D, E, F, and G all recorded in non-zone-content metadata in order to deliver NOTIFY(SOA) messages to them.\r\n\r\nI'd like to have a mechanism for D, E, F and G to be able to indicate to P their details in order to receive the relevant NOTIFY(SOA) messages; if this 'generalized notify' mechanism was available, those systems could inject NOTIFY RRs into the necessary zones to be added to the NOTIFY(SOA) lists. For this to be a fully dynamic mechanism, there would also need to be some method for those records to expire automatically.",
+          "createdAt": "2023-10-01T11:09:01Z",
+          "updatedAt": "2023-10-01T11:09:01Z"
+        },
+        {
+          "author": "jrlevine",
+          "authorAssociation": "COLLABORATOR",
+          "body": " > I'd like to have a mechanism for D, E, F and G to be able to indicate to P their details in order to receive the relevant NOTIFY(SOA) messages; \r\n\r\nI wouldn't want to let random hosts ask for notifies. It's none of their business, and it's a vector for abuse if a hostile party can fake someone else's IP (still pretty easy within many networks.) You need authentication, but by the time you figure out how to distribute the keys, just skip the keys and do the notifies to the places you would have sent the keys.\r\n\r\nOn the other hand, catalog zones are designed to be extensible and it would be easy to put notify info into them. e.g.:\r\n\r\n```\r\n; where to send notifies, defaults to secondaries\r\n; explicit secondaries\r\nnotifyto.ext.<unique>.zones.$CATZ  0 IN PTR A\r\nnotifyto.ext.<unique>.zones.$CATZ  0 IN PTR B\r\nnotifyto.ext.<unique>.zones.$CATZ  0 IN PTR C\r\n; kibitzers\r\nnotifyto.ext.<unique>.zones.$CATZ  0 IN PTR D\r\nnotifyto.ext.<unique>.zones.$CATZ  0 IN PTR E\r\nnotifyto.ext.<unique>.zones.$CATZ  0 IN PTR F\r\nnotifyto.ext.<unique>.zones.$CATZ  0 IN PTR G\r\n\r\n; hidden primary for notify, defaults to SOA primary\r\nnotifyfrom.ext.<unique>.zones.$CATZ  0 IN PTR P\r\n```\r\n\r\nD, E, F, G have to know to AXFR the catalog zone to know where the primary is and what zones they're kibitzing, but that's a one time thing. Everything else can be automated.\r\n\r\nThis is the same reason I am not crazy about section 4.1 where to send the notifies. It doesn't handle hidden primaries in the child zone, and it scales poorly in TLDs where there may be millions of zones.",
+          "createdAt": "2023-10-01T18:26:01Z",
+          "updatedAt": "2023-10-01T18:40:42Z"
+        },
+        {
+          "author": "kpfleming",
+          "authorAssociation": "NONE",
+          "body": "> I wouldn't want to let random hosts ask for notifies. It's none of their business, and it's a vector for abuse if a hostile party can fake someone else's IP (still pretty easy within many networks.) You need authentication, but by the time you figure out how to distribute the keys, just skip the keys and do the notifies to the places you would have sent the keys.\r\n\r\nI disagree there; distributing a key to a NOTIFY(SOA) consumer is a significantly different operation from modifying the configuration of the primary auth server. In my case it's done by Ansible playbooks/roles, but others will use a variety of configuration management tools.\r\n\r\nI'd certainly be happy to use a mechanism relying on catalog zones for this; after all, the list of NOTIFY(SOA) receivers is itself a catalog :-)",
+          "createdAt": "2023-10-02T09:48:18Z",
+          "updatedAt": "2023-10-02T09:48:18Z"
+        },
+        {
+          "author": "jrlevine",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> I'd certainly be happy to use a mechanism relying on catalog zones for this; after all, the list of NOTIFY(SOA) receivers is itself a catalog :-)\r\n\r\nHow about writing up a draft that does that, something like what was in my example?",
+          "createdAt": "2023-10-02T11:59:58Z",
+          "updatedAt": "2023-10-02T11:59:58Z"
+        }
+      ]
+    },
+    {
+      "number": 21,
+      "id": "I_kwDOIax6Es5-ymnF",
+      "title": "Avoid overloading the term \"NOTIFY\"",
+      "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/issues/21",
+      "state": "CLOSED",
+      "author": "peterthomassen",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "The draft currently says:\r\n\r\n```\r\nIn the text below there are two different uses of the term\r\n\"NOTIFY\". One refers to the NOTIFY message, sent from a DNSSEC signer\r\nor name server to a notification target (for subsequent\r\nprocessing). We refer to this message as NOTIFY(RRtype) where the\r\nRRtype indicates the type of NOTIFY message (CDS or CSYNC).\r\n\r\nThe second is a proposed new DNS record type, with the suggested\r\nmnemonic \"NOTIFY\". This record is used to publish the location of the\r\nnotification target. We refer to this as the \"NOTIFY record\".\r\n```\r\n\r\nI found myself repeatedly confused by NOTIFY sometimes denoting the record in the parent, and sometimes denoting the message sent by the child.\r\n\r\nThere may be a risk of confusing other people as well. - Can we think of resolving this ambiguity? (As the message is already called NOTIFY by RFC 1996, we'd have to rename the record type.)",
+      "createdAt": "2024-02-09T13:50:11Z",
+      "updatedAt": "2024-03-04T01:31:03Z",
+      "closedAt": "2024-03-04T01:31:03Z",
+      "comments": [
+        {
+          "author": "jrlevine",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Good point, the RRTYPE is not the notification but the end point. I suppose YFITON would be too clever.",
+          "createdAt": "2024-02-09T17:36:55Z",
+          "updatedAt": "2024-02-09T17:36:55Z"
+        },
+        {
+          "author": "peterthomassen",
+          "authorAssociation": "OWNER",
+          "body": "fixed in #22 ",
+          "createdAt": "2024-03-04T01:31:03Z",
+          "updatedAt": "2024-03-04T01:31:03Z"
+        }
+      ]
+    },
+    {
+      "number": 24,
+      "id": "I_kwDOIax6Es6HFolP",
+      "title": "Error reporting",
+      "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/issues/24",
+      "state": "CLOSED",
+      "author": "peterthomassen",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "I was thinking about ways for the NOTIFY receiver (i.e., parent) to communicate an error condition to the DNS operator.\r\n\r\nPerhaps good ideas:\r\n- [ ] Allow the DNS operator to add a record in the NOTIFY message, indicating an error reporting channel (e.g. SRV record with some host/port, or a TXT record with an email address, or something different. It would need to be standardized; but the basic idea probably is clear.)\r\n- [ ] Send an EDNS0 Report-Channel option in the NOTIFY message (RFC 9567). The parent then can send a reporting query to the DNS operator's monitoring agent later if needed.\r\n\r\nIn both cases, to prevent reflection attacks, the report target's last labels could be required to be one of the NS hostnames (or something like that).\r\n\r\nProbably bad ideas:\r\n- [ ] Act immediately and delay the NOTIFY response until either success or an error condition occurred, and communicate the result in the response. The problem is that this creates pressure on the receiver to come to a conclusion within seconds, which may not be acceptable given that DS provisioning may take longer (including bootstrapping fetches, acceptance checks etc.). Related: #11 \r\n- [ ] Allow the DNS operator to publish a reporting endpoint under their nameserver, e.g. `_notify-report.$child._signal.ns1.provider.net`, or similar (need not be child-specific). The problem here is that there may be multiple NS by different operators, and it's not clear which of the published endpoints is the one related to the NOTIFY that was sent.",
+      "createdAt": "2024-04-26T19:39:11Z",
+      "updatedAt": "2024-07-08T20:03:52Z",
+      "closedAt": "2024-07-08T20:03:52Z",
+      "comments": [
+        {
+          "author": "peterthomassen",
+          "authorAssociation": "OWNER",
+          "body": "Some indicated that \"EDNS0 Report-Channel option in the NOTIFY message (RFC 9567)\" (option 2 above) is preferable, as it's already standardized.",
+          "createdAt": "2024-06-02T13:48:40Z",
+          "updatedAt": "2024-06-02T13:48:40Z"
+        },
+        {
+          "author": "jrlevine",
+          "authorAssociation": "COLLABORATOR",
+          "body": "That makes sense. There are a few loose ends like whether the notify needs to have the EDNS0 option 18.\r\nIt's authors will likely be in Kigali so we can ask them if they see issues with using it.\r\n\r\n\u2063Sent from phone with tiny keyboard, please excuse typos.\u200b\r\n\r\nOn Jun 2, 2024, 15:49, at 15:49, Peter Thomassen ***@***.***> wrote:\r\n>Some indicated that \"EDNS0 Report-Channel option in the NOTIFY message\r\n>(RFC 9567)\" (option 2 above) is preferable, as it's already\r\n>standardized.\r\n>\r\n>-- \r\n>Reply to this email directly or view it on GitHub:\r\n>https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/issues/24#issuecomment-2143860992\r\n>You are receiving this because you are subscribed to this thread.\r\n>\r\n>Message ID:\r\n>***@***.***>\r\n",
+          "createdAt": "2024-06-02T14:42:27Z",
+          "updatedAt": "2024-06-02T14:42:27Z"
+        }
+      ]
+    },
+    {
+      "number": 26,
+      "id": "I_kwDOIax6Es6Orgrb",
+      "title": "Some point discuss the Downref nits",
+      "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/issues/26",
+      "state": "CLOSED",
+      "author": "moonshiner",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "before WGLC\r\n\r\n  ** Downref: Normative reference to an Informational RFC: RFC 6781\r\nhttps://datatracker.ietf.org/doc/rfc6781/referencedby/\r\n\r\n  ** Downref: Normative reference to an Informational RFC: RFC 7583\r\nhttps://datatracker.ietf.org/doc/rfc7583/referencedby/\r\n\r\n  ** Downref: Normative reference to an Informational RFC: RFC 8901\r\nhttps://datatracker.ietf.org/doc/rfc8901/referencedby/\r\n\r\nI'm OK with the Downrefs, just work out the particulars. \r\n",
+      "createdAt": "2024-07-06T22:41:20Z",
+      "updatedAt": "2024-07-08T20:03:52Z",
+      "closedAt": "2024-07-08T20:03:52Z",
+      "comments": [
+        {
+          "author": "peterthomassen",
+          "authorAssociation": "OWNER",
+          "body": "Thanks for spotting these! Going to address in #25.",
+          "createdAt": "2024-07-08T13:24:31Z",
+          "updatedAt": "2024-07-08T13:24:31Z"
+        }
+      ]
+    }
+  ],
+  "pulls": [
+    {
+      "number": 8,
+      "id": "PR_kwDOIax6Es5DpyBO",
+      "title": "20221224 misc",
+      "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/pull/8",
+      "state": "MERGED",
+      "author": "peterthomassen",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-11-24T14:54:34Z",
+      "updatedAt": "2022-11-25T15:19:19Z",
+      "baseRepository": "peterthomassen/draft-ietf-dnsop-generalized-notify",
+      "baseRefName": "main",
+      "baseRefOid": "e74429317812947b382c34e55bbd36b6a9178109",
+      "headRepository": "peterthomassen/draft-ietf-dnsop-generalized-notify",
+      "headRefName": "20221124_misc",
+      "headRefOid": "cf81caca4e98e7282cf3c0e15e2518598dd1d9da",
+      "closedAt": "2022-11-25T14:51:14Z",
+      "mergedAt": "2022-11-25T14:51:14Z",
+      "mergedBy": "johanix",
+      "mergeCommit": {
+        "oid": "985ce2ebf5bbc80699d68cf90511a395161e5ec2"
+      },
+      "comments": [
+        {
+          "author": "peterthomassen",
+          "authorAssociation": "OWNER",
+          "body": "This is ready for review.\r\n\r\nOpen issues (can be addressed in next PR):\r\n- https://github.com/peterthomassen/draft-thomassen-dnsop-generalized-dns-notifications/issues?q=is%3Aissue+is%3Aopen+no%3Aassignee\r\n- phrase carefully \"notify controller\" vs \"notify peers\" (can wait until after discussion with other, i.e. include in -01)\r\n- ... anything else I forgot / you feel like",
+          "createdAt": "2022-11-24T16:01:15Z",
+          "updatedAt": "2022-11-24T17:03:04Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 12,
+      "id": "PR_kwDOIax6Es5Dt-2z",
+      "title": "* a bunch of minor nits.",
+      "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/pull/12",
+      "state": "MERGED",
+      "author": "johanix",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "* some tweaks to the options in section 4.2, but not really a solution.\r\n\r\n* a couple of added small paragraphs for clarity.",
+      "createdAt": "2022-11-25T16:13:03Z",
+      "updatedAt": "2022-11-28T20:50:22Z",
+      "baseRepository": "peterthomassen/draft-ietf-dnsop-generalized-notify",
+      "baseRefName": "main",
+      "baseRefOid": "985ce2ebf5bbc80699d68cf90511a395161e5ec2",
+      "headRepository": "peterthomassen/draft-ietf-dnsop-generalized-notify",
+      "headRefName": "johani-20221125",
+      "headRefOid": "be353ee8e5a58d295c4c5c4eebeb2b33870529d0",
+      "closedAt": "2022-11-28T20:50:18Z",
+      "mergedAt": "2022-11-28T20:50:18Z",
+      "mergedBy": "peterthomassen",
+      "mergeCommit": {
+        "oid": "34817f0dc1c667147dde18b35070550c22ebd925"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 15,
+      "id": "PR_kwDOIax6Es5IhiOf",
+      "title": "various updates",
+      "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/pull/15",
+      "state": "MERGED",
+      "author": "peterthomassen",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2023-01-25T15:35:01Z",
+      "updatedAt": "2023-01-27T09:36:16Z",
+      "baseRepository": "peterthomassen/draft-ietf-dnsop-generalized-notify",
+      "baseRefName": "main",
+      "baseRefOid": "ca0ea28a3303030b2a397332d7fc557a9e801643",
+      "headRepository": "peterthomassen/draft-ietf-dnsop-generalized-notify",
+      "headRefName": "20230125",
+      "headRefOid": "a58065ba231610ea98e7e3a6074c359fb2f3edda",
+      "closedAt": "2023-01-27T08:59:13Z",
+      "mergedAt": "2023-01-27T08:59:13Z",
+      "mergedBy": "johanix",
+      "mergeCommit": {
+        "oid": "8479747970f21093c831210f9e7842aa037a6081"
+      },
+      "comments": [
+        {
+          "author": "peterthomassen",
+          "authorAssociation": "OWNER",
+          "body": "> I agree with almost everything. I disagree with this one:\r\n> \r\n> * [ ]  \"types of Notifies and how to interpret them on...\": \"interpret them in\" was better\r\n\r\nI don't feel strongly; if you prefer we can change it back. (It seems weird to me, but it may be perfectly fine and just my non-native English telling me that.)\r\n\r\n> Then there's a couple of more nits, like our inconsistent use of \"cds-notificationS.parent\" vs \"_dnskey-notificatioN.child.parent\". I suggest we change all of these to be \"_{RR}-notify...\".\r\n\r\nWill you create a PR or shall I?",
+          "createdAt": "2023-01-27T09:36:16Z",
+          "updatedAt": "2023-01-27T09:36:16Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOIax6Es5L1enY",
+          "commit": {
+            "abbreviatedOid": "a58065b"
+          },
+          "author": "johanix",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "I agree with almost everything. I disagree with this one:\r\n\r\n- [ ] \"types of Notifies and how to interpret them on...\": \"interpret them in\" was better\r\n\r\nThen there's a couple of more nits, like our inconsistent use of \"cds-notificationS.parent\" vs \"_dnskey-notificatioN.child.parent\". I suggest we change all of these to be \"_{RR}-notify...\".\r\n",
+          "createdAt": "2023-01-27T08:58:13Z",
+          "updatedAt": "2023-01-27T08:58:13Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 16,
+      "id": "PR_kwDOIax6Es5JYKnF",
+      "title": "20230127 johani",
+      "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/pull/16",
+      "state": "MERGED",
+      "author": "johanix",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This is now (I think) \"feature complete\". But I'm sure there are all sorts of horrible language issues, as I wrote this in one go.\r\n\r\nI make the pull request mostly so that you'll get the notification, not that I think this should be merged exactly as it is. More like, \"subject for discussion\".\r\n\r\nRegards,\r\nJohan\r\n",
+      "createdAt": "2023-02-06T21:11:08Z",
+      "updatedAt": "2023-02-10T16:13:02Z",
+      "baseRepository": "peterthomassen/draft-ietf-dnsop-generalized-notify",
+      "baseRefName": "main",
+      "baseRefOid": "8479747970f21093c831210f9e7842aa037a6081",
+      "headRepository": "peterthomassen/draft-ietf-dnsop-generalized-notify",
+      "headRefName": "20230127-johani",
+      "headRefOid": "8b47a8278ef47c18eca20595175cefddc69dc417",
+      "closedAt": "2023-02-10T16:12:59Z",
+      "mergedAt": "2023-02-10T16:12:58Z",
+      "mergedBy": "peterthomassen",
+      "mergeCommit": {
+        "oid": "0df68d837481085e848ae644107755a0ac382cf9"
+      },
+      "comments": [
+        {
+          "author": "peterthomassen",
+          "authorAssociation": "OWNER",
+          "body": "I fixed the whitespace issue (which fixed the rendering job), and added some clarifications where I had trouble understanding. I think this is now ready for merging and draft submission. What do you think?",
+          "createdAt": "2023-02-08T18:25:06Z",
+          "updatedAt": "2023-02-08T18:25:06Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOIax6Es5Ms-7e",
+          "commit": {
+            "abbreviatedOid": "c8729fe"
+          },
+          "author": "peterthomassen",
+          "authorAssociation": "OWNER",
+          "state": "CHANGES_REQUESTED",
+          "body": "Very cool! Thank you, great progress. Once this is polished and merged, I think we can submit the new revision.\r\n\r\nSome comments/nits in the code. Otherwise, I noticed we have a split between British and American English, most significantly with the word \"generali[sz]ed\". I suggest using \"z\" because it's also in the draft name.\r\n\r\nI believe the rendering job failed due to linting errors, such as inconsistent indentation. The job output suggest to \"Run 'make fix-lint' to automatically fix some errors\".",
+          "createdAt": "2023-02-07T10:51:29Z",
+          "updatedAt": "2023-02-07T11:07:57Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "`registry and registrar`",
+              "createdAt": "2023-02-07T10:51:29Z",
+              "updatedAt": "2023-02-07T11:07:37Z"
+            },
+            {
+              "originalPosition": 49,
+              "body": "This and the previous sentence begin with `However`",
+              "createdAt": "2023-02-07T10:52:59Z",
+              "updatedAt": "2023-02-07T11:07:37Z"
+            },
+            {
+              "originalPosition": 64,
+              "body": "We run the risk of confusing the reading by overloading the meaning of `NOTIFY`, which can now be either the type or the message. To remedy this, we should say `a NOTIFY(CDS) or NOTIFY(CSYNC) *message*`",
+              "createdAt": "2023-02-07T10:54:27Z",
+              "updatedAt": "2023-02-07T11:07:37Z"
+            },
+            {
+              "originalPosition": 167,
+              "body": "Why not an alias, and why so strong (MUST NOT)? -- Aliases seem fine to me.",
+              "createdAt": "2023-02-07T11:01:21Z",
+              "updatedAt": "2023-02-07T11:07:37Z"
+            },
+            {
+              "originalPosition": 171,
+              "body": "Is that different from not having the record at all?",
+              "createdAt": "2023-02-07T11:01:51Z",
+              "updatedAt": "2023-02-07T11:07:37Z"
+            },
+            {
+              "originalPosition": 203,
+              "body": "`occurs`",
+              "createdAt": "2023-02-07T11:03:05Z",
+              "updatedAt": "2023-02-07T11:07:37Z"
+            },
+            {
+              "originalPosition": 204,
+              "body": "`type` --> `The NOTIFY type`?",
+              "createdAt": "2023-02-07T11:03:27Z",
+              "updatedAt": "2023-02-07T11:07:37Z"
+            },
+            {
+              "originalPosition": 243,
+              "body": "Should be expert review",
+              "createdAt": "2023-02-07T11:04:43Z",
+              "updatedAt": "2023-02-07T11:07:37Z"
+            },
+            {
+              "originalPosition": 161,
+              "body": "inconsistent indentation",
+              "createdAt": "2023-02-07T11:06:25Z",
+              "updatedAt": "2023-02-07T11:07:37Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOIax6Es5Mtqq9",
+          "commit": {
+            "abbreviatedOid": "c8729fe"
+          },
+          "author": "johanix",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-02-07T12:51:41Z",
+          "updatedAt": "2023-02-07T12:51:42Z",
+          "comments": [
+            {
+              "originalPosition": 64,
+              "body": "I agree.",
+              "createdAt": "2023-02-07T12:51:41Z",
+              "updatedAt": "2023-02-07T12:51:42Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOIax6Es5MuX33",
+          "commit": {
+            "abbreviatedOid": "c8729fe"
+          },
+          "author": "johanix",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-02-07T14:32:39Z",
+          "updatedAt": "2023-02-07T14:32:39Z",
+          "comments": [
+            {
+              "originalPosition": 64,
+              "body": "I added a short \"Terminology\" paragraph just after the Introduction to further clarify this.",
+              "createdAt": "2023-02-07T14:32:39Z",
+              "updatedAt": "2023-02-07T14:32:39Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOIax6Es5MuY1-",
+          "commit": {
+            "abbreviatedOid": "c8729fe"
+          },
+          "author": "johanix",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-02-07T14:34:36Z",
+          "updatedAt": "2023-02-07T14:34:36Z",
+          "comments": [
+            {
+              "originalPosition": 167,
+              "body": "I stole that text from the RFC for SRV and didn't really think it through. I removed that sentence, as I agree that a CNAME should not be a problem.",
+              "createdAt": "2023-02-07T14:34:36Z",
+              "updatedAt": "2023-02-07T14:34:36Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOIax6Es5MuaeE",
+          "commit": {
+            "abbreviatedOid": "c8729fe"
+          },
+          "author": "johanix",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-02-07T14:38:02Z",
+          "updatedAt": "2023-02-07T14:38:02Z",
+          "comments": [
+            {
+              "originalPosition": 171,
+              "body": "Hmm. While this is also stolen from RFC 2782 I did think about that. My thought was that it made sense to clearly signal the intention NOT to provide a target address for notifications, as a sort of \"negative response\" that clearly signals that there is no point in looking elsewhere. \r\n\r\nBut on further reflection I think it is better to keep it simple so I removed this sentence also.",
+              "createdAt": "2023-02-07T14:38:02Z",
+              "updatedAt": "2023-02-07T14:38:02Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOIax6Es5Mubns",
+          "commit": {
+            "abbreviatedOid": "c8729fe"
+          },
+          "author": "johanix",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-02-07T14:40:05Z",
+          "updatedAt": "2023-02-07T14:40:05Z",
+          "comments": [
+            {
+              "originalPosition": 204,
+              "body": "Right, trivial errors all over.",
+              "createdAt": "2023-02-07T14:40:05Z",
+              "updatedAt": "2023-02-07T14:40:05Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOIax6Es5MudL7",
+          "commit": {
+            "abbreviatedOid": "c8729fe"
+          },
+          "author": "johanix",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-02-07T14:43:13Z",
+          "updatedAt": "2023-02-07T14:43:13Z",
+          "comments": [
+            {
+              "originalPosition": 49,
+              "body": "Rewrote that a little bit.",
+              "createdAt": "2023-02-07T14:43:13Z",
+              "updatedAt": "2023-02-07T14:43:13Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOIax6Es5MueMQ",
+          "commit": {
+            "abbreviatedOid": "c8729fe"
+          },
+          "author": "johanix",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-02-07T14:45:15Z",
+          "updatedAt": "2023-02-07T14:45:15Z",
+          "comments": [
+            {
+              "originalPosition": 243,
+              "body": "Hmm? I don't understand your comment here?",
+              "createdAt": "2023-02-07T14:45:15Z",
+              "updatedAt": "2023-02-07T14:45:15Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOIax6Es5Muueq",
+          "commit": {
+            "abbreviatedOid": "c8729fe"
+          },
+          "author": "peterthomassen",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-02-07T15:18:04Z",
+          "updatedAt": "2023-02-07T15:18:04Z",
+          "comments": [
+            {
+              "originalPosition": 243,
+              "body": "I commented on my own old TODO in line 540, which raises the question by what mechanism entries can later be added to the NOTIFY IANA registry, such as via an RFC, or via a simple web form.\r\n\r\nIt then occurred to me that we should say that it can be done based via Expert Review, which is one of the \"accredited\" mechanisms. \r\n\r\nIf you agree, we can borrow language [here](https://www.ietf.org/archive/id/draft-ietf-dnsop-dns-catalog-zones-09.html#name-iana-considerations-2).",
+              "createdAt": "2023-02-07T15:18:04Z",
+              "updatedAt": "2023-02-07T15:18:04Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOIax6Es5MuwVQ",
+          "commit": {
+            "abbreviatedOid": "111d513"
+          },
+          "author": "peterthomassen",
+          "authorAssociation": "OWNER",
+          "state": "CHANGES_REQUESTED",
+          "body": "Thanks! Agree with all your changes.\r\n\r\nModulo\r\n- the one comment I added in this review,\r\n- some whitespace stuff,\r\n- the Expert Review thingy,\r\n\r\nI think we're done for an updated submission.\r\n\r\n1.) Do you agree?\r\n2.) Depending on your editor, sorting out the whitespace stuff that the linter expects may be tedious. It's easy for me to do; if you prefer I can take that on.\r\n3.) I can take on the Expert Review thingy.",
+          "createdAt": "2023-02-07T15:21:52Z",
+          "updatedAt": "2023-02-08T18:24:18Z",
+          "comments": [
+            {
+              "originalPosition": 147,
+              "body": "This wording also may be read to preclude aliases. Suggestion: `This name MUST resolve to one or more address records.`",
+              "createdAt": "2023-02-07T15:21:52Z",
+              "updatedAt": "2023-02-07T15:23:18Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOIax6Es5MwDoH",
+          "commit": {
+            "abbreviatedOid": "111d513"
+          },
+          "author": "johanix",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-02-07T17:59:45Z",
+          "updatedAt": "2023-02-07T17:59:45Z",
+          "comments": [
+            {
+              "originalPosition": 147,
+              "body": "Hmm. I see your point and agree with your suggestion.",
+              "createdAt": "2023-02-07T17:59:45Z",
+              "updatedAt": "2023-02-07T17:59:46Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOIax6Es5M4BWp",
+          "commit": {
+            "abbreviatedOid": "111d513"
+          },
+          "author": "peterthomassen",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-02-08T18:24:06Z",
+          "updatedAt": "2023-02-08T18:24:07Z",
+          "comments": [
+            {
+              "originalPosition": 147,
+              "body": "done",
+              "createdAt": "2023-02-08T18:24:06Z",
+              "updatedAt": "2023-02-08T18:24:07Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOIax6Es5M4Bnd",
+          "commit": {
+            "abbreviatedOid": "8b47a82"
+          },
+          "author": "peterthomassen",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2023-02-08T18:24:52Z",
+          "updatedAt": "2023-02-08T18:24:52Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 18,
+      "id": "PR_kwDOIax6Es5TawJp",
+      "title": "Johani 20230617",
+      "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/pull/18",
+      "state": "MERGED",
+      "author": "johanix",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "* added a new paragraph on why DNS message format and DNS transport should be kept.\r\n\r\n* fixed a couple of minor typos\r\n",
+      "createdAt": "2023-06-20T09:28:08Z",
+      "updatedAt": "2023-06-20T10:43:42Z",
+      "baseRepository": "peterthomassen/draft-ietf-dnsop-generalized-notify",
+      "baseRefName": "main",
+      "baseRefOid": "0df68d837481085e848ae644107755a0ac382cf9",
+      "headRepository": "peterthomassen/draft-ietf-dnsop-generalized-notify",
+      "headRefName": "johani-20230617",
+      "headRefOid": "93e65422679948ef8fde0efa8b1a2c813b6c4922",
+      "closedAt": "2023-06-20T10:43:38Z",
+      "mergedAt": "2023-06-20T10:43:38Z",
+      "mergedBy": "peterthomassen",
+      "mergeCommit": {
+        "oid": "93e65422679948ef8fde0efa8b1a2c813b6c4922"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 20,
+      "id": "PR_kwDOIax6Es5me-4f",
+      "title": "Describe endpoint discovery, closes #14",
+      "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/pull/20",
+      "state": "MERGED",
+      "author": "peterthomassen",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-02-09T13:46:48Z",
+      "updatedAt": "2024-03-04T01:37:58Z",
+      "baseRepository": "peterthomassen/draft-ietf-dnsop-generalized-notify",
+      "baseRefName": "main",
+      "baseRefOid": "adec97c4316a2cf9088431e156d7eb467a77a899",
+      "headRepository": "peterthomassen/draft-ietf-dnsop-generalized-notify",
+      "headRefName": "20240209_discovery",
+      "headRefOid": "048a59100187ce12c63fb67637156554ee9e8f68",
+      "closedAt": "2024-03-04T01:32:54Z",
+      "mergedAt": "2024-03-04T01:32:54Z",
+      "mergedBy": "peterthomassen",
+      "mergeCommit": {
+        "oid": "048a59100187ce12c63fb67637156554ee9e8f68"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 22,
+      "id": "PR_kwDOIax6Es5nUJPl",
+      "title": "johani 20240219",
+      "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/pull/22",
+      "state": "MERGED",
+      "author": "johanix",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-02-19T17:27:49Z",
+      "updatedAt": "2024-03-04T01:47:26Z",
+      "baseRepository": "peterthomassen/draft-ietf-dnsop-generalized-notify",
+      "baseRefName": "main",
+      "baseRefOid": "048a59100187ce12c63fb67637156554ee9e8f68",
+      "headRepository": "peterthomassen/draft-ietf-dnsop-generalized-notify",
+      "headRefName": "johani-20240219",
+      "headRefOid": "837f8260c5e20f00b670cb4e174a8daf2fa1ca42",
+      "closedAt": "2024-03-04T01:37:57Z",
+      "mergedAt": "2024-03-04T01:37:57Z",
+      "mergedBy": "peterthomassen",
+      "mergeCommit": {
+        "oid": "837f8260c5e20f00b670cb4e174a8daf2fa1ca42"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 23,
+      "id": "PR_kwDOIax6Es5oiAF3",
+      "title": "Final (?) edits for next revision",
+      "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/pull/23",
+      "state": "MERGED",
+      "author": "peterthomassen",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-03-04T01:51:20Z",
+      "updatedAt": "2024-03-04T20:22:12Z",
+      "baseRepository": "peterthomassen/draft-ietf-dnsop-generalized-notify",
+      "baseRefName": "main",
+      "baseRefOid": "837f8260c5e20f00b670cb4e174a8daf2fa1ca42",
+      "headRepository": "peterthomassen/draft-ietf-dnsop-generalized-notify",
+      "headRefName": "20240303_misc",
+      "headRefOid": "5df2affc53a0fd6b575f02ca221e522bb411f84c",
+      "closedAt": "2024-03-04T20:22:11Z",
+      "mergedAt": "2024-03-04T20:22:11Z",
+      "mergedBy": "peterthomassen",
+      "mergeCommit": {
+        "oid": "5df2affc53a0fd6b575f02ca221e522bb411f84c"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 25,
+      "id": "PR_kwDOIax6Es50mNha",
+      "title": "Addressing Dnsdir review",
+      "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/pull/25",
+      "state": "MERGED",
+      "author": "peterthomassen",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-07-06T21:34:59Z",
+      "updatedAt": "2024-07-08T20:04:03Z",
+      "baseRepository": "peterthomassen/draft-ietf-dnsop-generalized-notify",
+      "baseRefName": "main",
+      "baseRefOid": "3a37b880cd3e97c974363803552b464f93edab64",
+      "headRepository": "peterthomassen/draft-ietf-dnsop-generalized-notify",
+      "headRefName": "20240706_dnsdir",
+      "headRefOid": "58bdbcc6eb59adbedb98b05bcbea2c1c4c291ae0",
+      "closedAt": "2024-07-08T20:03:52Z",
+      "mergedAt": "2024-07-08T20:03:52Z",
+      "mergedBy": "peterthomassen",
+      "mergeCommit": {
+        "oid": "58bdbcc6eb59adbedb98b05bcbea2c1c4c291ae0"
+      },
+      "comments": [
+        {
+          "author": "moonshiner",
+          "authorAssociation": "NONE",
+          "body": "It turns out if you use the Kramdown, you can add this\r\n\r\n`{::boilerplate bcp14}`\r\n\r\nand achieve all the appropriate wording. ",
+          "createdAt": "2024-07-06T22:36:38Z",
+          "updatedAt": "2024-07-06T22:36:38Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOIax6Es6A22GT",
+          "commit": {
+            "abbreviatedOid": "ed9007f"
+          },
+          "author": "johanix",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-07T13:28:03Z",
+          "updatedAt": "2024-07-07T13:28:04Z",
+          "comments": [
+            {
+              "originalPosition": 209,
+              "body": "I agree with the reviewer that it would be better to indicate the scheme via a mnemonic rather than a number. I've changed my code to parse/present schemes a la 1=NOTIFY and 2=UPDATE. I.e. for the example below:\r\n\r\nchild._dsync.parent.    IN DSYNC  CSYNC  NOTIFY  59 scanner.example.net.",
+              "createdAt": "2024-07-07T13:28:03Z",
+              "updatedAt": "2024-07-07T13:28:04Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOIax6Es6A22bT",
+          "commit": {
+            "abbreviatedOid": "ed9007f"
+          },
+          "author": "johanix",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-07T13:33:51Z",
+          "updatedAt": "2024-07-07T13:33:51Z",
+          "comments": [
+            {
+              "originalPosition": 393,
+              "body": "It obviously doesn't make any sense to NOT sign a particular record (like the DSYNC RRset), so saying that this is not required is sort of beside the point.\r\n\r\nI would rephrase this as \"...does not require the parent zone to be DNSSEC signed.\"",
+              "createdAt": "2024-07-07T13:33:51Z",
+              "updatedAt": "2024-07-07T13:33:51Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOIax6Es6A22fK",
+          "commit": {
+            "abbreviatedOid": "ed9007f"
+          },
+          "author": "johanix",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-07T13:35:18Z",
+          "updatedAt": "2024-07-07T13:35:18Z",
+          "comments": [
+            {
+              "originalPosition": 395,
+              "body": "I think SIG(0) is a better example than TSIG here, as the mere concept of setting up shared TSIG keys between child and parent would make anyones head hurt. But it is a detail, not that important.",
+              "createdAt": "2024-07-07T13:35:18Z",
+              "updatedAt": "2024-07-07T13:35:18Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOIax6Es6A22ql",
+          "commit": {
+            "abbreviatedOid": "ed9007f"
+          },
+          "author": "johanix",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-07T13:39:45Z",
+          "updatedAt": "2024-07-07T13:39:45Z",
+          "comments": [
+            {
+              "originalPosition": 467,
+              "body": "Perhaps: \"...use of the NOTIFY mechanism for coordinating the key exchange in multi-signer setups (where the parties may be identified via lookup of the DSYNC RRset)...\"\r\n\r\nOr perhaps not. Never mind.",
+              "createdAt": "2024-07-07T13:39:45Z",
+              "updatedAt": "2024-07-07T13:39:45Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOIax6Es6A3W7Y",
+          "commit": {
+            "abbreviatedOid": "ed9007f"
+          },
+          "author": "peterthomassen",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-08T00:39:34Z",
+          "updatedAt": "2024-07-08T00:39:34Z",
+          "comments": [
+            {
+              "originalPosition": 209,
+              "body": "While I'm OK with that, I don't know why you \"agree with the reviewer\"; I can't find this suggestion in the [review](https://mailarchive.ietf.org/arch/msg/dnsop/PxPDGSbOIPpX320CwTLdEZHlvho/).\r\n\r\nI'm wondering if it would be better to keep changes minimal this time, and introduce this in the next step. What do you think?",
+              "createdAt": "2024-07-08T00:39:34Z",
+              "updatedAt": "2024-07-08T00:39:34Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOIax6Es6A3XEP",
+          "commit": {
+            "abbreviatedOid": "ed9007f"
+          },
+          "author": "peterthomassen",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-08T00:40:54Z",
+          "updatedAt": "2024-07-08T00:40:55Z",
+          "comments": [
+            {
+              "originalPosition": 393,
+              "body": "Yeah. I tried to avoid \"parent zone\" because in this document this term is usually used for the zone's parent zone, not for the enclosing zone. But I agree with you, and will come up with something.",
+              "createdAt": "2024-07-08T00:40:55Z",
+              "updatedAt": "2024-07-08T00:40:55Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOIax6Es6A3XG8",
+          "commit": {
+            "abbreviatedOid": "ed9007f"
+          },
+          "author": "peterthomassen",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-08T00:41:18Z",
+          "updatedAt": "2024-07-08T00:41:18Z",
+          "comments": [
+            {
+              "originalPosition": 395,
+              "body": "Ack (and I actually meant SIG(0) and mistyped)",
+              "createdAt": "2024-07-08T00:41:18Z",
+              "updatedAt": "2024-07-08T00:41:19Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOIax6Es6A8L5F",
+          "commit": {
+            "abbreviatedOid": "ed9007f"
+          },
+          "author": "peterthomassen",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-08T13:08:51Z",
+          "updatedAt": "2024-07-08T13:08:51Z",
+          "comments": [
+            {
+              "originalPosition": 395,
+              "body": "done",
+              "createdAt": "2024-07-08T13:08:51Z",
+              "updatedAt": "2024-07-08T13:08:51Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOIax6Es6A8Qsg",
+          "commit": {
+            "abbreviatedOid": "ed9007f"
+          },
+          "author": "peterthomassen",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-08T13:15:45Z",
+          "updatedAt": "2024-07-08T13:15:45Z",
+          "comments": [
+            {
+              "originalPosition": 393,
+              "body": "done",
+              "createdAt": "2024-07-08T13:15:45Z",
+              "updatedAt": "2024-07-08T13:15:45Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 27,
+      "id": "PR_kwDOIax6Es52rABA",
+      "title": "Very minor copy edit",
+      "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/pull/27",
+      "state": "MERGED",
+      "author": "stepnem",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Just a few editorial nits I noticed while reading.\n\nI split the commas to a separate commit in case you found\nthem controversial.",
+      "createdAt": "2024-07-28T16:47:54Z",
+      "updatedAt": "2024-08-05T16:47:13Z",
+      "baseRepository": "peterthomassen/draft-ietf-dnsop-generalized-notify",
+      "baseRefName": "main",
+      "baseRefOid": "58bdbcc6eb59adbedb98b05bcbea2c1c4c291ae0",
+      "headRepository": "stepnem/draft-ietf-dnsop-generalized-notify",
+      "headRefName": "typofixes",
+      "headRefOid": "ff666ae5aa13a8a70912afa5ce5beedf9a3f8160",
+      "closedAt": "2024-08-05T16:47:13Z",
+      "mergedAt": "2024-08-05T16:47:13Z",
+      "mergedBy": "peterthomassen",
+      "mergeCommit": {
+        "oid": "a98517319ce95b354146cdead69e4c1441a234ff"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOIax6Es6ESj_3",
+          "commit": {
+            "abbreviatedOid": "ff666ae"
+          },
+          "author": "peterthomassen",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "lgtm, and thanks!",
+          "createdAt": "2024-08-05T16:46:59Z",
+          "updatedAt": "2024-08-05T16:46:59Z",
+          "comments": []
+        }
+      ]
+    }
+  ]
+}
