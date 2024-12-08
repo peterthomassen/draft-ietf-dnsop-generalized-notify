@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-12-05T00:40:33.824217+00:00",
+  "timestamp": "2024-12-08T00:44:19.139258+00:00",
   "repo": "peterthomassen/draft-ietf-dnsop-generalized-notify",
   "labels": [
     {
@@ -527,6 +527,54 @@
           "updatedAt": "2024-07-08T13:24:31Z"
         }
       ]
+    },
+    {
+      "number": 28,
+      "id": "I_kwDOIax6Es6iVTqe",
+      "title": "Change mention of RFC1996 in Abstract to not be a Reference ",
+      "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/issues/28",
+      "state": "OPEN",
+      "author": "moonshiner",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "s/{{!RFC1996}}/RFC1996/",
+      "createdAt": "2024-12-06T16:46:03Z",
+      "updatedAt": "2024-12-06T16:46:03Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 29,
+      "id": "I_kwDOIax6Es6iVUlO",
+      "title": "Replace refs to 4033, 4034, and 4035 with 9364",
+      "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/issues/29",
+      "state": "OPEN",
+      "author": "moonshiner",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Replace the references tro the dnssec docs 4033, 4034, and 4035 to 9364\r\n\r\n",
+      "createdAt": "2024-12-06T16:48:05Z",
+      "updatedAt": "2024-12-06T16:48:05Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 30,
+      "id": "I_kwDOIax6Es6iWBIe",
+      "title": "\"parent\" and \"parent zone\" - also include reference to Terminology draft",
+      "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/issues/30",
+      "state": "OPEN",
+      "author": "moonshiner",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "In   \"1.1.  Design Requirements\"\r\n\r\nI think you should include a reference to the terminology document. Here is a simple sentence:\r\n\r\n\"DNS specific terminology can be found in [RFC9499] \"\r\n\r\n\"Parent\" is defined in 9499 and I think you will want to be more specific if you are referring to a \"Parent Zone\" (which can be Parent) or a \"Parent Zone Operator\" \r\n\r\nI see spots where the wording gets a bit loose. will put something more specific together",
+      "createdAt": "2024-12-06T18:29:46Z",
+      "updatedAt": "2024-12-06T18:29:46Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
