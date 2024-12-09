@@ -451,6 +451,8 @@ records.
 
 # IANA Considerations
 
+**Note to the RFC Editor**: In this section, please replace occurrences of "(this document)" with a proper reference.
+
 ## DSYNC RR Type
 
 IANA is requested to update the "Resource Record (RR) TYPEs" registry
@@ -491,6 +493,19 @@ Reference
 | CSYNC  |       1 | Delegation management  | (this document) |
 |        |   2-127 | Unassigned             |                 |
 |        | 128-255 | Reserved (private use) | (this document) |
+
+
+## _dsync Underscore Name
+
+Per [@!RFC8552], IANA is requested to add the following entries to the
+"Underscored and Globally Scoped DNS Node Names" registry:
+
+    +---------+------------+-----------------+
+    | RR Type | _NODE NAME | Reference       |
+    +---------+------------+-----------------+
+    | DSYNC   | _dsync     | (this document) |
+    +---------+------------+-----------------+
+
 
 # Acknowledgements
 
@@ -551,6 +566,8 @@ conceivable, the detailed specification is left for future work.
 # Change History (to be removed before publication)
 
 * draft-ietf-dnsop-generalized-notify-04
+
+> Make all needed IANA requests
 
 > Editorial changes
 
