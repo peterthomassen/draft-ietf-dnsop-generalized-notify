@@ -497,7 +497,7 @@ Reference
 
 ## _dsync Underscore Name
 
-Per [@!RFC8552], IANA is requested to add the following entries to the
+IANA is requested to add the following entries to the
 "Underscored and Globally Scoped DNS Node Names" registry:
 
     +---------+------------+-----------------+
