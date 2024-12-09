@@ -115,9 +115,9 @@ Table of Contents
    by the protocol.  Future extension for further use cases (such as
    multi-signer key exchange) is possible.
 
-   Readers are expected to be familiar with DNSSEC, including [RFC4033],
-   [RFC4034], [RFC4035], [RFC6781], [RFC7344], [RFC7477], [RFC7583],
-   [RFC8078], [RFC8901], and [RFC9615].
+   Readers are expected to be familiar with DNSSEC [RFC9364], including
+   [RFC6781], [RFC7344], [RFC7477], [RFC7583], [RFC8078], [RFC8901], and
+   [RFC9615].
 
 1.1.  Design Requirements
 
@@ -565,21 +565,6 @@ Table of Contents
               RFC 2136, DOI 10.17487/RFC2136, April 1997,
               <https://www.rfc-editor.org/rfc/rfc2136>.
 
-   [RFC4033]  Arends, R., Austein, R., Larson, M., Massey, D., and S.
-              Rose, "DNS Security Introduction and Requirements",
-              RFC 4033, DOI 10.17487/RFC4033, March 2005,
-              <https://www.rfc-editor.org/rfc/rfc4033>.
-
-   [RFC4034]  Arends, R., Austein, R., Larson, M., Massey, D., and S.
-              Rose, "Resource Records for the DNS Security Extensions",
-              RFC 4034, DOI 10.17487/RFC4034, March 2005,
-              <https://www.rfc-editor.org/rfc/rfc4034>.
-
-   [RFC4035]  Arends, R., Austein, R., Larson, M., Massey, D., and S.
-              Rose, "Protocol Modifications for the DNS Security
-              Extensions", RFC 4035, DOI 10.17487/RFC4035, March 2005,
-              <https://www.rfc-editor.org/rfc/rfc4035>.
-
    [RFC7344]  Kumari, W., Gudmundsson, O., and G. Barwood, "Automating
               DNSSEC Delegation Trust Maintenance", RFC 7344,
               DOI 10.17487/RFC7344, September 2014,
@@ -607,6 +592,10 @@ Table of Contents
               Lawrence, "Extended DNS Errors", RFC 8914,
               DOI 10.17487/RFC8914, October 2020,
               <https://www.rfc-editor.org/rfc/rfc8914>.
+
+   [RFC9364]  Hoffman, P., "DNS Security Extensions (DNSSEC)", BCP 237,
+              RFC 9364, DOI 10.17487/RFC9364, February 2023,
+              <https://www.rfc-editor.org/rfc/rfc9364>.
 
    [RFC9567]  Arends, R. and M. Larson, "DNS Error Reporting", RFC 9567,
               DOI 10.17487/RFC9567, April 2024,
