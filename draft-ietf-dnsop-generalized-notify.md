@@ -73,13 +73,14 @@ is possible.
 Readers are expected to be familiar with DNSSEC {{!RFC9364}}, including
 {{?RFC6781}}, {{!RFC7344}}, {{!RFC7477}}, {{?RFC7583}}, {{!RFC8078}},
 {{?RFC8901}}, and {{!RFC9615}}.
+DNS-specific terminology can be found in {{!RFC9499}}.
 
 ## Design Requirements
 
-When the parent is interested in notifications for delegation
-maintenance (such as for DS or NS hints), a service will need to be
+When the parent operator is interested in notifications for delegation
+maintenance (such as DS or NS update hints), a service will need to be
 made available for accepting these notifications. Depending on the
-context, this service may be run by the parent zone operator themselves,
+context, this service may be run by the parent operator themselves,
 or by a designated entity who is in charge of handling the domain's
 delegation data (such as a domain registrar).
 
@@ -88,14 +89,14 @@ sender needs to figure out where to send the NOTIFY. This suggests that
 the lookup process be ignorant of the details of the parent-side
 relationships (e.g., whether there is a registrar or not). This is
 addressed by parameterizing the lookup with the name of the child. The
-parent may then (optionally) announce the notification endpoint in a
-delegation-specific way, that is, at a child-specific name. (A catch-all
-endpoint may be indicated by wildcarding.)
+parent operator may then (optionally) announce the notification endpoint
+in a delegation-specific way, by publishing it at a child-specific name.
+(A catch-all endpoint may be indicated by wildcarding.)
 
-The solution proposed here is thus for the parent to publish the address
-where it listens for notifications, in a child-specific way (see
-{{signaling}}). Potential senders, knowing the name of the parent zone,
-can then simply look up that information (see {{discovery}}).
+The solution proposed here is thus for the parent operator to publish
+the address where someone listens for notifications, in a child-specific
+way (see {{signaling}}). Potential senders can easily determine the name
+of the parent and then look up that information (see {{discovery}}).
 
 ## Requirements Notation
 
@@ -161,7 +162,7 @@ procedure for discovering that notification target.
 
 Note that generalized NOTIFY messages are but one mechanism for
 improving the efficiency of automated delegation maintenance. Other
-alternatives, such as contacting the parent via an API or
+alternatives, such as contacting the parent operator via an API or
 DNS Update ({{!RFC2136}}), may (or may not) be more suitable in
 individual cases. Like generalized notifications, they similarly require
 a means for discovering where to send the API or DNS Update requests.
@@ -170,38 +171,39 @@ The scope for the publication mechanism is therefore wider than only to
 support generalized notifications, and a unified approach that works
 independently of the notification method is specified in this section.
 
-Parents participating in the discovery scheme for the purpose of
+Parent operators participating in the discovery scheme for the purpose of
 delegation maintenance notifications MUST publish endpoint information
 using the record type defined in {{dsyncrdtype}} under the `_dsync`
-domain as described in the following subsection.
+subdomain of the parent zone, as described in the following subsection.
 
+There MUST NOT be more than one DSYNC record for each combination of
+rrtype and scheme.
 It is RECOMMENDED to secure the corresponding zone with DNSSEC.
-A parent MUST NOT publish more than one DSYNC record for each
-combination of rrtype and scheme.
 
-For practical purposes, the parent MAY delegate the `_dsync` domain as a
-separate zone, and/or synthesize records under it. If child-specificity
-is not needed, the parent can publish a wildcard DSYNC record.
+For practical purposes, the parent operator MAY delegate the `_dsync`
+domain as a separate zone, and/or synthesize records under it. If
+child-specificity is not needed, the parent can publish a static
+wildcard DSYNC record.
 
 ## Wildcard Method
 
-If the parent itself performs CDS/CDNSKEY or CSYNC processing, or if
-the parent forwards the notifications internally to the designated party
-(such as a registrar), the following scheme is used:
+If the parent operator itself performs CDS/CDNSKEY or CSYNC processing
+for some or all delegations, or wants to forward notifications to some
+other party, a default notification target may be specified as follows:
 
     *._dsync.example.  IN DSYNC  CDS   scheme port target
     *._dsync.example.  IN DSYNC  CSYNC scheme port target
 
-To accommodate indirect delegation management models, the parent's
+To accommodate indirect delegation management models, the
 designated notification target may relay notifications to a third party
 (such as the registrar, in ICANN's model). The details of such
 arrangements are out of scope for this document.
 
-In case the parent does not need child-specificity, the wildcard label
-may be dropped from the DSYNC owner name (i.e., it may be published at
-the `_dsync` label instead). While this practice enables zone structures
-without wildcards, it also requires an additional step during discovery
-(see {{discovery}}), and is therefore NOT RECOMMENDED.
+If for some reason the parent operator cannot publish wildcard records,
+the wildcard label may be dropped from the DSYNC owner name (i.e., it
+may be published at the `_dsync` label instead). This practice requires
+an additional step during discovery (see {{discovery}}), and is
+therefore NOT RECOMMENDED.
 
 ## Child-specific Method
 
@@ -230,8 +232,8 @@ NOTIFY messages for delegation maintenance MUST be formatted as described in
 To address the CDS/CDNSKEY dichotomy, the NOTIFY(CDS) message (with
 `qtype=CDS`) is defined to indicate any child-side changes pertaining
 to an upcoming update of DS records.
-As the child DNS operator generally is unaware of whether the
-parent consumes CDS records or prefers CDNSKEY, or when that policy
+As the child DNS operator generally is unaware of whether the parent
+registry consumes CDS records or prefers CDNSKEY, or when that policy
 changes, it seems advisable to publish both types of records,
 preferably using automation features of common authoritative nameserver
 software for ensuring consistency.
@@ -244,7 +246,8 @@ timer.
 
 The CSYNC {{!RFC7477}} inefficiency may be similarly treated, with the
 child sending a NOTIFY(CSYNC) message (with `qtype=CSYNC`) to an address
-where the parent (or a registrar) is listening to CSYNC notifications.
+where the parent operator (or a designated pary) is listening for CSYNC
+notifications.
 
 In both cases the notification will speed up processing times by
 providing the recipient with a hint that a particular child zone has
@@ -294,11 +297,11 @@ MUST send a separate notification for each one.
 
 When a primary name server publishes a new RRset in the child, there
 typically is a time delay until all publicly visible copies of the zone
-will have been updated. If the primary sends a notification at the exact
-time of publication of the new zone, there is a potential for the
-parent to attempt CDS/CDNSKEY/CSYNC processing before the updated zone
-is visible. In this case the parent may draw the wrong conclusion (“the
-CDS RRset has not been updated”).
+are updated. If the primary sends a notification at the exact time of
+publication, there is a potential for CDS/CDNSKEY/CSYNC processing to be
+attempted before the corresponding records are served. As a result, a
+desired update may not be detected (or appear inconsistent), preventing
+it from being applied.
 
 It is therefore RECOMMENDED that the child delays sending notifications
 to the recipient until a consistent public view of the pertinent
@@ -311,8 +314,8 @@ NOTIFY messages are expected to elicit a response from the recipient
 employ the same logic as for SOA notifications ({{!RFC1996}} Sections
 3.5 and 3.6).
 
-The parent's attempt to act upon the delegation update request may fail
-for a variety of reasons (e.g., due to violation of the continuity
+The recipient's attempt to act upon the delegation update request may
+fail for a variety of reasons (e.g., due to violation of the continuity
 requirement set forth in {{!RFC7344}} Section 4.1). Such failures may
 occur asynchronously, even after the NOTIFY response has been sent.
 
@@ -329,8 +332,8 @@ child's delegation in the parent zone.
 While the CDS/CDNSKEY/CSYNC processing following the receipt of a NOTIFY
 will often be performed by the registry, the protocol anticipates that
 in some contexts (especially for ICANN gTLDs), registrars may take on
-the task. In such cases, the parent may publish the current registrar
-notification endpoint, enabling notifications to be directed to the
+the task. In such cases, the current registrar notification endpoint may
+be published, enabling notifications to be directed to the
 appropriate target. The mechanics of how this is arranged between
 registry and registrar are out of scope for this document; the protocol
 only offers the possibility to arrange things such that from the child
@@ -365,19 +368,18 @@ the receiving side (parent registry or registrar) has two options:
      a report query with an appropriate extended DNS error code as
      described in {{!RFC8914}}.
 
-     If the check finds that the CDS/CDNSKEY RRset is indeed new or has
-     changed, the parent MAY reset the scanning timer for children for
-     which NOTIFY(CDS) is received, or reduce the periodic scanning
-     frequency accordingly (e.g. to every two weeks).
-     This will decrease the scanning effort for the parent.
-     If a CDS/CDNSKEY change is then detected (without having received
-     a notification), the parent SHOULD clear that state and revert to
-     the default scanning schedule.
+     When using period scanning, notifications preempt the scanning
+     timer. If the NOTIFY-induced check finds that the CDS/CDNSKEY RRset
+     is indeed new or has changed, the corresponding child's timer may
+     be reset and the scanning frequency reduced (e.g. to once a week).
+     If a CDS/CDNSKEY change is later detected through scanning (without
+     having received a notification), NOTIFY-related state SHOULD be
+     cleared, reverting to the default scanning schedule for this child.
 
-     Parents introducing CDS/CDNSKEY scanning support at the same time
-     as NOTIFY(CDS) support are not in danger of breaking children's
-     scanning assumption, and MAY therefore use a low-frequency
-     scanning schedule in default mode.
+     When introducing CDS/CDNSKEY scanning support at the same time as
+     NOTIFY(CDS) support, backwards compatibility considerations
+     regarding the scanning interval do not apply; a low-frequency
+     scanning schedule MAY thus be used by default in such cases.
 
   2. Do not act upon the notification. To prevent retries, recipients
      SHOULD acknowledge the notification by sending a NOTIFY response
@@ -386,15 +388,14 @@ the receiving side (parent registry or registrar) has two options:
      limit (see {{security}}), in which case "Blocked" (15) may be a
      suitable extended DNS error code.
 
-If the parent implements the first option, the convergence time (time
-between publication of a new CDS/CDNSKEY record in the child and
-propagation of the resulting DS) will decrease significantly, thereby
-providing improved service to the child zone.
+Implementing the first option will significantly decrease the
+convergence time (between publication of a new CDS/CDNSKEY record in the
+child and publication of the resulting DS), thereby providing improved
+service for the child.
 
-If the parent, in addition to scheduling an immediate check for the
-child zone of the notification, also chooses to modify the scanning
-schedule (to be less frequent), the cost of providing the scanning
-service will be reduced.
+If, in addition to scheduling an immediate check for the child zone of
+the notification, the scanning schedule is also modified to be less
+frequent, the cost of providing the scanning service will be reduced.
 
 Upon receipt of a NOTIFY(CSYNC) to the published address for CSYNC
 notifications, the same options and considerations apply as for the
@@ -536,8 +537,8 @@ Unlike in the original case, where the primary is able to suggest the
 scanning interval via the SOA Refresh parameter, an equivalent mechanism
 does not exist for DS-related scanning.
 
-All of this above also applies to parents that offer automated NS and glue
-record maintenance via CSYNC scanning {{!RFC7477}}. Again, given that CSYNC
+All of the above also applies to automated NS and glue record
+maintenance via CSYNC scanning {{!RFC7477}}. Again, given that CSYNC
 records change only rarely, frequent scanning of a large number of
 delegations seems disproportionately costly, while infrequent scanning
 causes slower convergence (delay until the delegation is updated).
