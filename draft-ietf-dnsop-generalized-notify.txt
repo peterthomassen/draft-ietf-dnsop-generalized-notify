@@ -85,6 +85,7 @@ Table of Contents
    6.  IANA Considerations
      6.1.  DSYNC RR Type
      6.2.  DSYNC Scheme Registration
+     6.3.  _dsync Underscore Name
    7.  Acknowledgements
    8.  References
      8.1.  Normative References
@@ -504,6 +505,9 @@ Table of Contents
 
 6.  IANA Considerations
 
+   *Note to the RFC Editor*: In this section, please replace occurrences
+   of "(this document)" with a proper reference.
+
 6.1.  DSYNC RR Type
 
    IANA is requested to update the "Resource Record (RR) TYPEs" registry
@@ -544,6 +548,17 @@ Table of Contents
       +--------+---------+------------------------+-----------------+
 
                                   Table 1
+
+6.3.  _dsync Underscore Name
+
+   IANA is requested to add the following entries to the "Underscored
+   and Globally Scoped DNS Node Names" registry:
+
+   +---------+------------+-----------------+
+   | RR Type | _NODE NAME | Reference       |
+   +---------+------------+-----------------+
+   | DSYNC   | _dsync     | (this document) |
+   +---------+------------+-----------------+
 
 7.  Acknowledgements
 
@@ -690,6 +705,8 @@ A.2.  Similar Issues for DS Maintenance and Beyond
 Appendix B.  Change History (to be removed before publication)
 
    *  draft-ietf-dnsop-generalized-notify-04
+
+      Make all needed IANA requests
 
       Editorial changes
 
