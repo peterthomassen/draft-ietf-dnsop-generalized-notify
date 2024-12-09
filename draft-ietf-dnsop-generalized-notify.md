@@ -70,9 +70,9 @@ instead makes use of a wider range of DNS messages allowed by the protocol.
 Future extension for further use cases (such as multi-signer key exchange)
 is possible.
 
-Readers are expected to be familiar with DNSSEC, including {{!RFC4033}},
-{{!RFC4034}}, {{!RFC4035}}, {{?RFC6781}}, {{!RFC7344}}, {{!RFC7477}},
-{{?RFC7583}}, {{?RFC8078}}, {{?RFC8901}}, and {{?RFC9615}}.
+Readers are expected to be familiar with DNSSEC {{!RFC9364}}, including
+{{?RFC6781}}, {{!RFC7344}}, {{!RFC7477}}, {{?RFC7583}}, {{!RFC8078}},
+{{?RFC8901}}, and {{!RFC9615}}.
 
 ## Design Requirements
 
