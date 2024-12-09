@@ -2,16 +2,16 @@
 
 This is the working area for the IETF [DNSOP Working Group](https://datatracker.ietf.org/wg/dnsop/documents/) Internet-Draft, "Generalized DNS Notifications".
 
-* [Editor's Copy](https://peterthomassen.github.io/draft-thomassen-dnsop-generalized-dns-notify/#go.draft-ietf-dnsop-generalized-notify.html)
+* [Editor's Copy](https://peterthomassen.github.io/draft-ietf-dnsop-generalized-notify/#go.draft-ietf-dnsop-generalized-notify.html)
 * [Datatracker Page](https://datatracker.ietf.org/doc/draft-ietf-dnsop-generalized-notify)
 * [Working Group Draft](https://datatracker.ietf.org/doc/html/draft-ietf-dnsop-generalized-notify)
-* [Compare Editor's Copy to Working Group Draft](https://peterthomassen.github.io/draft-thomassen-dnsop-generalized-dns-notify/#go.draft-ietf-dnsop-generalized-notify.diff)
+* [Compare Editor's Copy to Working Group Draft](https://peterthomassen.github.io/draft-ietf-dnsop-generalized-notify/#go.draft-ietf-dnsop-generalized-notify.diff)
 
 
 ## Contributing
 
 See the
-[guidelines for contributions](https://github.com/peterthomassen/draft-thomassen-dnsop-generalized-dns-notify/blob/main/CONTRIBUTING.md).
+[guidelines for contributions](https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/blob/main/CONTRIBUTING.md).
 
 Contributions can be made by creating pull requests.
 The GitHub interface supports creating pull requests using the Edit (✏) button.
