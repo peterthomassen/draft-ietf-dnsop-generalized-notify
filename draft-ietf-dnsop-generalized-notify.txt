@@ -5,10 +5,10 @@
 DNSOP Working Group                                          J. Stenstam
 Internet-Draft                           The Swedish Internet Foundation
 Intended status: Standards Track                            P. Thomassen
-Expires: 12 June 2025                  deSEC, Secure Systems Engineering
+Expires: 13 June 2025                  deSEC, Secure Systems Engineering
                                                                J. Levine
                                                            Standcore LLC
-                                                         9 December 2024
+                                                        10 December 2024
 
 
                      Generalized DNS Notifications
@@ -48,7 +48,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 12 June 2025.
+   This Internet-Draft will expire on 13 June 2025.
 
 Copyright Notice
 
@@ -71,7 +71,8 @@ Table of Contents
      1.2.  Requirements Notation
    2.  DSYNC RR Type
      2.1.  Wire Format
-     2.2.  Semantics
+     2.2.  Presentation Format
+     2.3.  Semantics
    3.  Publication of Notification Targets
      3.1.  Wildcard Method
      3.2.  Child-specific Method
@@ -186,7 +187,21 @@ Table of Contents
       notifications of the specified type.  This name MUST resolve to
       one or more address records.
 
-2.2.  Semantics
+2.2.  Presentation Format
+
+   The presentation format of the RDATA portion is as follows:
+
+   *  The RRtype field is represented as a mnemonic from the "Resource
+      Record (RR) TYPEs" registry.
+
+   *  The Scheme field is represented as an unsigned decimal integer.
+
+   *  The Port field is represented as an unsigned decimal integer.
+
+   *  The Target field is represented as a <domain-name> ([RFC1035],
+      Section 5.1).
+
+2.3.  Semantics
 
    For now, the only scheme defined is scheme=1 with the interpretation
    that when a new CDS/CDNSKEY (or CSYNC) RRset is published, a
@@ -570,6 +585,10 @@ Table of Contents
 
 8.1.  Normative References
 
+   [RFC1035]  Mockapetris, P., "Domain names - implementation and
+              specification", STD 13, RFC 1035, DOI 10.17487/RFC1035,
+              November 1987, <https://www.rfc-editor.org/rfc/rfc1035>.
+
    [RFC1996]  Vixie, P., "A Mechanism for Prompt Notification of Zone
               Changes (DNS NOTIFY)", RFC 1996, DOI 10.17487/RFC1996,
               August 1996, <https://www.rfc-editor.org/rfc/rfc1996>.
@@ -705,6 +724,8 @@ A.2.  Similar Issues for DS Maintenance and Beyond
 Appendix B.  Change History (to be removed before publication)
 
    *  draft-ietf-dnsop-generalized-notify-04
+
+      Define DSYNC presentation format
 
       Make all needed IANA requests
 
