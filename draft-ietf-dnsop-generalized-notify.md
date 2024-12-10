@@ -138,6 +138,20 @@ Target
 providing the service of listening for generalized notifications of the
 specified type. This name MUST resolve to one or more address records.
 
+## Presentation Format
+
+The presentation format of the RDATA portion is as follows:
+
+- The RRtype field is represented as a mnemonic from the "Resource
+  Record (RR) TYPEs" registry.
+
+- The Scheme field is represented as an unsigned decimal integer.
+
+- The Port field is represented as an unsigned decimal integer.
+
+- The Target field is represented as a \<domain-name\> ({{!RFC1035,
+  Section 5.1}}).
+
 ## Semantics
 
 For now, the only scheme defined is scheme=1 with the interpretation
@@ -566,6 +580,8 @@ conceivable, the detailed specification is left for future work.
 # Change History (to be removed before publication)
 
 * draft-ietf-dnsop-generalized-notify-04
+
+> Define DSYNC presentation format
 
 > Make all needed IANA requests
 
