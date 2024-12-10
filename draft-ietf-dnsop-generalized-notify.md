@@ -477,7 +477,7 @@ Type
 : DSYNC
 
 Value
-: tbd (next available)
+: 66
 
 Meaning
 : Endpoint discovery for delegation synchronization
@@ -580,6 +580,8 @@ conceivable, the detailed specification is left for future work.
 # Change History (to be removed before publication)
 
 * draft-ietf-dnsop-generalized-notify-04
+
+> Use assigned DSYNC RRtype value
 
 > Define DSYNC presentation format
 
