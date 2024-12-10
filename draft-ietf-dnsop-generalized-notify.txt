@@ -531,7 +531,7 @@ Table of Contents
 
    Type  DSYNC
 
-   Value  tbd (next available)
+   Value  66
 
    Meaning  Endpoint discovery for delegation synchronization
 
@@ -724,6 +724,8 @@ A.2.  Similar Issues for DS Maintenance and Beyond
 Appendix B.  Change History (to be removed before publication)
 
    *  draft-ietf-dnsop-generalized-notify-04
+
+      Use assigned DSYNC RRtype value
 
       Define DSYNC presentation format
 
