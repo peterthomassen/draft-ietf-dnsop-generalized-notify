@@ -521,6 +521,24 @@ IANA is requested to add the following entries to the
     +---------+------------+-----------------+
 
 
+# Implementation Status
+
+**Note to the RFC Editor**: please remove this entire section before publication.
+
+Johan Stenstam's experimental nameserver implements this draft
+(https://github.com/johanix/tdns).
+
+## Child DNS Operator-side
+
+- IronDNS implementation under way
+
+- deSEC implementation under way (Q1/2025)
+
+## Parent-side
+
+- .SE/.NU will implement this once it is an RFC.
+
+
 # Acknowledgements
 
 In order of first contribution:
@@ -580,6 +598,8 @@ conceivable, the detailed specification is left for future work.
 # Change History (to be removed before publication)
 
 * draft-ietf-dnsop-generalized-notify-04
+
+> Add section on Implementation Status
 
 > Use assigned DSYNC RRtype value
 
