@@ -260,7 +260,7 @@ timer.
 
 The CSYNC {{!RFC7477}} inefficiency may be similarly treated, with the
 child sending a NOTIFY(CSYNC) message (with `qtype=CSYNC`) to an address
-where the parent operator (or a designated pary) is listening for CSYNC
+where the parent operator (or a designated party) is listening for CSYNC
 notifications.
 
 In both cases the notification will speed up processing times by
