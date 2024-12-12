@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-12-10T00:41:18.717763+00:00",
+  "timestamp": "2024-12-12T00:40:35.437640+00:00",
   "repo": "peterthomassen/draft-ietf-dnsop-generalized-notify",
   "labels": [
     {
@@ -653,14 +653,30 @@
       "id": "I_kwDOIax6Es6imSjP",
       "title": "Presentation Format Section",
       "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/issues/35",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "moonshiner",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "Following up with what Ray said, there should some formal section on Presentation Format and  Wire Format\r\n\r\nhere are some recent examples\r\n\r\nhttps://datatracker.ietf.org/doc/html/rfc9660#name-presentation-format\r\n\r\nhttps://datatracker.ietf.org/doc/html/rfc9460#name-zone-file-presentation-form\r\n\r\nhttps://datatracker.ietf.org/doc/html/rfc8976#name-zonemd-presentation-format\r\n",
       "createdAt": "2024-12-09T18:40:41Z",
-      "updatedAt": "2024-12-09T18:40:41Z",
+      "updatedAt": "2024-12-10T14:41:16Z",
+      "closedAt": "2024-12-10T14:41:16Z",
+      "comments": []
+    },
+    {
+      "number": 36,
+      "id": "I_kwDOIax6Es6iztbH",
+      "title": "Spelling error`",
+      "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/issues/36",
+      "state": "OPEN",
+      "author": "moonshiner",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "s/designated pary/designated party/\r\n\r\n",
+      "createdAt": "2024-12-10T23:39:16Z",
+      "updatedAt": "2024-12-10T23:39:16Z",
       "closedAt": null,
       "comments": []
     }
