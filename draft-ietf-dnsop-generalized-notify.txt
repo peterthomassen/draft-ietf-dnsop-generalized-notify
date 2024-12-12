@@ -5,10 +5,10 @@
 DNSOP Working Group                                          J. Stenstam
 Internet-Draft                           The Swedish Internet Foundation
 Intended status: Standards Track                            P. Thomassen
-Expires: 13 June 2025                  deSEC, Secure Systems Engineering
+Expires: 15 June 2025                  deSEC, Secure Systems Engineering
                                                                J. Levine
                                                            Standcore LLC
-                                                        10 December 2024
+                                                        12 December 2024
 
 
                      Generalized DNS Notifications
@@ -48,7 +48,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 13 June 2025.
+   This Internet-Draft will expire on 15 June 2025.
 
 Copyright Notice
 
@@ -87,10 +87,13 @@ Table of Contents
      6.1.  DSYNC RR Type
      6.2.  DSYNC Scheme Registration
      6.3.  _dsync Underscore Name
-   7.  Acknowledgements
-   8.  References
-     8.1.  Normative References
-     8.2.  Informative References
+   7.  Implementation Status
+     7.1.  Child DNS Operator-side
+     7.2.  Parent-side
+   8.  Acknowledgements
+   9.  References
+     9.1.  Normative References
+     9.2.  Informative References
    Appendix A.  Efficiency and Convergence Issues in DNS Scanning
      A.1.  Original NOTIFY for Zone Transfer Nudging
      A.2.  Similar Issues for DS Maintenance and Beyond
@@ -310,8 +313,8 @@ Table of Contents
 
    The CSYNC [RFC7477] inefficiency may be similarly treated, with the
    child sending a NOTIFY(CSYNC) message (with qtype=CSYNC) to an
-   address where the parent operator (or a designated pary) is listening
-   for CSYNC notifications.
+   address where the parent operator (or a designated party) is
+   listening for CSYNC notifications.
 
    In both cases the notification will speed up processing times by
    providing the recipient with a hint that a particular child zone has
@@ -575,15 +578,33 @@ Table of Contents
    | DSYNC   | _dsync     | (this document) |
    +---------+------------+-----------------+
 
-7.  Acknowledgements
+7.  Implementation Status
+
+   *Note to the RFC Editor*: please remove this entire section before
+   publication.
+
+   Johan Stenstam's experimental nameserver implements this draft
+   (https://github.com/johanix/tdns).
+
+7.1.  Child DNS Operator-side
+
+   *  IronDNS implementation under way
+
+   *  deSEC implementation under way (Q1/2025)
+
+7.2.  Parent-side
+
+   *  .SE/.NU will implement this once it is an RFC.
+
+8.  Acknowledgements
 
    In order of first contribution: Joe Abley, Mark Andrews, Christian
    Elmerot, Ólafur Guðmundsson, Paul Wouters, Brian Dickson, Warren
    Kumari, Patrick Mevzek, Tim Wicinski
 
-8.  References
+9.  References
 
-8.1.  Normative References
+9.1.  Normative References
 
    [RFC1035]  Mockapetris, P., "Domain names - implementation and
               specification", STD 13, RFC 1035, DOI 10.17487/RFC1035,
@@ -648,7 +669,7 @@ Table of Contents
               Operator", RFC 9615, DOI 10.17487/RFC9615, July 2024,
               <https://www.rfc-editor.org/rfc/rfc9615>.
 
-8.2.  Informative References
+9.2.  Informative References
 
    [I-D.ietf-dnsop-dnssec-automation]
               Wisser, U., Huque, S., and J. Stenstam, "DNSSEC
@@ -724,6 +745,8 @@ A.2.  Similar Issues for DS Maintenance and Beyond
 Appendix B.  Change History (to be removed before publication)
 
    *  draft-ietf-dnsop-generalized-notify-04
+
+      Add section on Implementation Status
 
       Use assigned DSYNC RRtype value
 
