@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-12-12T00:40:35.437640+00:00",
+  "timestamp": "2024-12-15T00:44:28.378600+00:00",
   "repo": "peterthomassen/draft-ietf-dnsop-generalized-notify",
   "labels": [
     {
@@ -581,15 +581,15 @@
       "id": "I_kwDOIax6Es6iaqfI",
       "title": "add an Implementation appendix",
       "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/issues/31",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "moonshiner",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "-: I know there are some, add an appendix with links or pointers.  This will get pulled when it reaches the RFC editor, but it will be useful for the IESG Eval and IETF last call, etc.\r\n",
       "createdAt": "2024-12-08T01:47:13Z",
-      "updatedAt": "2024-12-08T01:47:13Z",
-      "closedAt": null,
+      "updatedAt": "2024-12-12T09:49:10Z",
+      "closedAt": "2024-12-12T09:49:10Z",
       "comments": []
     },
     {
@@ -669,15 +669,15 @@
       "id": "I_kwDOIax6Es6iztbH",
       "title": "Spelling error`",
       "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/issues/36",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "moonshiner",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "s/designated pary/designated party/\r\n\r\n",
       "createdAt": "2024-12-10T23:39:16Z",
-      "updatedAt": "2024-12-10T23:39:16Z",
-      "closedAt": null,
+      "updatedAt": "2024-12-12T09:49:10Z",
+      "closedAt": "2024-12-12T09:49:10Z",
       "comments": []
     }
   ],
@@ -1230,7 +1230,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2024-03-04T01:51:20Z",
-      "updatedAt": "2024-03-04T20:22:12Z",
+      "updatedAt": "2024-12-12T09:55:04Z",
       "baseRepository": "peterthomassen/draft-ietf-dnsop-generalized-notify",
       "baseRefName": "main",
       "baseRefOid": "837f8260c5e20f00b670cb4e174a8daf2fa1ca42",
