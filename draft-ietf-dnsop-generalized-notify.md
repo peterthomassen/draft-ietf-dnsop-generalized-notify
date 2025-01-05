@@ -488,8 +488,7 @@ Reference
 
 ## DSYNC Scheme Registration
 
-Per {{!RFC8552}}, IANA is requested to create a new registry on the
-"Domain Name System (DNS) Parameters" IANA web page as follows:
+IANA has created and will maintain a new registry called "DSYNC: Location of Synchronization Endpoints" in the "Domain Name System (DNS) Parameters" registry group as follows:
 
 Name
 : DSYNC: Location of Synchronization Endpoints
@@ -500,6 +499,24 @@ Assignment Policy
 Reference
 : (this document)
 
+A registration MUST include the following fields:
+
+RRtype: Lists an RR TYPE that is defined for use.
+
+Scheme: The mode used for locating the desired notification address
+
+Purpose: Description of the Scheme
+
+Reference: Location of specification or registration source
+
+Requests to register additional new DSYNC RRtype Enpoints in the registry are to be recorded by IANA after
+Expert Review [RFC8126].  The expert review should validate that the RRtype and Scheme do not conflict
+with any existing allocations.
+
+### Initial Contents
+
+Initial values for "DSYNC: Location of Synchronization Endpoints" are given below.
+
 | RRtype | Scheme  | Purpose                | Reference       |
 | ------ | ------- | ---------------------- | --------------- |
 |        |       0 | Null scheme (no-op)    | (this document) |
@@ -508,10 +525,9 @@ Reference
 |        |   2-127 | Unassigned             |                 |
 |        | 128-255 | Reserved (private use) | (this document) |
 
-
 ## _dsync Underscore Name
 
-IANA is requested to add the following entries to the
+Per {{!RFC8552}}, IANA is requested to add the following entries to the
 "Underscored and Globally Scoped DNS Node Names" registry:
 
     +---------+------------+-----------------+
