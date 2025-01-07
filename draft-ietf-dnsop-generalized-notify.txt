@@ -627,7 +627,7 @@ Table of Contents
 
    In order of first contribution: Joe Abley, Mark Andrews, Christian
    Elmerot, Ólafur Guðmundsson, Paul Wouters, Brian Dickson, Warren
-   Kumari, Patrick Mevzek, Tim Wicinski
+   Kumari, Patrick Mevzek, Tim Wicinski, Q Misell, Stefan Ubbink
 
 9.  References
 
