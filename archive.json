@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-01-05T00:41:58.646911+00:00",
+  "timestamp": "2025-01-07T00:37:55.005040+00:00",
   "repo": "peterthomassen/draft-ietf-dnsop-generalized-notify",
   "labels": [
     {
@@ -1504,6 +1504,32 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 37,
+      "id": "PR_kwDOIax6Es6GwvFX",
+      "title": "additional text to IANA considerations",
+      "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/pull/37",
+      "state": "OPEN",
+      "author": "moonshiner",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "I did some rework of the IANA considerations section. \r\n\r\n I moved the 8552 reference to the _dsync request\r\n\r\nI added text about adding new values to the new registry and the expert review process. \r\nIt can used some word smithing. \r\n\r\n\r\n\r\n",
+      "createdAt": "2025-01-05T23:08:25Z",
+      "updatedAt": "2025-01-05T23:08:26Z",
+      "baseRepository": "peterthomassen/draft-ietf-dnsop-generalized-notify",
+      "baseRefName": "main",
+      "baseRefOid": "aed895e95173b7cf53a67b479e625a0a78d3835b",
+      "headRepository": "moonshiner/draft-ietf-dnsop-generalized-notify",
+      "headRefName": "tjw-iana-edits",
+      "headRefOid": "d3940c91ce1affb4fe587a0068ca32985dfa66ec",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
