@@ -176,11 +176,11 @@ Table of Contents
       registry).  For now, only CDS and CSYNC are supported values, with
       the former indicating an updated CDS or CDNSKEY record set.
 
-   Scheme  The scheme indicates the mode used for contacting the desired
-      notification address.  This is an 8 bit unsigned integer.  Records
-      with value 0 (null scheme) are ignored by consumers.  Value 1 is
-      described in this document, and values 128-255 are reserved for
-      private use.  All other values are currently unspecified.
+   Scheme  The mode used for contacting the desired notification
+      address.  This is an 8 bit unsigned integer.  Records with value 0
+      (null scheme) are ignored by consumers.  Value 1 is described in
+      this document, and values 128-255 are reserved for private use.
+      All other values are currently unspecified.
 
    Port  The port on the target host of the notification service.  This
       is a 16 bit unsigned integer in network byte order.
@@ -208,8 +208,8 @@ Table of Contents
 
    For now, the only scheme defined is scheme=1 with the interpretation
    that when a new CDS/CDNSKEY (or CSYNC) RRset is published, a
-   NOTIFY(CDS) (or NOTIFY(CSYNC)) should be sent to the address and port
-   listed in the corresponding DSYNC record.
+   NOTIFY(CDS) (or NOTIFY(CSYNC)) message should be sent to the address
+   and port listed in the corresponding DSYNC record.
 
    Example (for the owner names of these records, see Section 3):
 
@@ -218,6 +218,10 @@ Table of Contents
 
    Should a need for other mechanisms arise, other schemes may be
    defined to deal with such requirements using alternative logic.
+
+   Schemes are independent of RRtype.  They merely specify a method of
+   contacting the target (whereas the RRtype is part of the notification
+   payload).
 
 3.  Publication of Notification Targets
 
@@ -245,7 +249,7 @@ Table of Contents
    subsection.
 
    There MUST NOT be more than one DSYNC record for each combination of
-   rrtype and scheme.  It is RECOMMENDED to secure the corresponding
+   RRtype and Scheme.  It is RECOMMENDED to secure the corresponding
    zone with DNSSEC.
 
    For practical purposes, the parent operator MAY delegate the _dsync
@@ -276,9 +280,9 @@ Table of Contents
 
 3.2.  Child-specific Method
 
-   It is also possible to publish child-specific records, where the
-   wildcard label is replaced by the child's FQDN with the parent zone's
-   labels stripped.
+   It is also possible to publish child-specific records, where in place
+   of the wildcard label, the child's FQDN with the parent zone's labels
+   stripped is used.
 
    As an example, consider a registrar offering domains like
    child.example, delegated from example zone.  If the registrar
@@ -300,16 +304,17 @@ Table of Contents
    To address the CDS/CDNSKEY dichotomy, the NOTIFY(CDS) message (with
    qtype=CDS) is defined to indicate any child-side changes pertaining
    to an upcoming update of DS records.  As the child DNS operator
-   generally is unaware of whether the parent registry consumes CDS
-   records or prefers CDNSKEY, or when that policy changes, it seems
-   advisable to publish both types of records, preferably using
-   automation features of common authoritative nameserver software for
-   ensuring consistency.
+   generally is unaware of whether the parent side consumes CDS records
+   or prefers CDNSKEY, or when that policy changes, it seems advisable
+   to publish both types of records, preferably using automation
+   features of common authoritative nameserver software for ensuring
+   consistency.
 
-   Upon receipt of NOTIFY(CDS), the recipient (the parent registry or a
-   registrar) SHOULD initiate the same DNS lookups and verifications for
-   DNSSEC bootstrapping [RFC9615] or DS maintenance [RFC7344][RFC8078]
-   that would otherwise be triggered based on a timer.
+   Upon receipt of NOTIFY(CDS), the parent-side recipient (typically,
+   registry or registrar) SHOULD initiate the same DNS lookups and
+   verifications for DNSSEC bootstrapping [RFC9615] or DS maintenance
+   [RFC7344][RFC8078] that would otherwise be triggered based on a
+   timer.
 
    The CSYNC [RFC7477] inefficiency may be similarly treated, with the
    child sending a NOTIFY(CSYNC) message (with qtype=CSYNC) to an
@@ -393,9 +398,13 @@ Table of Contents
    [RFC9567] EDNS0 Report-Channel option in the NOTIFY message to
    request the receiving side to report any errors by making a report
    query with an appropriate extended DNS error code as described in
-   [RFC8914].  When including this EDNS0 option, its agent domain MUST
-   be subordinate or equal to one of the NS hostnames, as listed in the
-   child's delegation in the parent zone.
+   [RFC8914].
+
+   When including this EDNS0 option, its agent domain MUST be
+   subordinate or equal to one of the NS hostnames, as listed in the
+   child's delegation in the parent zone.  This is to prevent malicious
+   senders from causing the NOTIFY recipient to send unsolicited report
+   queries to unrelated third parties.
 
 4.2.2.  Roles
 
@@ -438,7 +447,8 @@ Table of Contents
        hostnames listed in the delegation, the processing party SHOULD
        report any errors occuring during CDS/CDNSKEY processing by
        sending a report query with an appropriate extended DNS error
-       code as described in [RFC8914].
+       code as described in [RFC8914].  Reporting may be done
+       asynchronously (outside of the NOTIFY transaction).
 
        When using period scanning, notifications preempt the scanning
        timer.  If the NOTIFY-induced check finds that the CDS/CDNSKEY
@@ -765,6 +775,10 @@ A.2.  Similar Issues for DS Maintenance and Beyond
    conceivable, the detailed specification is left for future work.
 
 Appendix B.  Change History (to be removed before publication)
+
+   *  draft-ietf-dnsop-generalized-notify-05
+
+      Editorial changes
 
    *  draft-ietf-dnsop-generalized-notify-04
 
