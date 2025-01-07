@@ -123,7 +123,7 @@ registry). For now, only CDS and CSYNC are supported values, with
 the former indicating an updated CDS or CDNSKEY record set.
 
 Scheme
-: The scheme indicates the mode used for locating the desired
+: The scheme indicates the mode used for contacting the desired
 notification address.  This is an 8 bit unsigned integer. Records
 with value 0 (null scheme) are ignored by consumers.  Value 1 is
 described in this document, and values 128-255 are reserved for
@@ -488,8 +488,7 @@ Reference
 
 ## DSYNC Scheme Registration
 
-Per {{!RFC8552}}, IANA is requested to create a new registry on the
-"Domain Name System (DNS) Parameters" IANA web page as follows:
+IANA has created and will maintain the following new registry in the "Domain Name System (DNS) Parameters" registry group:
 
 Name
 : DSYNC: Location of Synchronization Endpoints
@@ -500,6 +499,8 @@ Assignment Policy
 Reference
 : (this document)
 
+The initial contents for the registry are as follows:
+
 | RRtype | Scheme  | Purpose                | Reference       |
 | ------ | ------- | ---------------------- | --------------- |
 |        |       0 | Null scheme (no-op)    | (this document) |
@@ -508,10 +509,27 @@ Reference
 |        |   2-127 | Unassigned             |                 |
 |        | 128-255 | Reserved (private use) | (this document) |
 
+Requests to register additional entries MUST include the following fields:
+
+RRtype
+: Lists an RRtype that is defined for use.
+
+Scheme
+: The mode used for contacting the desired notification address
+
+Purpose
+: Use case description
+
+Reference
+: Location of specification or registration source
+
+Registration requests are to be recorded by IANA after Expert Review {{!RFC8126}}.
+The expert review should validate that the RRtype and Scheme do not conflict
+with any existing allocations.
 
 ## _dsync Underscore Name
 
-IANA is requested to add the following entries to the
+Per {{!RFC8552}}, IANA is requested to add the following entries to the
 "Underscored and Globally Scoped DNS Node Names" registry:
 
     +---------+------------+-----------------+
