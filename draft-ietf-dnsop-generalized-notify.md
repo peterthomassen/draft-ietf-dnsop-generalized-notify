@@ -123,7 +123,7 @@ registry). For now, only CDS and CSYNC are supported values, with
 the former indicating an updated CDS or CDNSKEY record set.
 
 Scheme
-: The scheme indicates the mode used for locating the desired
+: The scheme indicates the mode used for contacting the desired
 notification address.  This is an 8 bit unsigned integer. Records
 with value 0 (null scheme) are ignored by consumers.  Value 1 is
 described in this document, and values 128-255 are reserved for
@@ -488,7 +488,7 @@ Reference
 
 ## DSYNC Scheme Registration
 
-IANA has created and will maintain a new registry called "DSYNC: Location of Synchronization Endpoints" in the "Domain Name System (DNS) Parameters" registry group as follows:
+IANA has created and will maintain the following new registry in the "Domain Name System (DNS) Parameters" registry group:
 
 Name
 : DSYNC: Location of Synchronization Endpoints
@@ -499,23 +499,7 @@ Assignment Policy
 Reference
 : (this document)
 
-A registration MUST include the following fields:
-
-RRtype: Lists an RR TYPE that is defined for use.
-
-Scheme: The mode used for locating the desired notification address
-
-Purpose: Description of the Scheme
-
-Reference: Location of specification or registration source
-
-Requests to register additional new DSYNC RRtype Enpoints in the registry are to be recorded by IANA after
-Expert Review [RFC8126].  The expert review should validate that the RRtype and Scheme do not conflict
-with any existing allocations.
-
-### Initial Contents
-
-Initial values for "DSYNC: Location of Synchronization Endpoints" are given below.
+The initial contents for the registry are as follows:
 
 | RRtype | Scheme  | Purpose                | Reference       |
 | ------ | ------- | ---------------------- | --------------- |
@@ -524,6 +508,24 @@ Initial values for "DSYNC: Location of Synchronization Endpoints" are given belo
 | CSYNC  |       1 | Delegation management  | (this document) |
 |        |   2-127 | Unassigned             |                 |
 |        | 128-255 | Reserved (private use) | (this document) |
+
+Requests to register additional entries MUST include the following fields:
+
+RRtype
+: Lists an RRtype that is defined for use.
+
+Scheme
+: The mode used for contacting the desired notification address
+
+Purpose
+: Use case description
+
+Reference
+: Location of specification or registration source
+
+Registration requests are to be recorded by IANA after Expert Review {{!RFC8126}}.
+The expert review should validate that the RRtype and Scheme do not conflict
+with any existing allocations.
 
 ## _dsync Underscore Name
 
