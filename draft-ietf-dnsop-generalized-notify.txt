@@ -5,10 +5,10 @@
 DNSOP Working Group                                          J. Stenstam
 Internet-Draft                           The Swedish Internet Foundation
 Intended status: Standards Track                            P. Thomassen
-Expires: 15 June 2025                  deSEC, Secure Systems Engineering
+Expires: 11 July 2025                  deSEC, Secure Systems Engineering
                                                                J. Levine
                                                            Standcore LLC
-                                                        12 December 2024
+                                                          7 January 2025
 
 
                      Generalized DNS Notifications
@@ -48,11 +48,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 15 June 2025.
+   This Internet-Draft will expire on 11 July 2025.
 
 Copyright Notice
 
-   Copyright (c) 2024 IETF Trust and the persons identified as the
+   Copyright (c) 2025 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -176,7 +176,7 @@ Table of Contents
       registry).  For now, only CDS and CSYNC are supported values, with
       the former indicating an updated CDS or CDNSKEY record set.
 
-   Scheme  The scheme indicates the mode used for locating the desired
+   Scheme  The scheme indicates the mode used for contacting the desired
       notification address.  This is an 8 bit unsigned integer.  Records
       with value 0 (null scheme) are ignored by consumers.  Value 1 is
       described in this document, and values 128-255 are reserved for
@@ -542,14 +542,16 @@ Table of Contents
 
 6.2.  DSYNC Scheme Registration
 
-   Per [RFC8552], IANA is requested to create a new registry on the
-   "Domain Name System (DNS) Parameters" IANA web page as follows:
+   IANA has created and will maintain the following new registry in the
+   "Domain Name System (DNS) Parameters" registry group:
 
    Name  DSYNC: Location of Synchronization Endpoints
 
    Assignment Policy  Expert Review
 
    Reference  (this document)
+
+   The initial contents for the registry are as follows:
 
       +========+=========+========================+=================+
       | RRtype | Scheme  | Purpose                | Reference       |
@@ -567,10 +569,25 @@ Table of Contents
 
                                   Table 1
 
+   Requests to register additional entries MUST include the following
+   fields:
+
+   RRtype  Lists an RRtype that is defined for use.
+
+   Scheme  The mode used for contacting the desired notification address
+
+   Purpose  Use case description
+
+   Reference  Location of specification or registration source
+
+   Registration requests are to be recorded by IANA after Expert Review
+   [RFC8126].  The expert review should validate that the RRtype and
+   Scheme do not conflict with any existing allocations.
+
 6.3.  _dsync Underscore Name
 
-   IANA is requested to add the following entries to the "Underscored
-   and Globally Scoped DNS Node Names" registry:
+   Per [RFC8552], IANA is requested to add the following entries to the
+   "Underscored and Globally Scoped DNS Node Names" registry:
 
    +---------+------------+-----------------+
    | RR Type | _NODE NAME | Reference       |
@@ -637,6 +654,11 @@ Table of Contents
               the Parent via CDS/CDNSKEY", RFC 8078,
               DOI 10.17487/RFC8078, March 2017,
               <https://www.rfc-editor.org/rfc/rfc8078>.
+
+   [RFC8126]  Cotton, M., Leiba, B., and T. Narten, "Guidelines for
+              Writing an IANA Considerations Section in RFCs", BCP 26,
+              RFC 8126, DOI 10.17487/RFC8126, June 2017,
+              <https://www.rfc-editor.org/rfc/rfc8126>.
 
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
