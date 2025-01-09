@@ -153,10 +153,11 @@ The presentation format of the RDATA portion is as follows:
 
 ## Semantics
 
-For now, the only scheme defined is scheme=1 with the interpretation
-that when a new CDS/CDNSKEY (or CSYNC) RRset is published, a NOTIFY(CDS)
-(or NOTIFY(CSYNC)) message should be sent to the address and port listed
-in the corresponding DSYNC record.
+For now, the only scheme defined is scheme=1. It indicates that when a
+new CDS/CDNSKEY (or CSYNC) RRset is published, a NOTIFY(CDS) (or
+NOTIFY(CSYNC)) message should be sent to the address and port listed
+in the corresponding DSYNC record, using conventional {{!RFC1035}} DNS
+transport.
 
 Example (for the owner names of these records, see {{signaling}}):
 
@@ -279,7 +280,8 @@ the notification sender MUST perform the following procedure:
    first label of the delegation owner name.
 
 2. Perform a lookup of type DSYNC for the lookup name, and validate the
-   response if DNSSEC is enabled. If a DSYNC RRset results, return it.
+   response if DNSSEC is enabled. If a positive DSYNC answer results,
+   return it.
 
 3. If the query resulted in a negative response:
 
