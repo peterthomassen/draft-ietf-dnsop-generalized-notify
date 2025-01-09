@@ -5,10 +5,10 @@
 DNSOP Working Group                                          J. Stenstam
 Internet-Draft                           The Swedish Internet Foundation
 Intended status: Standards Track                            P. Thomassen
-Expires: 11 July 2025                  deSEC, Secure Systems Engineering
+Expires: 13 July 2025                  deSEC, Secure Systems Engineering
                                                                J. Levine
                                                            Standcore LLC
-                                                          7 January 2025
+                                                          9 January 2025
 
 
                      Generalized DNS Notifications
@@ -48,7 +48,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 11 July 2025.
+   This Internet-Draft will expire on 13 July 2025.
 
 Copyright Notice
 
@@ -206,10 +206,11 @@ Table of Contents
 
 2.3.  Semantics
 
-   For now, the only scheme defined is scheme=1 with the interpretation
-   that when a new CDS/CDNSKEY (or CSYNC) RRset is published, a
-   NOTIFY(CDS) (or NOTIFY(CSYNC)) message should be sent to the address
-   and port listed in the corresponding DSYNC record.
+   For now, the only scheme defined is scheme=1.  It indicates that when
+   a new CDS/CDNSKEY (or CSYNC) RRset is published, a NOTIFY(CDS) (or
+   NOTIFY(CSYNC)) message should be sent to the address and port listed
+   in the corresponding DSYNC record, using conventional [RFC1035] DNS
+   transport.
 
    Example (for the owner names of these records, see Section 3):
 
@@ -335,8 +336,8 @@ Table of Contents
        the first label of the delegation owner name.
 
    2.  Perform a lookup of type DSYNC for the lookup name, and validate
-       the response if DNSSEC is enabled.  If a DSYNC RRset results,
-       return it.
+       the response if DNSSEC is enabled.  If a positive DSYNC answer
+       results, return it.
 
    3.  If the query resulted in a negative response:
 
