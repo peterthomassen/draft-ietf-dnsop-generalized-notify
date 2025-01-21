@@ -5,10 +5,10 @@
 DNSOP Working Group                                          J. Stenstam
 Internet-Draft                           The Swedish Internet Foundation
 Intended status: Standards Track                            P. Thomassen
-Expires: 13 July 2025                  deSEC, Secure Systems Engineering
+Expires: 25 July 2025                  deSEC, Secure Systems Engineering
                                                                J. Levine
                                                            Standcore LLC
-                                                          9 January 2025
+                                                         21 January 2025
 
 
                      Generalized DNS Notifications
@@ -48,7 +48,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 13 July 2025.
+   This Internet-Draft will expire on 25 July 2025.
 
 Copyright Notice
 
@@ -330,7 +330,7 @@ Table of Contents
 
    To locate the target for outgoing delegation maintenance
    notifications, the notification sender MUST perform the following
-   procedure:
+   steps:
 
    1.  Construct the lookup name, by injecting the _dsync label after
        the first label of the delegation owner name.
@@ -351,7 +351,7 @@ Table of Contents
           from ise.mie.jp or mie.jp!).  The initial DSYNC query relating
           to it is thus directed at city._dsync.ise.mie.jp.  This is
           expected to result in a negative response from jp, and another
-          query for city.ise.mie._dsync.jp is then required;
+          query for city.ise.mie._dsync.jp is then required.
 
        *  Otherwise, if the lookup name has any labels in front of the
           _dsync label, remove them to construct a new lookup name (such
@@ -583,7 +583,7 @@ Table of Contents
    Requests to register additional entries MUST include the following
    fields:
 
-   RRtype  Lists an RRtype that is defined for use.
+   RRtype  An RRtype that is defined for use
 
    Scheme  The mode used for contacting the desired notification address
 
@@ -626,9 +626,10 @@ Table of Contents
 
 8.  Acknowledgements
 
-   In order of first contribution: Joe Abley, Mark Andrews, Christian
-   Elmerot, Ólafur Guðmundsson, Paul Wouters, Brian Dickson, Warren
-   Kumari, Patrick Mevzek, Tim Wicinski, Q Misell, Stefan Ubbink
+   In order of first contribution or review: Joe Abley, Mark Andrews,
+   Christian Elmerot, Ólafur Guðmundsson, Paul Wouters, Brian Dickson,
+   Warren Kumari, Patrick Mevzek, Tim Wicinski, Q Misell, Stefan Ubbink,
+   Matthijs Mekking, Kevin P.  Fleming, Nicolai Leymann.
 
 9.  References
 
@@ -776,6 +777,10 @@ A.2.  Similar Issues for DS Maintenance and Beyond
    conceivable, the detailed specification is left for future work.
 
 Appendix B.  Change History (to be removed before publication)
+
+   *  draft-ietf-dnsop-generalized-notify-06
+
+      Nits from Dnsdir review
 
    *  draft-ietf-dnsop-generalized-notify-05
 
