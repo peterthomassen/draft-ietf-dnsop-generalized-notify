@@ -274,7 +274,7 @@ published new CDS, CDNSKEY and/or CSYNC records.
 ## Endpoint Discovery {#discovery}
 
 To locate the target for outgoing delegation maintenance notifications,
-the notification sender MUST perform the following procedure:
+the notification sender MUST perform the following steps:
 
 1. Construct the lookup name, by injecting the `_dsync` label after the
    first label of the delegation owner name.
@@ -295,7 +295,7 @@ the notification sender MUST perform the following procedure:
      from `ise.mie.jp` or `mie.jp`!). The initial DSYNC query relating
      to it is thus directed at `city._dsync.ise.mie.jp`. This is
      expected to result in a negative response from `jp`, and another
-     query for `city.ise.mie._dsync.jp` is then required;
+     query for `city.ise.mie._dsync.jp` is then required.
 
    - Otherwise, if the lookup name has any labels in front of the
      `_dsync` label, remove them to construct a new lookup name (such
@@ -522,7 +522,7 @@ The initial contents for the registry are as follows:
 Requests to register additional entries MUST include the following fields:
 
 RRtype
-: Lists an RRtype that is defined for use.
+: An RRtype that is defined for use
 
 Scheme
 : The mode used for contacting the desired notification address
@@ -569,10 +569,11 @@ Johan Stenstam's experimental nameserver implements this draft
 
 # Acknowledgements
 
-In order of first contribution:
+In order of first contribution or review:
 Joe Abley, Mark Andrews, Christian Elmerot, Ólafur Guðmundsson, Paul
 Wouters, Brian Dickson, Warren Kumari, Patrick Mevzek, Tim Wicinski,
-Q Misell, Stefan Ubbink
+Q Misell, Stefan Ubbink, Matthijs Mekking, Kevin P. Fleming, Nicolai
+Leymann.
 
 --- back
 
@@ -625,6 +626,10 @@ conceivable, the detailed specification is left for future work.
 
 
 # Change History (to be removed before publication)
+
+* draft-ietf-dnsop-generalized-notify-06
+
+> Nits from Dnsdir review
 
 * draft-ietf-dnsop-generalized-notify-05
 
