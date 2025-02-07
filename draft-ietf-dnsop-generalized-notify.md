@@ -104,6 +104,9 @@ of the parent and then look up that information (see {{discovery}}).
 
 # DSYNC RR Type {#dsyncrdtype}
 
+This section defines the DSYNC RR type which is subsequently used for
+discovering notification endpoints.
+
 ## Wire Format
 
 The DSYNC RDATA wire format is encoded as follows:
@@ -573,7 +576,7 @@ In order of first contribution or review:
 Joe Abley, Mark Andrews, Christian Elmerot, Ólafur Guðmundsson, Paul
 Wouters, Brian Dickson, Warren Kumari, Patrick Mevzek, Tim Wicinski,
 Q Misell, Stefan Ubbink, Matthijs Mekking, Kevin P. Fleming, Nicolai
-Leymann.
+Leymann, Giuseppe Fioccola.
 
 --- back
 
@@ -628,6 +631,8 @@ conceivable, the detailed specification is left for future work.
 # Change History (to be removed before publication)
 
 * draft-ietf-dnsop-generalized-notify-06
+
+> Nits from Opsdir review
 
 > Nits from Dnsdir review
 
