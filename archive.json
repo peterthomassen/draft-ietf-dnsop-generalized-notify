@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-02-06T00:37:14.739658+00:00",
+  "timestamp": "2025-02-09T00:39:50.491403+00:00",
   "repo": "peterthomassen/draft-ietf-dnsop-generalized-notify",
   "labels": [
     {
@@ -1530,6 +1530,32 @@
       "mergeCommit": {
         "oid": "50190953147a7214707177e24e19483c6d1e6cab"
       },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 38,
+      "id": "PR_kwDOIax6Es6KbUpZ",
+      "title": "Nits from Opsdir review",
+      "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/pull/38",
+      "state": "OPEN",
+      "author": "peterthomassen",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-02-07T14:32:15Z",
+      "updatedAt": "2025-02-07T14:32:15Z",
+      "baseRepository": "peterthomassen/draft-ietf-dnsop-generalized-notify",
+      "baseRefName": "main",
+      "baseRefOid": "7f06bc5531449d5d24aaf081e5d0faca4c452fce",
+      "headRepository": "peterthomassen/draft-ietf-dnsop-generalized-notify",
+      "headRefName": "20250207_opsdir",
+      "headRefOid": "48565696869dc294175191bc33226804c5da1425",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
       "comments": [],
       "reviews": []
     }
