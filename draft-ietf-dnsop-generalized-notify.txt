@@ -5,10 +5,10 @@
 DNSOP Working Group                                          J. Stenstam
 Internet-Draft                           The Swedish Internet Foundation
 Intended status: Standards Track                            P. Thomassen
-Expires: 25 July 2025                  deSEC, Secure Systems Engineering
+Expires: 14 August 2025                deSEC, Secure Systems Engineering
                                                                J. Levine
                                                            Standcore LLC
-                                                         21 January 2025
+                                                        10 February 2025
 
 
                      Generalized DNS Notifications
@@ -48,7 +48,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 25 July 2025.
+   This Internet-Draft will expire on 14 August 2025.
 
 Copyright Notice
 
@@ -158,6 +158,9 @@ Table of Contents
    capitals, as shown here.
 
 2.  DSYNC RR Type
+
+   This section defines the DSYNC RR type which is subsequently used for
+   discovering notification endpoints.
 
 2.1.  Wire Format
 
@@ -629,7 +632,8 @@ Table of Contents
    In order of first contribution or review: Joe Abley, Mark Andrews,
    Christian Elmerot, Ólafur Guðmundsson, Paul Wouters, Brian Dickson,
    Warren Kumari, Patrick Mevzek, Tim Wicinski, Q Misell, Stefan Ubbink,
-   Matthijs Mekking, Kevin P.  Fleming, Nicolai Leymann.
+   Matthijs Mekking, Kevin P.  Fleming, Nicolai Leymann, Giuseppe
+   Fioccola.
 
 9.  References
 
@@ -779,6 +783,8 @@ A.2.  Similar Issues for DS Maintenance and Beyond
 Appendix B.  Change History (to be removed before publication)
 
    *  draft-ietf-dnsop-generalized-notify-06
+
+      Nits from Opsdir review
 
       Nits from Dnsdir review
 
