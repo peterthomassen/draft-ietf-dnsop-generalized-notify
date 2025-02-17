@@ -5,10 +5,10 @@
 DNSOP Working Group                                          J. Stenstam
 Internet-Draft                           The Swedish Internet Foundation
 Intended status: Standards Track                            P. Thomassen
-Expires: 14 August 2025                deSEC, Secure Systems Engineering
+Expires: 21 August 2025                deSEC, Secure Systems Engineering
                                                                J. Levine
                                                            Standcore LLC
-                                                        10 February 2025
+                                                        17 February 2025
 
 
                      Generalized DNS Notifications
@@ -48,7 +48,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 14 August 2025.
+   This Internet-Draft will expire on 21 August 2025.
 
 Copyright Notice
 
@@ -180,13 +180,13 @@ Table of Contents
       the former indicating an updated CDS or CDNSKEY record set.
 
    Scheme  The mode used for contacting the desired notification
-      address.  This is an 8 bit unsigned integer.  Records with value 0
+      address.  This is an 8-bit unsigned integer.  Records with value 0
       (null scheme) are ignored by consumers.  Value 1 is described in
       this document, and values 128-255 are reserved for private use.
       All other values are currently unspecified.
 
    Port  The port on the target host of the notification service.  This
-      is a 16 bit unsigned integer in network byte order.
+      is a 16-bit unsigned integer in network byte order.
 
    Target  The fully-qualified, uncompressed domain name of the target
       host providing the service of listening for generalized
@@ -449,7 +449,7 @@ Table of Contents
        If the NOTIFY message contains an [RFC9567] EDNS0 Report-Channel
        option with an agent domain subordinate or equal to one of the NS
        hostnames listed in the delegation, the processing party SHOULD
-       report any errors occuring during CDS/CDNSKEY processing by
+       report any errors occurring during CDS/CDNSKEY processing by
        sending a report query with an appropriate extended DNS error
        code as described in [RFC8914].  Reporting may be done
        asynchronously (outside of the NOTIFY transaction).
@@ -457,7 +457,7 @@ Table of Contents
        When using period scanning, notifications preempt the scanning
        timer.  If the NOTIFY-induced check finds that the CDS/CDNSKEY
        RRset is indeed new or has changed, the corresponding child's
-       timer may be reset and the scanning frequency reduced (e.g. to
+       timer may be reset and the scanning frequency reduced (e.g., to
        once a week).  If a CDS/CDNSKEY change is later detected through
        scanning (without having received a notification), NOTIFY-related
        state SHOULD be cleared, reverting to the default scanning
@@ -556,8 +556,8 @@ Table of Contents
 
 6.2.  DSYNC Scheme Registration
 
-   IANA has created and will maintain the following new registry in the
-   "Domain Name System (DNS) Parameters" registry group:
+   IANA is requested to create and maintain the following new registry
+   in the "Domain Name System (DNS) Parameters" registry group:
 
    Name  DSYNC: Location of Synchronization Endpoints
 
@@ -633,7 +633,7 @@ Table of Contents
    Christian Elmerot, Ólafur Guðmundsson, Paul Wouters, Brian Dickson,
    Warren Kumari, Patrick Mevzek, Tim Wicinski, Q Misell, Stefan Ubbink,
    Matthijs Mekking, Kevin P.  Fleming, Nicolai Leymann, Giuseppe
-   Fioccola.
+   Fioccola, Peter Yee.
 
 9.  References
 
@@ -783,6 +783,8 @@ A.2.  Similar Issues for DS Maintenance and Beyond
 Appendix B.  Change History (to be removed before publication)
 
    *  draft-ietf-dnsop-generalized-notify-06
+
+      Nits from Genart review
 
       Nits from Opsdir review
 
