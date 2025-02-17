@@ -127,13 +127,13 @@ the former indicating an updated CDS or CDNSKEY record set.
 
 Scheme
 : The mode used for contacting the desired notification address. This is an
-8 bit unsigned integer. Records with value 0 (null scheme) are ignored by consumers.
+8-bit unsigned integer. Records with value 0 (null scheme) are ignored by consumers.
 Value 1 is described in this document, and values 128-255 are reserved for
 private use.  All other values are currently unspecified.
 
 Port
 : The port on the target host of the notification service. This
-is a 16 bit unsigned integer in network byte order.
+is a 16-bit unsigned integer in network byte order.
 
 Target
 : The fully-qualified, uncompressed domain name of the target host
@@ -390,7 +390,7 @@ the receiving side (parent registry or registrar) has two options:
      If the NOTIFY message contains an {{!RFC9567}} EDNS0 Report-Channel
      option with an agent domain subordinate or equal to one of the NS
      hostnames listed in the delegation, the processing party SHOULD
-     report any errors occuring during CDS/CDNSKEY processing by sending
+     report any errors occurring during CDS/CDNSKEY processing by sending
      a report query with an appropriate extended DNS error code as
      described in {{!RFC8914}}. Reporting may be done asynchronously
      (outside of the NOTIFY transaction).
@@ -398,7 +398,7 @@ the receiving side (parent registry or registrar) has two options:
      When using period scanning, notifications preempt the scanning
      timer. If the NOTIFY-induced check finds that the CDS/CDNSKEY RRset
      is indeed new or has changed, the corresponding child's timer may
-     be reset and the scanning frequency reduced (e.g. to once a week).
+     be reset and the scanning frequency reduced (e.g., to once a week).
      If a CDS/CDNSKEY change is later detected through scanning (without
      having received a notification), NOTIFY-related state SHOULD be
      cleared, reverting to the default scanning schedule for this child.
@@ -501,7 +501,8 @@ Reference
 
 ## DSYNC Scheme Registration
 
-IANA has created and will maintain the following new registry in the "Domain Name System (DNS) Parameters" registry group:
+IANA is requested to create and maintain the following new registry in the
+"Domain Name System (DNS) Parameters" registry group:
 
 Name
 : DSYNC: Location of Synchronization Endpoints
@@ -576,7 +577,7 @@ In order of first contribution or review:
 Joe Abley, Mark Andrews, Christian Elmerot, Ólafur Guðmundsson, Paul
 Wouters, Brian Dickson, Warren Kumari, Patrick Mevzek, Tim Wicinski,
 Q Misell, Stefan Ubbink, Matthijs Mekking, Kevin P. Fleming, Nicolai
-Leymann, Giuseppe Fioccola.
+Leymann, Giuseppe Fioccola, Peter Yee.
 
 --- back
 
@@ -631,6 +632,8 @@ conceivable, the detailed specification is left for future work.
 # Change History (to be removed before publication)
 
 * draft-ietf-dnsop-generalized-notify-06
+
+> Nits from Genart review
 
 > Nits from Opsdir review
 
