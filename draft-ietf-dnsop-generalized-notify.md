@@ -568,6 +568,8 @@ Johan Stenstam's experimental nameserver implements this draft
 
 ## Parent-side
 
+- SWITCH (.CH/.LI) implementation is under way.
+
 - .SE/.NU will implement this once it is an RFC.
 
 
