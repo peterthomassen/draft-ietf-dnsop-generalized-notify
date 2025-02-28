@@ -557,8 +557,6 @@ Reference
 : Location of specification or registration source
 
 Registration requests are to be recorded by IANA after Expert Review {{!RFC8126}}.
-The expert review should validate that the RRtype and Scheme do not conflict
-with any existing allocations.
 
 ## _dsync Underscore Name
 
@@ -598,7 +596,7 @@ In order of first contribution or review:
 Joe Abley, Mark Andrews, Christian Elmerot, Ólafur Guðmundsson, Paul
 Wouters, Brian Dickson, Warren Kumari, Patrick Mevzek, Tim Wicinski,
 Q Misell, Stefan Ubbink, Matthijs Mekking, Kevin P. Fleming, Nicolai
-Leymann, Giuseppe Fioccola, Peter Yee, Tony Li, Paul Wouters.
+Leymann, Giuseppe Fioccola, Peter Yee, Tony Li, Paul Wouters, Roman Danyliw.
 
 --- back
 
