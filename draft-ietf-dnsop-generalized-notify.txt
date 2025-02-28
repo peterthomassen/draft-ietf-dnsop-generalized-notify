@@ -5,10 +5,10 @@
 DNSOP Working Group                                          J. Stenstam
 Internet-Draft                           The Swedish Internet Foundation
 Intended status: Standards Track                            P. Thomassen
-Expires: 21 August 2025                deSEC, Secure Systems Engineering
+Expires: 1 September 2025              deSEC, Secure Systems Engineering
                                                                J. Levine
                                                            Standcore LLC
-                                                        17 February 2025
+                                                        28 February 2025
 
 
                      Generalized DNS Notifications
@@ -48,7 +48,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 21 August 2025.
+   This Internet-Draft will expire on 1 September 2025.
 
 Copyright Notice
 
@@ -624,6 +624,8 @@ Table of Contents
    *  deSEC implementation under way (Q1/2025)
 
 7.2.  Parent-side
+
+   *  SWITCH (.CH/.LI) implementation is under way.
 
    *  .SE/.NU will implement this once it is an RFC.
 
