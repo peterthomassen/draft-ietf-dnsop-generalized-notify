@@ -129,11 +129,12 @@ Scheme
 : The mode used for contacting the desired notification address. This is an
 8-bit unsigned integer. Records with value 0 (null scheme) are ignored by consumers.
 Value 1 is described in this document, and values 128-255 are reserved for
-private use.  All other values are currently unspecified.
+private use.  All other values are currently unassigned.
 
 Port
 : The port on the target host of the notification service. This
-is a 16-bit unsigned integer in network byte order.
+is a 16-bit unsigned integer in network byte order. Records with
+value 0 are ignored by consumers.
 
 Target
 : The fully-qualified, uncompressed domain name of the target host
@@ -147,7 +148,8 @@ The presentation format of the RDATA portion is as follows:
 - The RRtype field is represented as a mnemonic from the "Resource
   Record (RR) TYPEs" registry.
 
-- The Scheme field is represented as an unsigned decimal integer.
+- The Scheme field is represented by its mnemonic if assigned (see
+  {{schemeregistry}}), otherwise as an unsigned decimal integer.
 
 - The Port field is represented as an unsigned decimal integer.
 
@@ -156,16 +158,16 @@ The presentation format of the RDATA portion is as follows:
 
 ## Semantics
 
-For now, the only scheme defined is scheme=1. It indicates that when a
-new CDS/CDNSKEY (or CSYNC) RRset is published, a NOTIFY(CDS) (or
+For now, the only scheme defined is 1 (mnemonic: NOTIFY). It indicates that
+when a new CDS/CDNSKEY (or CSYNC) RRset is published, a NOTIFY(CDS) (or
 NOTIFY(CSYNC)) message should be sent to the address and port listed
 in the corresponding DSYNC record, using conventional {{!RFC1035}} DNS
 transport.
 
 Example (for the owner names of these records, see {{signaling}}):
 
-    IN DSYNC CDS   1 5359 cds-scanner.example.net.
-    IN DSYNC CSYNC 1 5360 csync-scanner.example.net.
+    IN DSYNC  CDS   NOTIFY 5359 cds-scanner.example.net.
+    IN DSYNC  CSYNC NOTIFY 5360 csync-scanner.example.net.
 
 Should a need for other mechanisms arise, other schemes may be defined
 to deal with such requirements using alternative logic.
@@ -237,7 +239,7 @@ As an example, consider a registrar offering domains like
 provides the notification endpoint, e.g., `rr-endpoint.example:5300`,
 the parent may publish this information as follows:
 
-    child._dsync.example.  IN DSYNC  CDS  1 5300 rr-endpoint.example.
+    child._dsync.example.  IN DSYNC  CDS NOTIFY 5300 rr-endpoint.example.
 
 
 # Delegation Maintenance: CDS/CDNSKEY and CSYNC Notifications
@@ -279,7 +281,7 @@ published new CDS, CDNSKEY and/or CSYNC records.
 To locate the target for outgoing delegation maintenance notifications,
 the notification sender MUST perform the following steps:
 
-1. Construct the lookup name, by injecting the `_dsync` label after the
+1. Construct the lookup name, by inserting the `_dsync` label after the
    first label of the delegation owner name.
 
 2. Perform a lookup of type DSYNC for the lookup name, and validate the
@@ -499,7 +501,7 @@ Reference
 : (this document)
 
 
-## DSYNC Scheme Registration
+## DSYNC Scheme Registration {#schemeregistry}
 
 IANA is requested to create and maintain the following new registry in the
 "Domain Name System (DNS) Parameters" registry group:
@@ -515,13 +517,13 @@ Reference
 
 The initial contents for the registry are as follows:
 
-| RRtype | Scheme  | Purpose                | Reference       |
-| ------ | ------- | ---------------------- | --------------- |
-|        |       0 | Null scheme (no-op)    | (this document) |
-| CDS    |       1 | Delegation management  | (this document) |
-| CSYNC  |       1 | Delegation management  | (this document) |
-|        |   2-127 | Unassigned             |                 |
-|        | 128-255 | Reserved (private use) | (this document) |
+| RRtype | Scheme  | Mnemonic | Purpose                | Reference       |
+| ------ | ------- | -------- | ---------------------- | --------------- |
+|        |       0 |          | Null scheme (no-op)    | (this document) |
+| CDS    |       1 | NOTIFY   | Delegation management  | (this document) |
+| CSYNC  |       1 | NOTIFY   | Delegation management  | (this document) |
+|        |   2-127 |          | Unassigned             |                 |
+|        | 128-255 |          | Reserved (private use) | (this document) |
 
 Requests to register additional entries MUST include the following fields:
 
@@ -530,6 +532,9 @@ RRtype
 
 Scheme
 : The mode used for contacting the desired notification address
+
+Mnemonic
+: The scheme's shorthand string used in presentation format
 
 Purpose
 : Use case description
@@ -579,7 +584,7 @@ In order of first contribution or review:
 Joe Abley, Mark Andrews, Christian Elmerot, Ólafur Guðmundsson, Paul
 Wouters, Brian Dickson, Warren Kumari, Patrick Mevzek, Tim Wicinski,
 Q Misell, Stefan Ubbink, Matthijs Mekking, Kevin P. Fleming, Nicolai
-Leymann, Giuseppe Fioccola, Peter Yee.
+Leymann, Giuseppe Fioccola, Peter Yee, Paul Wouters.
 
 --- back
 
@@ -632,6 +637,10 @@ conceivable, the detailed specification is left for future work.
 
 
 # Change History (to be removed before publication)
+
+* draft-ietf-dnsop-generalized-notify-07
+
+> IESG review changes (notable: scheme now has mnemonic; else editorial)
 
 * draft-ietf-dnsop-generalized-notify-06
 
