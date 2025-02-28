@@ -9,12 +9,16 @@
 <meta content="Peter Thomassen" name="author">
 <meta content="John Levine" name="author">
 <meta content="
-       This document extends the use of DNS NOTIFY (RFC 1996) beyond conventional
-zone transfer hints, bringing the benefits of ad-hoc notifications to DNS
-delegation maintenance in general.  Use cases include DNSSEC bootstrapping
-and key rollovers hints, and quicker changes to a delegation's NS record set. 
+       This document generalizes and extends the use of DNS NOTIFY (RFC 1996) beyond
+conventional zone transfer hints, to allow triggering other types of actions
+via the DNS that were previously lacking a trigger mechanism.
+Notifications merely nudge the receiver to initiate the desired action promptly
+(instead of on a schedule); they do not alter the action itself
+(including any security checks it might employ). 
        To enable this functionality, a method for discovering the receiver endpoint
-for such notification message is introduced, via the new DSYNC record type. 
+for such notification messages is introduced, via the new DSYNC record type.
+Notification types are recorded in a new registry, with initial support for
+parental NS and DS record updates including DNSSEC bootstrapping. 
        TO BE REMOVED: This document is being collaborated on in Github at:
  https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify .
 The most recent working version of the document, open issues, etc. should all be
@@ -1098,12 +1102,16 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <h1 id="title">Generalized DNS Notifications</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">This document extends the use of DNS NOTIFY (RFC 1996) beyond conventional
-zone transfer hints, bringing the benefits of ad-hoc notifications to DNS
-delegation maintenance in general.  Use cases include DNSSEC bootstrapping
-and key rollovers hints, and quicker changes to a delegation's NS record set.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">This document generalizes and extends the use of DNS NOTIFY (RFC 1996) beyond
+conventional zone transfer hints, to allow triggering other types of actions
+via the DNS that were previously lacking a trigger mechanism.
+Notifications merely nudge the receiver to initiate the desired action promptly
+(instead of on a schedule); they do not alter the action itself
+(including any security checks it might employ).<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 <p id="section-abstract-2">To enable this functionality, a method for discovering the receiver endpoint
-for such notification message is introduced, via the new DSYNC record type.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
+for such notification messages is introduced, via the new DSYNC record type.
+Notification types are recorded in a new registry, with initial support for
+parental NS and DS record updates including DNSSEC bootstrapping.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
 <p id="section-abstract-3">TO BE REMOVED: This document is being collaborated on in Github at:
 <a href="https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify">https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify</a>.
 The most recent working version of the document, open issues, etc. should all be
@@ -1737,35 +1745,44 @@ NOTIFY(CDS).<a href="#section-4.3-6" class="pilcrow">¶</a></p>
       <h2 id="name-security-considerations">
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-5-1">The original NOTIFY specification sidesteps most security issues by not
+<p id="section-5-1">If an action is triggered by the receipt of a DNS NOTIFY, its execution relies
+on the same security model which the receiving party would apply if the action
+had been triggered by something else. This is because the notification affects
+the action's timing alone. For example, DS bootstrapping is expected to be
+always performed in the same manner; this includes all applicable security and
+authentication requirements (e.g., <span>[<a href="#RFC9615" class="cite xref">RFC9615</a>]</span>) which the parent
+registry/registrar has chosen to apply, independently of the type of trigger.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-2">The original NOTIFY specification sidesteps most security issues by not
 relying on the information in the NOTIFY message in any way, and instead
 only using it to "enter the state it would if the zone's refresh timer
-had expired" (<span><a href="https://rfc-editor.org/rfc/rfc1996#section-4.7" class="relref">Section 4.7</a> of [<a href="#RFC1996" class="cite xref">RFC1996</a>]</span>).<a href="#section-5-1" class="pilcrow">¶</a></p>
-<p id="section-5-2">This security model is reused for generalized NOTIFY messages. It
+had expired" (<span><a href="https://rfc-editor.org/rfc/rfc1996#section-4.7" class="relref">Section 4.7</a> of [<a href="#RFC1996" class="cite xref">RFC1996</a>]</span>).<a href="#section-5-2" class="pilcrow">¶</a></p>
+<p id="section-5-3">This security model is reused for generalized NOTIFY messages. It
 therefore seems impossible to affect the behaviour of the recipient of
 the NOTIFY other than by hastening the timing for when different checks
-are initiated.<a href="#section-5-2" class="pilcrow">¶</a></p>
-<p id="section-5-3">The receipt of a notification message will, in general, cause the
+are initiated.
+As a consequence, while notifications themselves can be secured via access
+control mechanisms, this is not a requirement.<a href="#section-5-3" class="pilcrow">¶</a></p>
+<p id="section-5-4">The receipt of a notification message will, in general, cause the
 receiving party to perform one or more outbound queries for the records
 of interest (for example, NOTIFY(CDS) will cause CDS/CDNSKEY
 queries). When done using standard DNS, the size of these queries is
 comparable to that of the NOTIFY messages themselves, rendering any
 amplification attempts futile. The number of queries triggered per
 notification is also limited by the requirement that a NOTIFY message
-can refer to one child only.<a href="#section-5-3" class="pilcrow">¶</a></p>
-<p id="section-5-4">However, when the outgoing query occurs via encrypted transport, some
+can refer to one child only.<a href="#section-5-4" class="pilcrow">¶</a></p>
+<p id="section-5-5">However, when the outgoing query occurs via encrypted transport, some
 amplification is possible, both with respect to bandwidth and
 computational burden. In this case, the usual principle of bounding the
-work, even under unreasonable events, applies.<a href="#section-5-4" class="pilcrow">¶</a></p>
-<p id="section-5-5">Receivers therefore MUST implement rate limiting for notification
+work, even under unreasonable events, applies.<a href="#section-5-5" class="pilcrow">¶</a></p>
+<p id="section-5-6">Receivers therefore MUST implement rate limiting for notification
 processing. It is RECOMMENDED to configure rate limiting independently
 for both the notification's source IP address and the name of the zone
 that is conveyed in the NOTIFY message. Rate limiting also mitigates
-processing load from garbage notifications.<a href="#section-5-5" class="pilcrow">¶</a></p>
-<p id="section-5-6">Alternative solutions (such as signing notifications and validating
+processing load from garbage notifications.<a href="#section-5-6" class="pilcrow">¶</a></p>
+<p id="section-5-7">Alternative solutions (such as signing notifications and validating
 their signatures) appear significantly more expensive without tangible
-benefit.<a href="#section-5-6" class="pilcrow">¶</a></p>
-<p id="section-5-7">In order to facilitate schemes that are authenticated outside of DNSSEC
+benefit.<a href="#section-5-7" class="pilcrow">¶</a></p>
+<p id="section-5-8">In order to facilitate schemes that are authenticated outside of DNSSEC
 (such as via SIG(0)), zones containing DSYNC records are not required to
 be signed. Spoofed DSYNC responses would prevent notifications from
 reaching their legitimate target, and a different party may receive
@@ -1773,7 +1790,7 @@ unsolicited notifications; both effects, however, can also be achieved
 in the presence of DNSSEC. The illegitimate target is also enabled to
 learn notification contents in real-time, which may be a privacy concern
 for the sender. If so, the sender may choose to ignore unsigned DSYNC
-records.<a href="#section-5-7" class="pilcrow">¶</a></p>
+records.<a href="#section-5-8" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana-considerations">

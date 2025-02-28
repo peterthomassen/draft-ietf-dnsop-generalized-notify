@@ -16,15 +16,19 @@ Expires: 1 September 2025              deSEC, Secure Systems Engineering
 
 Abstract
 
-   This document extends the use of DNS NOTIFY (RFC 1996) beyond
-   conventional zone transfer hints, bringing the benefits of ad-hoc
-   notifications to DNS delegation maintenance in general.  Use cases
-   include DNSSEC bootstrapping and key rollovers hints, and quicker
-   changes to a delegation's NS record set.
+   This document generalizes and extends the use of DNS NOTIFY (RFC
+   1996) beyond conventional zone transfer hints, to allow triggering
+   other types of actions via the DNS that were previously lacking a
+   trigger mechanism.  Notifications merely nudge the receiver to
+   initiate the desired action promptly (instead of on a schedule); they
+   do not alter the action itself (including any security checks it
+   might employ).
 
    To enable this functionality, a method for discovering the receiver
-   endpoint for such notification message is introduced, via the new
-   DSYNC record type.
+   endpoint for such notification messages is introduced, via the new
+   DSYNC record type.  Notification types are recorded in a new
+   registry, with initial support for parental NS and DS record updates
+   including DNSSEC bootstrapping.
 
    TO BE REMOVED: This document is being collaborated on in Github at:
    https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify
@@ -493,6 +497,15 @@ Table of Contents
 
 5.  Security Considerations
 
+   If an action is triggered by the receipt of a DNS NOTIFY, its
+   execution relies on the same security model which the receiving party
+   would apply if the action had been triggered by something else.  This
+   is because the notification affects the action's timing alone.  For
+   example, DS bootstrapping is expected to be always performed in the
+   same manner; this includes all applicable security and authentication
+   requirements (e.g., [RFC9615]) which the parent registry/registrar
+   has chosen to apply, independently of the type of trigger.
+
    The original NOTIFY specification sidesteps most security issues by
    not relying on the information in the NOTIFY message in any way, and
    instead only using it to "enter the state it would if the zone's
@@ -501,7 +514,9 @@ Table of Contents
    This security model is reused for generalized NOTIFY messages.  It
    therefore seems impossible to affect the behaviour of the recipient
    of the NOTIFY other than by hastening the timing for when different
-   checks are initiated.
+   checks are initiated.  As a consequence, while notifications
+   themselves can be secured via access control mechanisms, this is not
+   a requirement.
 
    The receipt of a notification message will, in general, cause the
    receiving party to perform one or more outbound queries for the
