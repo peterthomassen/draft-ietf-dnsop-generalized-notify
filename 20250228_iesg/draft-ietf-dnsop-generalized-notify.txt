@@ -5,10 +5,10 @@
 DNSOP Working Group                                          J. Stenstam
 Internet-Draft                           The Swedish Internet Foundation
 Intended status: Standards Track                            P. Thomassen
-Expires: 1 September 2025              deSEC, Secure Systems Engineering
+Expires: 2 September 2025              deSEC, Secure Systems Engineering
                                                                J. Levine
                                                            Standcore LLC
-                                                        28 February 2025
+                                                            1 March 2025
 
 
                      Generalized DNS Notifications
@@ -20,8 +20,8 @@ Abstract
    1996) beyond conventional zone transfer hints, to allow triggering
    other types of actions via the DNS that were previously lacking a
    trigger mechanism.  Notifications merely nudge the receiver to
-   initiate the desired action promptly (instead of on a schedule); they
-   do not alter the action itself (including any security checks it
+   initiate a predefined action promptly (instead of on a schedule);
+   they do not alter the action itself (including any security checks it
    might employ).
 
    To enable this functionality, a method for discovering the receiver
@@ -52,7 +52,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 1 September 2025.
+   This Internet-Draft will expire on 2 September 2025.
 
 Copyright Notice
 
@@ -501,10 +501,10 @@ Table of Contents
    execution relies on the same security model which the receiving party
    would apply if the action had been triggered by something else.  This
    is because the notification affects the action's timing alone.  For
-   example, DS bootstrapping is expected to be always performed in the
-   same manner; this includes all applicable security and authentication
-   requirements (e.g., [RFC9615]) which the parent registry/registrar
-   has chosen to apply, independently of the type of trigger.
+   example, DS bootstrapping is expected to be performed the same way
+   independently of the type of trigger; this includes all security and
+   authentication requirements (e.g., [RFC9615]) which the parent
+   registry/registrar has chosen to apply.
 
    The original NOTIFY specification sidesteps most security issues by
    not relying on the information in the NOTIFY message in any way, and
