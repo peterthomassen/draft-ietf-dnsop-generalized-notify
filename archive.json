@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-02-27T00:38:18.819238+00:00",
+  "timestamp": "2025-03-02T00:41:15.240986+00:00",
   "repo": "peterthomassen/draft-ietf-dnsop-generalized-notify",
   "labels": [
     {
@@ -1558,6 +1558,32 @@
       "mergeCommit": {
         "oid": "8c6723e90d08116c8970cdaf623dfb0388c488ec"
       },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 39,
+      "id": "PR_kwDOIax6Es6M8-fm",
+      "title": "Changes from IESG Review",
+      "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/pull/39",
+      "state": "OPEN",
+      "author": "peterthomassen",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-02-28T15:09:54Z",
+      "updatedAt": "2025-03-01T14:48:20Z",
+      "baseRepository": "peterthomassen/draft-ietf-dnsop-generalized-notify",
+      "baseRefName": "main",
+      "baseRefOid": "39e40caadfe91d880c51f0604106337de429f79b",
+      "headRepository": "peterthomassen/draft-ietf-dnsop-generalized-notify",
+      "headRefName": "20250228_iesg",
+      "headRefOid": "e3d791d189876248a3fb885503b96b91a2d547ec",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
       "comments": [],
       "reviews": []
     }
