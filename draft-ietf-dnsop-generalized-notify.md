@@ -228,9 +228,9 @@ therefore NOT RECOMMENDED.
 
 ## Child-specific Method
 
-It is also possible to publish child-specific records, where in place of
-the wildcard label, the child's FQDN with the parent zone's labels
-stripped is used.
+It is also possible to publish child-specific records where the parent zone's
+labels are stripped from the child's FQDN and the result is used in place of
+the wildcard label.
 
 As an example, consider a registrar offering domains like
 `child.example`, delegated from `example` zone. If the registrar
@@ -579,7 +579,7 @@ In order of first contribution or review:
 Joe Abley, Mark Andrews, Christian Elmerot, Ólafur Guðmundsson, Paul
 Wouters, Brian Dickson, Warren Kumari, Patrick Mevzek, Tim Wicinski,
 Q Misell, Stefan Ubbink, Matthijs Mekking, Kevin P. Fleming, Nicolai
-Leymann, Giuseppe Fioccola, Peter Yee.
+Leymann, Giuseppe Fioccola, Peter Yee, Tony Li.
 
 --- back
 
@@ -632,6 +632,10 @@ conceivable, the detailed specification is left for future work.
 
 
 # Change History (to be removed before publication)
+
+* draft-ietf-dnsop-generalized-notify-07
+
+> Nits from Opsdir telechat review
 
 * draft-ietf-dnsop-generalized-notify-06
 
