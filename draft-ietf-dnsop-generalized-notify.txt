@@ -5,10 +5,10 @@
 DNSOP Working Group                                          J. Stenstam
 Internet-Draft                           The Swedish Internet Foundation
 Intended status: Standards Track                            P. Thomassen
-Expires: 1 September 2025              deSEC, Secure Systems Engineering
+Expires: 4 September 2025              deSEC, Secure Systems Engineering
                                                                J. Levine
                                                            Standcore LLC
-                                                        28 February 2025
+                                                            3 March 2025
 
 
                      Generalized DNS Notifications
@@ -16,15 +16,19 @@ Expires: 1 September 2025              deSEC, Secure Systems Engineering
 
 Abstract
 
-   This document extends the use of DNS NOTIFY (RFC 1996) beyond
-   conventional zone transfer hints, bringing the benefits of ad-hoc
-   notifications to DNS delegation maintenance in general.  Use cases
-   include DNSSEC bootstrapping and key rollovers hints, and quicker
-   changes to a delegation's NS record set.
+   This document generalizes and extends the use of DNS NOTIFY (RFC
+   1996) beyond conventional zone transfer hints, to allow triggering
+   other types of actions via the DNS that were previously lacking a
+   trigger mechanism.  Notifications merely nudge the receiver to
+   initiate a predefined action promptly (instead of on a schedule);
+   they do not alter the action itself (including any security checks it
+   might employ).
 
    To enable this functionality, a method for discovering the receiver
-   endpoint for such notification message is introduced, via the new
-   DSYNC record type.
+   endpoint for such notification messages is introduced, via the new
+   DSYNC record type.  Notification types are recorded in a new
+   registry, with initial support for parental NS and DS record updates
+   including DNSSEC bootstrapping.
 
    TO BE REMOVED: This document is being collaborated on in Github at:
    https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify
@@ -48,7 +52,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 1 September 2025.
+   This Internet-Draft will expire on 4 September 2025.
 
 Copyright Notice
 
@@ -183,10 +187,11 @@ Table of Contents
       address.  This is an 8-bit unsigned integer.  Records with value 0
       (null scheme) are ignored by consumers.  Value 1 is described in
       this document, and values 128-255 are reserved for private use.
-      All other values are currently unspecified.
+      All other values are currently unassigned.
 
    Port  The port on the target host of the notification service.  This
-      is a 16-bit unsigned integer in network byte order.
+      is a 16-bit unsigned integer in network byte order.  Records with
+      value 0 are ignored by consumers.
 
    Target  The fully-qualified, uncompressed domain name of the target
       host providing the service of listening for generalized
@@ -200,7 +205,8 @@ Table of Contents
    *  The RRtype field is represented as a mnemonic from the "Resource
       Record (RR) TYPEs" registry.
 
-   *  The Scheme field is represented as an unsigned decimal integer.
+   *  The Scheme field is represented by its mnemonic if assigned (see
+      Section 6.2), otherwise as an unsigned decimal integer.
 
    *  The Port field is represented as an unsigned decimal integer.
 
@@ -209,16 +215,16 @@ Table of Contents
 
 2.3.  Semantics
 
-   For now, the only scheme defined is scheme=1.  It indicates that when
-   a new CDS/CDNSKEY (or CSYNC) RRset is published, a NOTIFY(CDS) (or
-   NOTIFY(CSYNC)) message should be sent to the address and port listed
-   in the corresponding DSYNC record, using conventional [RFC1035] DNS
-   transport.
+   For now, the only scheme defined is 1 (mnemonic: NOTIFY).  It
+   indicates that when a new CDS/CDNSKEY (or CSYNC) RRset is published,
+   a NOTIFY(CDS) (or NOTIFY(CSYNC)) message should be sent to the
+   address and port listed in the corresponding DSYNC record, using
+   conventional [RFC1035] DNS transport.
 
    Example (for the owner names of these records, see Section 3):
 
-   IN DSYNC CDS   1 5359 cds-scanner.example.net.
-   IN DSYNC CSYNC 1 5360 csync-scanner.example.net.
+   IN DSYNC  CDS   NOTIFY 5359 cds-scanner.example.net.
+   IN DSYNC  CSYNC NOTIFY 5360 csync-scanner.example.net.
 
    Should a need for other mechanisms arise, other schemes may be
    defined to deal with such requirements using alternative logic.
@@ -284,16 +290,16 @@ Table of Contents
 
 3.2.  Child-specific Method
 
-   It is also possible to publish child-specific records, where in place
-   of the wildcard label, the child's FQDN with the parent zone's labels
-   stripped is used.
+   It is also possible to publish child-specific records where the
+   parent zone's labels are stripped from the child's FQDN and the
+   result is used in place of the wildcard label.
 
    As an example, consider a registrar offering domains like
    child.example, delegated from example zone.  If the registrar
    provides the notification endpoint, e.g., rr-endpoint.example:5300,
    the parent may publish this information as follows:
 
-   child._dsync.example.  IN DSYNC  CDS  1 5300 rr-endpoint.example.
+   child._dsync.example.  IN DSYNC  CDS NOTIFY 5300 rr-endpoint.example.
 
 4.  Delegation Maintenance: CDS/CDNSKEY and CSYNC Notifications
 
@@ -335,7 +341,7 @@ Table of Contents
    notifications, the notification sender MUST perform the following
    steps:
 
-   1.  Construct the lookup name, by injecting the _dsync label after
+   1.  Construct the lookup name, by inserting the _dsync label after
        the first label of the delegation owner name.
 
    2.  Perform a lookup of type DSYNC for the lookup name, and validate
@@ -491,6 +497,15 @@ Table of Contents
 
 5.  Security Considerations
 
+   If an action is triggered by the receipt of a DNS NOTIFY, its
+   execution relies on the same security model which the receiving party
+   would apply if the action had been triggered by something else.  This
+   is because the notification affects the action's timing alone.  For
+   example, DS bootstrapping is expected to be performed the same way
+   independently of the type of trigger; this includes all security and
+   authentication requirements (e.g., [RFC9615]) which the parent
+   registry/registrar has chosen to apply.
+
    The original NOTIFY specification sidesteps most security issues by
    not relying on the information in the NOTIFY message in any way, and
    instead only using it to "enter the state it would if the zone's
@@ -499,7 +514,9 @@ Table of Contents
    This security model is reused for generalized NOTIFY messages.  It
    therefore seems impossible to affect the behaviour of the recipient
    of the NOTIFY other than by hastening the timing for when different
-   checks are initiated.
+   checks are initiated.  As a consequence, while notifications
+   themselves can be secured via access control mechanisms, this is not
+   a requirement.
 
    The receipt of a notification message will, in general, cause the
    receiving party to perform one or more outbound queries for the
@@ -567,19 +584,23 @@ Table of Contents
 
    The initial contents for the registry are as follows:
 
-      +========+=========+========================+=================+
-      | RRtype | Scheme  | Purpose                | Reference       |
-      +========+=========+========================+=================+
-      |        | 0       | Null scheme (no-op)    | (this document) |
-      +--------+---------+------------------------+-----------------+
-      | CDS    | 1       | Delegation management  | (this document) |
-      +--------+---------+------------------------+-----------------+
-      | CSYNC  | 1       | Delegation management  | (this document) |
-      +--------+---------+------------------------+-----------------+
-      |        | 2-127   | Unassigned             |                 |
-      +--------+---------+------------------------+-----------------+
-      |        | 128-255 | Reserved (private use) | (this document) |
-      +--------+---------+------------------------+-----------------+
+     +========+=========+==========+=====================+===========+
+     | RRtype | Scheme  | Mnemonic | Purpose             | Reference |
+     +========+=========+==========+=====================+===========+
+     |        | 0       |          | Null scheme (no-op) | (this     |
+     |        |         |          |                     | document) |
+     +--------+---------+----------+---------------------+-----------+
+     | CDS    | 1       | NOTIFY   | Delegation          | (this     |
+     |        |         |          | management          | document) |
+     +--------+---------+----------+---------------------+-----------+
+     | CSYNC  | 1       | NOTIFY   | Delegation          | (this     |
+     |        |         |          | management          | document) |
+     +--------+---------+----------+---------------------+-----------+
+     |        | 2-127   |          | Unassigned          |           |
+     +--------+---------+----------+---------------------+-----------+
+     |        | 128-255 |          | Reserved (private   | (this     |
+     |        |         |          | use)                | document) |
+     +--------+---------+----------+---------------------+-----------+
 
                                   Table 1
 
@@ -590,13 +611,14 @@ Table of Contents
 
    Scheme  The mode used for contacting the desired notification address
 
+   Mnemonic  The scheme's shorthand string used in presentation format
+
    Purpose  Use case description
 
    Reference  Location of specification or registration source
 
    Registration requests are to be recorded by IANA after Expert Review
-   [RFC8126].  The expert review should validate that the RRtype and
-   Scheme do not conflict with any existing allocations.
+   [RFC8126].
 
 6.3.  _dsync Underscore Name
 
@@ -635,7 +657,7 @@ Table of Contents
    Christian Elmerot, Ólafur Guðmundsson, Paul Wouters, Brian Dickson,
    Warren Kumari, Patrick Mevzek, Tim Wicinski, Q Misell, Stefan Ubbink,
    Matthijs Mekking, Kevin P.  Fleming, Nicolai Leymann, Giuseppe
-   Fioccola, Peter Yee.
+   Fioccola, Peter Yee, Tony Li, Paul Wouters, Roman Danyliw.
 
 9.  References
 
@@ -783,6 +805,13 @@ A.2.  Similar Issues for DS Maintenance and Beyond
    conceivable, the detailed specification is left for future work.
 
 Appendix B.  Change History (to be removed before publication)
+
+   *  draft-ietf-dnsop-generalized-notify-07
+
+      IESG review changes (notable: scheme now has mnemonic; else
+      editorial)
+
+      Nits from Opsdir telechat review
 
    *  draft-ietf-dnsop-generalized-notify-06
 
