@@ -5,10 +5,10 @@
 DNSOP Working Group                                          J. Stenstam
 Internet-Draft                           The Swedish Internet Foundation
 Intended status: Standards Track                            P. Thomassen
-Expires: 2 September 2025              deSEC, Secure Systems Engineering
+Expires: 4 September 2025              deSEC, Secure Systems Engineering
                                                                J. Levine
                                                            Standcore LLC
-                                                            1 March 2025
+                                                            3 March 2025
 
 
                      Generalized DNS Notifications
@@ -52,7 +52,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 2 September 2025.
+   This Internet-Draft will expire on 4 September 2025.
 
 Copyright Notice
 
@@ -290,9 +290,9 @@ Table of Contents
 
 3.2.  Child-specific Method
 
-   It is also possible to publish child-specific records, where in place
-   of the wildcard label, the child's FQDN with the parent zone's labels
-   stripped is used.
+   It is also possible to publish child-specific records where the
+   parent zone's labels are stripped from the child's FQDN and the
+   result is used in place of the wildcard label.
 
    As an example, consider a registrar offering domains like
    child.example, delegated from example zone.  If the registrar
@@ -657,7 +657,7 @@ Table of Contents
    Christian Elmerot, Ólafur Guðmundsson, Paul Wouters, Brian Dickson,
    Warren Kumari, Patrick Mevzek, Tim Wicinski, Q Misell, Stefan Ubbink,
    Matthijs Mekking, Kevin P.  Fleming, Nicolai Leymann, Giuseppe
-   Fioccola, Peter Yee, Paul Wouters, Roman Danyliw.
+   Fioccola, Peter Yee, Tony Li, Paul Wouters, Roman Danyliw.
 
 9.  References
 
@@ -810,6 +810,8 @@ Appendix B.  Change History (to be removed before publication)
 
       IESG review changes (notable: scheme now has mnemonic; else
       editorial)
+
+      Nits from Opsdir telechat review
 
    *  draft-ietf-dnsop-generalized-notify-06
 
