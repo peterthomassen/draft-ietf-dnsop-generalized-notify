@@ -69,17 +69,19 @@ set of notification types will have a major positive benefit by
 allowing the DNS infrastructure to completely sidestep these
 inefficiencies. For additional context, see {{context}}.
 
+Although this document primarily deals with applying generalized notifications
+to the delegation maintenance use case, future extension for other applications
+(such as multi-signer key exchange) is possible.
+
 No DNS protocol changes are introduced by this document. The mechanism
 instead makes use of a wider range of DNS messages allowed by the protocol.
-Future extension for further use cases (such as multi-signer key exchange)
-is possible.
 
 Readers are expected to be familiar with DNSSEC {{!RFC9364}}, including
 {{?RFC6781}}, {{!RFC7344}}, {{!RFC7477}}, {{?RFC7583}}, {{!RFC8078}},
 {{?RFC8901}}, and {{!RFC9615}}.
 DNS-specific terminology can be found in {{!RFC9499}}.
 
-## Design Requirements
+## Design Requirements for Delegation Maintenance
 
 When the parent operator is interested in notifications for delegation
 maintenance (such as DS or NS update hints), a service will need to be
@@ -88,9 +90,9 @@ context, this service may be run by the parent operator themselves,
 or by a designated entity who is in charge of handling the domain's
 delegation data (such as a domain registrar).
 
-It seems desirable to minimize the number of steps that the notification
-sender needs to figure out where to send the NOTIFY. This suggests that
-the lookup process be ignorant of the details of the parent-side
+It seems desirable to minimize the number of steps that the notification sender
+needs to perform in order to figure out where to send the NOTIFY. This suggests
+that the lookup process be ignorant of the details of the parent-side
 relationships (e.g., whether there is a registrar or not). This is
 addressed by parameterizing the lookup with the name of the child. The
 parent operator may then (optionally) announce the notification endpoint
@@ -163,10 +165,9 @@ The presentation format of the RDATA portion is as follows:
 ## Semantics
 
 For now, the only scheme defined is 1 (mnemonic: NOTIFY). It indicates that
-when a new CDS/CDNSKEY (or CSYNC) RRset is published, a NOTIFY(CDS) (or
-NOTIFY(CSYNC)) message should be sent to the address and port listed
-in the corresponding DSYNC record, using conventional {{!RFC1035}} DNS
-transport.
+when a new CDS/CDNSKEY (or CSYNC) RRset is published, a NOTIFY message (see
+{{cnotify}}) should be sent to the address and port listed in the corresponding
+DSYNC record, using conventional {{!RFC1035}} DNS transport.
 
 Example (for the owner names of these records, see {{signaling}}):
 
@@ -194,18 +195,18 @@ DNS Update ({{!RFC2136}}), may (or may not) be more suitable in
 individual cases. Like generalized notifications, they similarly require
 a means for discovering where to send the API or DNS Update requests.
 
-The scope for the publication mechanism is therefore wider than only to
-support generalized notifications, and a unified approach that works
+As the scope for the publication mechanism is wider than only to
+support generalized notifications, a unified approach that works
 independently of the notification method is specified in this section.
 
 Parent operators participating in the discovery scheme for the purpose of
 delegation maintenance notifications MUST publish endpoint information
 using the record type defined in {{dsyncrdtype}} under the `_dsync`
-subdomain of the parent zone, as described in the following subsection.
+subdomain of the parent zone, as described in the following subsections.
 
 There MUST NOT be more than one DSYNC record for each combination of
 RRtype and Scheme.
-It is RECOMMENDED to secure the corresponding zone with DNSSEC.
+It is RECOMMENDED to secure zones containing DSYNC records with DNSSEC.
 
 For practical purposes, the parent operator MAY delegate the `_dsync`
 domain as a separate zone, and/or synthesize records under it. If
@@ -246,7 +247,7 @@ the parent may publish this information as follows:
     child._dsync.example.  IN DSYNC  CDS NOTIFY 5300 rr-endpoint.example.
 
 
-# Delegation Maintenance: CDS/CDNSKEY and CSYNC Notifications
+# Delegation Maintenance: CDS/CDNSKEY and CSYNC Notifications {#cnotify}
 
 Delegation maintenance notifications address the inefficiencies related
 to scanning child zones for CDS/CDNSKEY records
@@ -352,6 +353,8 @@ In order to learn about such failures, senders MAY include an
 request the receiving side to report any errors by making a report query
 with an appropriate extended DNS error code as described in
 {{!RFC8914}}.
+(The prohibition of this option in queries ({{?RFC9567, Section 6.1}}) only
+applies to resolver queries and thus does not cover NOTIFY message.)
 
 When including this EDNS0 option, its agent domain MUST be subordinate
 or equal to one of the NS hostnames, as listed in the child's delegation
@@ -379,38 +382,41 @@ This opens up the possibility of having an arbitrary party (e.g., a
 side-car service) send the notifications, enabling this functionality
 even before the emergence of native support in nameserver software.
 
-## Processing of NOTIFY Messages
+## Processing of NOTIFY Messages for Delegation Maintenance
 
-NOTIFY(CDS) messages carrying notification payloads (records) for
+The following algorithm applies to NOTIFY(CDS) and NOTIFY(CSYNC) processing.
+
+NOTIFY messages carrying notification payloads (records) for
 several child zones MUST be discarded, as sending them is an error.
 
-Upon receipt of a (potentially forwarded) valid NOTIFY(CDS) message for
-a particular child zone at the published address for CDS notifications,
+Upon receipt of a (potentially forwarded) valid NOTIFY message for
+a particular child zone at the published notification endpoint,
 the receiving side (parent registry or registrar) has two options:
 
   1. Acknowledge receipt by sending a NOTIFY response as described in
      {{!RFC1996}} Section 4.7 (identical to NOTIFY query, but with QR
-     bit set) and schedule an immediate check of the CDS and CDNSKEY
-     RRsets as published by that particular child zone.
+     bit set and any EDNS0 Report-Channel options removed), and schedule
+     an immediate check of the CDS/CDNSKEY/CSYNC RRsets published by that
+     particular child zone (as appropriate for the type of NOTIFY received).
 
      If the NOTIFY message contains an {{!RFC9567}} EDNS0 Report-Channel
      option with an agent domain subordinate or equal to one of the NS
      hostnames listed in the delegation, the processing party SHOULD
-     report any errors occurring during CDS/CDNSKEY processing by sending
+     report any errors occurring during CDS/CDNSKEY/CSYNC processing by sending
      a report query with an appropriate extended DNS error code as
      described in {{!RFC8914}}. Reporting may be done asynchronously
      (outside of the NOTIFY transaction).
 
-     When using period scanning, notifications preempt the scanning
-     timer. If the NOTIFY-induced check finds that the CDS/CDNSKEY RRset
+     When using periodic scanning, notifications preempt the scanning
+     timer. If the NOTIFY-induced check finds that the CDS/CDNSKEY/CSYNC RRset
      is indeed new or has changed, the corresponding child's timer may
      be reset and the scanning frequency reduced (e.g., to once a week).
-     If a CDS/CDNSKEY change is later detected through scanning (without
+     If a CDS/CDNSKEY/CSYNC change is later detected through scanning (without
      having received a notification), NOTIFY-related state SHOULD be
      cleared, reverting to the default scanning schedule for this child.
 
-     When introducing CDS/CDNSKEY scanning support at the same time as
-     NOTIFY(CDS) support, backwards compatibility considerations
+     When introducing CDS/CDNSKEY/CSYNC scanning support at the same time
+     as NOTIFY support, backwards compatibility considerations
      regarding the scanning interval do not apply; a low-frequency
      scanning schedule MAY thus be used by default in such cases.
 
@@ -422,17 +428,13 @@ the receiving side (parent registry or registrar) has two options:
      suitable extended DNS error code.
 
 Implementing the first option will significantly decrease the
-convergence time (between publication of a new CDS/CDNSKEY record in the
+convergence time (between publication of a new CDS/CDNSKEY/CSYNC record in the
 child and publication of the resulting DS), thereby providing improved
 service for the child.
 
 If, in addition to scheduling an immediate check for the child zone of
 the notification, the scanning schedule is also modified to be less
 frequent, the cost of providing the scanning service will be reduced.
-
-Upon receipt of a NOTIFY(CSYNC) to the published address for CSYNC
-notifications, the same options and considerations apply as for the
-NOTIFY(CDS).
 
 
 # Security Considerations {#security}
@@ -596,7 +598,8 @@ In order of first contribution or review:
 Joe Abley, Mark Andrews, Christian Elmerot, Ólafur Guðmundsson, Paul
 Wouters, Brian Dickson, Warren Kumari, Patrick Mevzek, Tim Wicinski,
 Q Misell, Stefan Ubbink, Matthijs Mekking, Kevin P. Fleming, Nicolai
-Leymann, Giuseppe Fioccola, Peter Yee, Tony Li, Paul Wouters, Roman Danyliw.
+Leymann, Giuseppe Fioccola, Peter Yee, Tony Li, Paul Wouters, Roman
+Danyliw, Peter van Dijk.
 
 --- back
 
@@ -649,6 +652,10 @@ conceivable, the detailed specification is left for future work.
 
 
 # Change History (to be removed before publication)
+
+* draft-ietf-dnsop-generalized-notify-08
+
+- Nits from Dnsdir telechat review
 
 * draft-ietf-dnsop-generalized-notify-07
 
