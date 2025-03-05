@@ -386,8 +386,8 @@ even before the emergence of native support in nameserver software.
 
 The following algorithm applies to NOTIFY(CDS) and NOTIFY(CSYNC) processing.
 
-NOTIFY messages carrying notification payloads (records) for
-several child zones MUST be discarded, as sending them is an error.
+NOTIFY messages carrying notification payloads (records) for more
+than one child zone MUST be discarded, as sending them is an error.
 
 Upon receipt of a (potentially forwarded) valid NOTIFY message for
 a particular child zone at the published notification endpoint,
@@ -559,6 +559,28 @@ Reference
 : Location of specification or registration source
 
 Registration requests are to be recorded by IANA after Expert Review {{!RFC8126}}.
+Expert reviewers should take into consideration the following points,
+but are being designated as experts for a reason, so they should
+be given substantial latitude:
+
+- Point squatting should be discouraged.  Reviewers are encouraged
+      to get sufficient information for registration requests to ensure
+      that the usage is not going to duplicate one that is already
+      registered and that the point is likely to be used in deployments.
+      The code points tagged as "Private Use" are intended for testing
+      purposes and closed environments.  Code points in other ranges
+      should not be assigned for testing.
+
+- A specification of a scheme is desirable, but early assignment before a
+      specification is available is also possible.  When
+      specifications are not provided, the description provided needs to
+      have sufficient information to identify what the point is being
+      used for.
+
+- Experts should take into account that field values are fit for purpose.
+  For example, the mnemonic should be indicative and and have a plausible
+  connection to the scheme's notification mechanism.
+
 
 ## _dsync Underscore Name
 
@@ -599,7 +621,7 @@ Joe Abley, Mark Andrews, Christian Elmerot, Ólafur Guðmundsson, Paul
 Wouters, Brian Dickson, Warren Kumari, Patrick Mevzek, Tim Wicinski,
 Q Misell, Stefan Ubbink, Matthijs Mekking, Kevin P. Fleming, Nicolai
 Leymann, Giuseppe Fioccola, Peter Yee, Tony Li, Paul Wouters, Roman
-Danyliw, Peter van Dijk.
+Danyliw, Peter van Dijk, John Scudder.
 
 --- back
 
@@ -654,6 +676,8 @@ conceivable, the detailed specification is left for future work.
 # Change History (to be removed before publication)
 
 * draft-ietf-dnsop-generalized-notify-08
+
+- Added guidelines for expert review (IESG feedback)
 
 - Nits from Dnsdir telechat review
 
