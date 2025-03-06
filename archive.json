@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-03-04T00:39:04.515079+00:00",
+  "timestamp": "2025-03-06T00:38:56.878926+00:00",
   "repo": "peterthomassen/draft-ietf-dnsop-generalized-notify",
   "labels": [
     {
@@ -1586,6 +1586,58 @@
       "mergeCommit": {
         "oid": "0e9057157c454150adabea68f169ba3c85dabac8"
       },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 40,
+      "id": "PR_kwDOIax6Es6Ne_bp",
+      "title": "Nits from Dnsdir telechat review",
+      "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/pull/40",
+      "state": "OPEN",
+      "author": "peterthomassen",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-03-05T14:35:27Z",
+      "updatedAt": "2025-03-05T14:35:27Z",
+      "baseRepository": "peterthomassen/draft-ietf-dnsop-generalized-notify",
+      "baseRefName": "main",
+      "baseRefOid": "0e9057157c454150adabea68f169ba3c85dabac8",
+      "headRepository": "peterthomassen/draft-ietf-dnsop-generalized-notify",
+      "headRefName": "20250305_dnsdir",
+      "headRefOid": "aa152f38bc5dc983cb5545d56b9a3fa175de983f",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 41,
+      "id": "PR_kwDOIax6Es6NhlFk",
+      "title": "expert advice",
+      "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/pull/41",
+      "state": "OPEN",
+      "author": "jrlevine",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Added expert advice section",
+      "createdAt": "2025-03-05T19:28:48Z",
+      "updatedAt": "2025-03-05T19:28:49Z",
+      "baseRepository": "peterthomassen/draft-ietf-dnsop-generalized-notify",
+      "baseRefName": "main",
+      "baseRefOid": "0e9057157c454150adabea68f169ba3c85dabac8",
+      "headRepository": "jrlevine/draft-ietf-dnsop-generalized-notify",
+      "headRefName": "main",
+      "headRefOid": "35d4ad8417ec9506db8648cda6a1e86d9334ae1a",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
       "comments": [],
       "reviews": []
     }
