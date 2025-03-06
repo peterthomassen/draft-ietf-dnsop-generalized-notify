@@ -355,7 +355,7 @@ request the receiving side to report any errors by making a report query
 with an appropriate extended DNS error code as described in
 {{!RFC8914}}.
 (The prohibition of this option in queries ({{?RFC9567, Section 6.1}}) only
-applies to resolver queries and thus does not cover NOTIFY message.)
+applies to resolver queries and thus does not cover NOTIFY messages.)
 
 When including this EDNS0 option, its agent domain MUST be subordinate
 or equal to one of the NS hostnames, as listed in the child's delegation
