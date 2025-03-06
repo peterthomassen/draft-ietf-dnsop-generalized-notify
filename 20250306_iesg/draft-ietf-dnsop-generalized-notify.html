@@ -1687,8 +1687,8 @@ even before the emergence of native support in nameserver software.<a href="#sec
 <a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-processing-of-notify-messag" class="section-name selfRef">Processing of NOTIFY Messages for Delegation Maintenance</a>
         </h3>
 <p id="section-4.3-1">The following algorithm applies to NOTIFY(CDS) and NOTIFY(CSYNC) processing.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
-<p id="section-4.3-2">NOTIFY messages carrying notification payloads (records) for
-several child zones MUST be discarded, as sending them is an error.<a href="#section-4.3-2" class="pilcrow">¶</a></p>
+<p id="section-4.3-2">NOTIFY messages carrying notification payloads (records) for more
+than one child zone MUST be discarded, as sending them is an error.<a href="#section-4.3-2" class="pilcrow">¶</a></p>
 <p id="section-4.3-3">Upon receipt of a (potentially forwarded) valid NOTIFY message for
 a particular child zone at the published notification endpoint,
 the receiving side (parent registry or registrar) has two options:<a href="#section-4.3-3" class="pilcrow">¶</a></p>

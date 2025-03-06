@@ -448,8 +448,8 @@ Table of Contents
    The following algorithm applies to NOTIFY(CDS) and NOTIFY(CSYNC)
    processing.
 
-   NOTIFY messages carrying notification payloads (records) for several
-   child zones MUST be discarded, as sending them is an error.
+   NOTIFY messages carrying notification payloads (records) for more
+   than one child zone MUST be discarded, as sending them is an error.
 
    Upon receipt of a (potentially forwarded) valid NOTIFY message for a
    particular child zone at the published notification endpoint, the
