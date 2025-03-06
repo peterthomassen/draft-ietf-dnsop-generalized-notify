@@ -1687,8 +1687,8 @@ even before the emergence of native support in nameserver software.<a href="#sec
 <a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-processing-of-notify-messag" class="section-name selfRef">Processing of NOTIFY Messages for Delegation Maintenance</a>
         </h3>
 <p id="section-4.3-1">The following algorithm applies to NOTIFY(CDS) and NOTIFY(CSYNC) processing.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
-<p id="section-4.3-2">NOTIFY messages carrying notification payloads (records) for
-several child zones MUST be discarded, as sending them is an error.<a href="#section-4.3-2" class="pilcrow">¶</a></p>
+<p id="section-4.3-2">NOTIFY messages carrying notification payloads (records) for more
+than one child zone MUST be discarded, as sending them is an error.<a href="#section-4.3-2" class="pilcrow">¶</a></p>
 <p id="section-4.3-3">Upon receipt of a (potentially forwarded) valid NOTIFY message for
 a particular child zone at the published notification endpoint,
 the receiving side (parent registry or registrar) has two options:<a href="#section-4.3-3" class="pilcrow">¶</a></p>
@@ -1934,7 +1934,33 @@ follows:<a href="#section-6.1-1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 </dl>
-<p id="section-6.2-7">Registration requests are to be recorded by IANA after Expert Review <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>.<a href="#section-6.2-7" class="pilcrow">¶</a></p>
+<p id="section-6.2-7">Registration requests are to be recorded by IANA after Expert Review <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>.
+Expert reviewers should take into consideration the following points,
+but are being designated as experts for a reason, so they should
+be given substantial latitude:<a href="#section-6.2-7" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6.2-8.1">
+            <p id="section-6.2-8.1.1">Point squatting should be discouraged.  Reviewers are encouraged
+    to get sufficient information for registration requests to ensure
+    that the usage is not going to duplicate one that is already
+    registered and that the point is likely to be used in deployments.
+    The code points tagged as "Private Use" are intended for testing
+    purposes and closed environments.  Code points in other ranges
+    should not be assigned for testing.<a href="#section-6.2-8.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-6.2-8.2">
+            <p id="section-6.2-8.2.1">A specification of a scheme is desirable, but early assignment before a
+    specification is available is also possible.  When
+    specifications are not provided, the description provided needs to
+    have sufficient information to identify what the point is being
+    used for.<a href="#section-6.2-8.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-6.2-8.3">
+            <p id="section-6.2-8.3.1">Experts should take into account that field values are fit for purpose.
+For example, the mnemonic should be indicative and and have a plausible
+connection to the scheme's notification mechanism.<a href="#section-6.2-8.3.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
 </section>
 </div>
 <div id="dsync-underscore-name">
@@ -2007,7 +2033,7 @@ Joe Abley, Mark Andrews, Christian Elmerot, Ólafur Guðmundsson, Paul
 Wouters, Brian Dickson, Warren Kumari, Patrick Mevzek, Tim Wicinski,
 Q Misell, Stefan Ubbink, Matthijs Mekking, Kevin P. Fleming, Nicolai
 Leymann, Giuseppe Fioccola, Peter Yee, Tony Li, Paul Wouters, Roman
-Danyliw, Peter van Dijk.<a href="#section-8-1" class="pilcrow">¶</a></p>
+Danyliw, Peter van Dijk, John Scudder.<a href="#section-8-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-combined-references">
@@ -2175,10 +2201,13 @@ conceivable, the detailed specification is left for future work.<a href="#append
           <p id="appendix-B-1.1.1">draft-ietf-dnsop-generalized-notify-08<a href="#appendix-B-1.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-1.2">
-          <p id="appendix-B-1.2.1">Nits from Dnsdir telechat review<a href="#appendix-B-1.2.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-1.2.1">Added guidelines for expert review (IESG feedback)<a href="#appendix-B-1.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-1.3">
-          <p id="appendix-B-1.3.1">draft-ietf-dnsop-generalized-notify-07<a href="#appendix-B-1.3.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-1.3.1">Nits from Dnsdir telechat review<a href="#appendix-B-1.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-B-1.4">
+          <p id="appendix-B-1.4.1">draft-ietf-dnsop-generalized-notify-07<a href="#appendix-B-1.4.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <ul class="normal ulEmpty">
