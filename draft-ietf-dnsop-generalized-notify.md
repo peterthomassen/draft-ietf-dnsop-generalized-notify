@@ -81,7 +81,7 @@ Readers are expected to be familiar with DNSSEC {{!RFC9364}}, including
 {{?RFC8901}}, and {{!RFC9615}}.
 DNS-specific terminology can be found in {{!RFC9499}}.
 
-## Design Requirements for Delegation Maintenance
+## Design Goals for Delegation Maintenance
 
 When the parent operator is interested in notifications for delegation
 maintenance (such as DS or NS update hints), a service will need to be
@@ -219,8 +219,8 @@ If the parent operator itself performs CDS/CDNSKEY or CSYNC processing
 for some or all delegations, or wants to forward notifications to some
 other party, a default notification target may be specified as follows:
 
-    *._dsync.example.  IN DSYNC  CDS   scheme port target
-    *._dsync.example.  IN DSYNC  CSYNC scheme port target
+    *._dsync.example.  IN DSYNC  CDS   NOTIFY port target
+    *._dsync.example.  IN DSYNC  CSYNC NOTIFY port target
 
 To accommodate indirect delegation management models, the
 designated notification target may relay notifications to a third party
@@ -301,15 +301,16 @@ the notification sender MUST perform the following steps:
      before the parent zone labels inferred from the negative response,
      and go to step 2.
 
-     For example, `city.ise.mie.jp` is delegated from `jp` (and not
-     from `ise.mie.jp` or `mie.jp`!). The initial DSYNC query relating
-     to it is thus directed at `city._dsync.ise.mie.jp`. This is
-     expected to result in a negative response from `jp`, and another
-     query for `city.ise.mie._dsync.jp` is then required.
+     For example, assume that `subsub.sub.child.example` is delegated from
+     `example` (and not from `sub.child.example` or `child.example`). The
+     initial DSYNC query relating to it is thus directed at
+     `subsub._dsync.sub.child.example`. This is expected to result in a
+     negative response from `example`, and another query for
+     `subsub.sub.child._dsync.example` is then required.
 
    - Otherwise, if the lookup name has any labels in front of the
      `_dsync` label, remove them to construct a new lookup name (such
-     as `_dsync.jp`), and go to step 2.
+     as `_dsync.example`), and go to step 2.
      (This is to enable zone structures without wildcards.)
 
    - Otherwise, return null (no notification target available).
@@ -389,7 +390,7 @@ The following algorithm applies to NOTIFY(CDS) and NOTIFY(CSYNC) processing.
 NOTIFY messages carrying notification payloads (records) for more
 than one child zone MUST be discarded, as sending them is an error.
 
-Upon receipt of a (potentially forwarded) valid NOTIFY message for
+Otherwise, upon receipt of a (potentially forwarded) NOTIFY message for
 a particular child zone at the published notification endpoint,
 the receiving side (parent registry or registrar) has two options:
 
@@ -621,7 +622,7 @@ Joe Abley, Mark Andrews, Christian Elmerot, Ólafur Guðmundsson, Paul
 Wouters, Brian Dickson, Warren Kumari, Patrick Mevzek, Tim Wicinski,
 Q Misell, Stefan Ubbink, Matthijs Mekking, Kevin P. Fleming, Nicolai
 Leymann, Giuseppe Fioccola, Peter Yee, Tony Li, Paul Wouters, Roman
-Danyliw, Peter van Dijk, John Scudder.
+Danyliw, Peter van Dijk, John Scudder, Éric Vyncke.
 
 --- back
 
@@ -677,9 +678,11 @@ conceivable, the detailed specification is left for future work.
 
 * draft-ietf-dnsop-generalized-notify-08
 
-- Added guidelines for expert review (IESG feedback)
+> IESG review editorial changes
 
-- Nits from Dnsdir telechat review
+> Added guidelines for expert review (IESG feedback)
+
+> Nits from Dnsdir telechat review
 
 * draft-ietf-dnsop-generalized-notify-07
 
