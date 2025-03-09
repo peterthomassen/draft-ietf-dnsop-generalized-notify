@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-03-06T00:38:56.878926+00:00",
+  "timestamp": "2025-03-09T00:34:30.300116+00:00",
   "repo": "peterthomassen/draft-ietf-dnsop-generalized-notify",
   "labels": [
     {
@@ -1594,24 +1594,26 @@
       "id": "PR_kwDOIax6Es6Ne_bp",
       "title": "Nits from Dnsdir telechat review",
       "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/pull/40",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "peterthomassen",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2025-03-05T14:35:27Z",
-      "updatedAt": "2025-03-05T14:35:27Z",
+      "updatedAt": "2025-03-06T15:43:36Z",
       "baseRepository": "peterthomassen/draft-ietf-dnsop-generalized-notify",
       "baseRefName": "main",
       "baseRefOid": "0e9057157c454150adabea68f169ba3c85dabac8",
       "headRepository": "peterthomassen/draft-ietf-dnsop-generalized-notify",
       "headRefName": "20250305_dnsdir",
       "headRefOid": "aa152f38bc5dc983cb5545d56b9a3fa175de983f",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-03-06T15:43:36Z",
+      "mergedAt": "2025-03-06T15:43:36Z",
+      "mergedBy": "peterthomassen",
+      "mergeCommit": {
+        "oid": "aa152f38bc5dc983cb5545d56b9a3fa175de983f"
+      },
       "comments": [],
       "reviews": []
     },
@@ -1620,25 +1622,73 @@
       "id": "PR_kwDOIax6Es6NhlFk",
       "title": "expert advice",
       "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/pull/41",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "jrlevine",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Added expert advice section",
       "createdAt": "2025-03-05T19:28:48Z",
-      "updatedAt": "2025-03-05T19:28:49Z",
+      "updatedAt": "2025-03-06T12:48:36Z",
       "baseRepository": "peterthomassen/draft-ietf-dnsop-generalized-notify",
       "baseRefName": "main",
       "baseRefOid": "0e9057157c454150adabea68f169ba3c85dabac8",
       "headRepository": "jrlevine/draft-ietf-dnsop-generalized-notify",
       "headRefName": "main",
       "headRefOid": "35d4ad8417ec9506db8648cda6a1e86d9334ae1a",
-      "closedAt": null,
+      "closedAt": "2025-03-06T12:48:36Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOIax6Es6ezrNL",
+          "commit": {
+            "abbreviatedOid": "35d4ad8"
+          },
+          "author": "peterthomassen",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "Thanks! This text looks good to me.\r\n\r\nThe commit has been conflated with the previous commit from Dnsdir review. I've thus disentangled the changes, and am moving the relevant ones to https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/pull/42/files.",
+          "createdAt": "2025-03-06T12:48:31Z",
+          "updatedAt": "2025-03-06T12:48:31Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 42,
+      "id": "PR_kwDOIax6Es6NopKy",
+      "title": "Expert advice",
+      "url": "https://github.com/peterthomassen/draft-ietf-dnsop-generalized-notify/pull/42",
+      "state": "CLOSED",
+      "author": "peterthomassen",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-03-06T12:46:46Z",
+      "updatedAt": "2025-03-06T15:50:42Z",
+      "baseRepository": "peterthomassen/draft-ietf-dnsop-generalized-notify",
+      "baseRefName": "20250305_dnsdir",
+      "baseRefOid": "aa152f38bc5dc983cb5545d56b9a3fa175de983f",
+      "headRepository": "peterthomassen/draft-ietf-dnsop-generalized-notify",
+      "headRefName": "20250306_iesg",
+      "headRefOid": "e5f2a5cdf8ae2e749ae26c7dcc94106cdcf22979",
+      "closedAt": "2025-03-06T15:50:42Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "peterthomassen",
+          "authorAssociation": "OWNER",
+          "body": "merged, not sure why it didn't close automatically",
+          "createdAt": "2025-03-06T15:50:42Z",
+          "updatedAt": "2025-03-06T15:50:42Z"
+        }
+      ],
       "reviews": []
     }
   ]
