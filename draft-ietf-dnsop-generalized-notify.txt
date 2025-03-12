@@ -5,10 +5,10 @@
 DNSOP Working Group                                          J. Stenstam
 Internet-Draft                           The Swedish Internet Foundation
 Intended status: Standards Track                            P. Thomassen
-Expires: 7 September 2025              deSEC, Secure Systems Engineering
+Expires: 13 September 2025             deSEC, Secure Systems Engineering
                                                                J. Levine
                                                            Standcore LLC
-                                                            6 March 2025
+                                                           12 March 2025
 
 
                      Generalized DNS Notifications
@@ -52,7 +52,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 7 September 2025.
+   This Internet-Draft will expire on 13 September 2025.
 
 Copyright Notice
 
@@ -219,10 +219,11 @@ Table of Contents
 
 2.3.  Semantics
 
-   For now, the only scheme defined is 1 (mnemonic: NOTIFY).  It
-   indicates that when a new CDS/CDNSKEY (or CSYNC) RRset is published,
-   a NOTIFY message (see Section 4) should be sent to the address and
-   port listed in the corresponding DSYNC record, using conventional
+   For now, the only scheme defined is 1 (mnemonic: NOTIFY).  By
+   publishing a DSYNC record with this scheme, a parent indicates that
+   they would like child operators to send them a NOTIFY message (see
+   Section 4) upon publication of a new CDS/CDNSKEY/CSYNC RRset, to the
+   address and port listed in that DSYNC record and using conventional
    [RFC1035] DNS transport.
 
    Example (for the owner names of these records, see Section 3):
@@ -349,8 +350,8 @@ Table of Contents
        the first label of the delegation owner name.
 
    2.  Perform a lookup of type DSYNC for the lookup name, and validate
-       the response if DNSSEC is enabled.  If a positive DSYNC answer
-       results, return it.
+       the response if DNSSEC is enabled.  If this results in a positive
+       DSYNC answer, return it.
 
    3.  If the query resulted in a negative response:
 
@@ -458,11 +459,9 @@ Table of Contents
    the receiving side (parent registry or registrar) has two options:
 
    1.  Acknowledge receipt by sending a NOTIFY response as described in
-       [RFC1996] Section 4.7 (identical to NOTIFY query, but with QR bit
-       set and any EDNS0 Report-Channel options removed), and schedule
-       an immediate check of the CDS/CDNSKEY/CSYNC RRsets published by
-       that particular child zone (as appropriate for the type of NOTIFY
-       received).
+       [RFC1996] Section 4.7, and schedule an immediate check of the
+       CDS/CDNSKEY/CSYNC RRsets published by that particular child zone
+       (as appropriate for the type of NOTIFY received).
 
        If the NOTIFY message contains an [RFC9567] EDNS0 Report-Channel
        option with an agent domain subordinate or equal to one of the NS
@@ -835,6 +834,10 @@ A.2.  Similar Issues for DS Maintenance and Beyond
    conceivable, the detailed specification is left for future work.
 
 Appendix B.  Change History (to be removed before publication)
+
+   *  draft-ietf-dnsop-generalized-notify-09
+
+      Leftover editorial changes
 
    *  draft-ietf-dnsop-generalized-notify-08
 
