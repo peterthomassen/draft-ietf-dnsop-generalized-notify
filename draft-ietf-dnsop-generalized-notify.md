@@ -164,10 +164,11 @@ The presentation format of the RDATA portion is as follows:
 
 ## Semantics
 
-For now, the only scheme defined is 1 (mnemonic: NOTIFY). It indicates that
-when a new CDS/CDNSKEY (or CSYNC) RRset is published, a NOTIFY message (see
-{{cnotify}}) should be sent to the address and port listed in the corresponding
-DSYNC record, using conventional {{!RFC1035}} DNS transport.
+For now, the only scheme defined is 1 (mnemonic: NOTIFY).  By publishing a
+DSYNC record with this scheme, a parent indicates that they would like child
+operators to send them a NOTIFY message (see {{cnotify}}) upon publication of
+a new CDS/CDNSKEY/CSYNC RRset, to the address and port listed in that DSYNC
+record and using conventional {{!RFC1035}} DNS transport.
 
 Example (for the owner names of these records, see {{signaling}}):
 
@@ -675,6 +676,10 @@ conceivable, the detailed specification is left for future work.
 
 
 # Change History (to be removed before publication)
+
+* draft-ietf-dnsop-generalized-notify-09
+
+> Leftover editorial changes
 
 * draft-ietf-dnsop-generalized-notify-08
 
