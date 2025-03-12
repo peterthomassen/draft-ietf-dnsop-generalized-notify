@@ -291,7 +291,7 @@ the notification sender MUST perform the following steps:
    first label of the delegation owner name.
 
 2. Perform a lookup of type DSYNC for the lookup name, and validate the
-   response if DNSSEC is enabled. If a positive DSYNC answer results,
+   response if DNSSEC is enabled. If this results in a positive DSYNC answer,
    return it.
 
 3. If the query resulted in a negative response:
@@ -396,8 +396,7 @@ a particular child zone at the published notification endpoint,
 the receiving side (parent registry or registrar) has two options:
 
   1. Acknowledge receipt by sending a NOTIFY response as described in
-     {{!RFC1996}} Section 4.7 (identical to NOTIFY query, but with QR
-     bit set and any EDNS0 Report-Channel options removed), and schedule
+     {{!RFC1996}} Section 4.7, and schedule
      an immediate check of the CDS/CDNSKEY/CSYNC RRsets published by that
      particular child zone (as appropriate for the type of NOTIFY received).
 
